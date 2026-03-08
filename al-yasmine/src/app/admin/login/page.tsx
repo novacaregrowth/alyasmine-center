@@ -38,7 +38,7 @@ export default function AdminLoginPage() {
 
   return (
     <div className="min-h-screen bg-brand-dark flex items-center justify-center px-4">
-      <div className="bg-brand-charcoal rounded-3xl p-10 w-full max-w-sm flex flex-col gap-5">
+      <div className="bg-brand-dark rounded-3xl p-10 w-full max-w-sm flex flex-col gap-5">
         <div>
           <p className="font-display text-2xl text-brand-cream font-light mb-1">Admin Access</p>
           <p className="text-brand-cream/40 text-xs">Al Yasmine Center</p>

@@ -6,27 +6,21 @@ import { pricingPlans } from "@/lib/config";
 import { formatPrice } from "@/lib/utils";
 import { Check } from "lucide-react";
 import { Reveal, StaggerReveal, staggerChild } from "@/components/ui/reveal";
-import { WaveDivider, CurveDivider } from "@/components/ui/dividers";
 import { motion } from "framer-motion";
-
-const CREAM = "#F6F2E9";
-const WHITE = "#ffffff";
-const TEAL  = "#035A60";
 
 export default function PricingPage() {
   return (
     <div className="pt-20">
 
-      <section className="relative pb-8" style={{ background: "linear-gradient(160deg,#f6f2e9 0%,#eef6f6 100%)" }}>
+      <section className="relative" style={{ background: "linear-gradient(160deg,#f6f2e9 0%,#eef6f6 100%)" }}>
         <div className="section-container max-w-2xl mx-auto text-center pt-16 pb-12">
           <Reveal>
             <p className="text-brand-gold text-[10px] tracking-[0.25em] uppercase font-medium mb-4">Investment</p>
-            <h1 className="font-display font-light text-brand-charcoal mb-3">Simple, Transparent Pricing</h1>
+            <h1 className="font-display font-light text-brand-dark mb-3">Simple, Transparent Pricing</h1>
             <div className="brand-divider" />
-            <p className="text-brand-charcoal/55 text-base mt-5 leading-relaxed">Every plan includes our full support and commitment to your growth.</p>
+            <p className="text-brand-dark/55 text-base mt-5 leading-relaxed">Every plan includes our full support and commitment to your growth.</p>
           </Reveal>
         </div>
-        <WaveDivider from="transparent" to={WHITE} />
       </section>
 
       <section className="bg-white pt-6 pb-8">
@@ -47,19 +41,19 @@ export default function PricingPage() {
                   </div>
                 )}
                 <div>
-                  <h3 className={`font-display text-2xl mb-0.5 ${plan.highlighted ? "text-brand-cream" : "text-brand-charcoal"}`}>{plan.name}</h3>
+                  <h3 className={`font-display text-2xl mb-0.5 ${plan.highlighted ? "text-brand-cream" : "text-brand-dark"}`}>{plan.name}</h3>
                   {plan.nameAr && <p className={`arabic text-sm ${plan.highlighted ? "text-brand-cream/55" : "text-brand-teal-light"}`} lang="ar">{plan.nameAr}</p>}
-                  <p className={`text-xs mt-2 leading-relaxed ${plan.highlighted ? "text-brand-cream/55" : "text-brand-charcoal/45"}`}>{plan.description}</p>
+                  <p className={`text-xs mt-2 leading-relaxed ${plan.highlighted ? "text-brand-cream/55" : "text-brand-dark/45"}`}>{plan.description}</p>
                 </div>
                 <div className={`pb-5 border-b ${plan.highlighted ? "border-brand-cream/20" : "border-[#ede8de]"}`}>
                   <span className="font-display text-4xl font-light">{formatPrice(plan.price)}</span>
-                  <span className={`text-xs ml-1 ${plan.highlighted ? "text-brand-cream/45" : "text-brand-charcoal/35"}`}>/ {plan.period}</span>
+                  <span className={`text-xs ml-1 ${plan.highlighted ? "text-brand-cream/45" : "text-brand-dark/35"}`}>/ {plan.period}</span>
                 </div>
                 <ul className="space-y-3 flex-1">
                   {plan.features.map((f) => (
                     <li key={f} className="flex items-start gap-2 text-xs">
                       <Check className={`w-3.5 h-3.5 mt-0.5 shrink-0 ${plan.highlighted ? "text-brand-gold" : "text-brand-teal"}`} />
-                      <span className={plan.highlighted ? "text-brand-cream/75" : "text-brand-charcoal/65"}>{f}</span>
+                      <span className={plan.highlighted ? "text-brand-cream/75" : "text-brand-dark/65"}>{f}</span>
                     </li>
                   ))}
                 </ul>
@@ -72,19 +66,16 @@ export default function PricingPage() {
             ))}
           </StaggerReveal>
           <Reveal delay={0.3} className="text-center mt-10">
-            <p className="text-xs text-brand-charcoal/35">All prices in AED. Payment plans available. <Link href="/booking" className="text-brand-teal hover:underline">Talk to us</Link> about custom options.</p>
+            <p className="text-xs text-brand-dark/35">All prices in AED. Payment plans available. <Link href="/booking" className="text-brand-teal hover:underline">Talk to us</Link> about custom options.</p>
           </Reveal>
-        </div>
-        <div className="-mb-1">
-          <CurveDivider from={WHITE} to={CREAM} />
         </div>
       </section>
 
       <section className="bg-brand-cream pt-6 pb-20">
         <Reveal className="section-container text-center max-w-lg mx-auto py-14">
           <span className="text-5xl block mb-4">❋</span>
-          <h2 className="font-display text-3xl font-light text-brand-charcoal mb-3">Our Promise</h2>
-          <p className="text-brand-charcoal/55 leading-relaxed text-sm">
+          <h2 className="font-display text-3xl font-light text-brand-dark mb-3">Our Promise</h2>
+          <p className="text-brand-dark/55 leading-relaxed text-sm">
             If you&apos;re not satisfied after your first session, we&apos;ll refund it in full. No questions asked.
           </p>
         </Reveal>

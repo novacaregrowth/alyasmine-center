@@ -104,12 +104,12 @@ export default function AIChatCard({ className }: { className?: string }) {
             <Sparkles className="w-4 h-4 text-brand-gold" />
           </div>
           <div>
-            <p className="text-sm font-semibold text-brand-charcoal font-display">Coaching Assistant</p>
+            <p className="text-sm font-semibold text-brand-dark font-display">Coaching Assistant</p>
             <p className="text-xs text-brand-teal-light">Al Yasmine Center ✦ Powered by AI</p>
           </div>
           <div className="ml-auto flex items-center gap-1">
             <span className="w-2 h-2 rounded-full bg-green-400 animate-pulse" />
-            <span className="text-xs text-brand-charcoal/40">online</span>
+            <span className="text-xs text-brand-dark/40">online</span>
           </div>
         </div>
 
@@ -125,7 +125,7 @@ export default function AIChatCard({ className }: { className?: string }) {
                 className={cn(
                   "px-4 py-3 rounded-2xl max-w-[88%] text-sm leading-relaxed shadow-sm",
                   msg.role === "assistant"
-                    ? "bg-brand-cream text-brand-charcoal self-start rounded-tl-sm"
+                    ? "bg-brand-cream text-brand-dark self-start rounded-tl-sm"
                     : "bg-brand-teal text-brand-cream self-end rounded-tr-sm"
                 )}
               >
@@ -157,7 +157,7 @@ export default function AIChatCard({ className }: { className?: string }) {
         {/* Input */}
         <div className="flex items-center gap-2 px-4 py-3 border-t border-brand-cream bg-white">
           <input
-            className="flex-1 px-4 py-2.5 text-sm bg-brand-cream/60 rounded-full border border-brand-cream focus:outline-none focus:ring-2 focus:ring-brand-teal/20 text-brand-charcoal placeholder:text-brand-charcoal/35"
+            className="flex-1 px-4 py-2.5 text-sm bg-brand-cream/60 rounded-full border border-brand-cream focus:outline-none focus:ring-2 focus:ring-brand-teal/20 text-brand-dark placeholder:text-brand-dark/35"
             placeholder="Ask me anything..."
             value={input}
             onChange={(e) => setInput(e.target.value)}

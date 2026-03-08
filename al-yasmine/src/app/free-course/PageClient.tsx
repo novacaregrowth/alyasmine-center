@@ -47,9 +47,9 @@ export default function FreeCoursePage() {
         <div className="section-container max-w-3xl mx-auto py-16">
           <Reveal className="text-center mb-14">
             <p className="text-brand-gold text-[10px] tracking-[0.25em] uppercase font-medium mb-3">What's Inside</p>
-            <h2 className="font-display font-light text-brand-charcoal mb-2">Four Modules to Prepare You</h2>
+            <h2 className="font-display font-light text-brand-dark mb-2">Four Modules to Prepare You</h2>
             <div className="brand-divider" />
-            <p className="text-brand-charcoal/45 text-sm mt-4 max-w-md mx-auto">
+            <p className="text-brand-dark/45 text-sm mt-4 max-w-md mx-auto">
               Each module takes under 30 minutes. Work through them at your own pace before your first session.
             </p>
           </Reveal>
@@ -63,10 +63,10 @@ export default function FreeCoursePage() {
                 <span className="font-display text-5xl font-light text-brand-teal/12 leading-none shrink-0 w-12 group-hover:text-brand-teal/22 transition-colors">{mod.number}</span>
                 <div className="flex-1">
                   <div className="flex items-start justify-between gap-4 mb-2">
-                    <h3 className="font-display text-xl text-brand-charcoal">{mod.title}</h3>
+                    <h3 className="font-display text-xl text-brand-dark">{mod.title}</h3>
                     <span className="text-xs text-brand-teal-light bg-brand-cream px-3 py-1 rounded-full shrink-0">{mod.duration}</span>
                   </div>
-                  <p className="text-sm text-brand-charcoal/55 leading-relaxed">{mod.body}</p>
+                  <p className="text-sm text-brand-dark/55 leading-relaxed">{mod.body}</p>
                 </div>
               </motion.div>
             ))}
@@ -80,7 +80,7 @@ export default function FreeCoursePage() {
         <div className="section-container max-w-2xl mx-auto py-16">
           <Reveal className="text-center mb-12">
             <p className="text-brand-gold text-[10px] tracking-[0.25em] uppercase font-medium mb-3">How It Works</p>
-            <h2 className="font-display font-light text-brand-charcoal mb-2">Shared After You Book</h2>
+            <h2 className="font-display font-light text-brand-dark mb-2">Shared After You Book</h2>
             <div className="brand-divider" />
           </Reveal>
 
@@ -96,8 +96,8 @@ export default function FreeCoursePage() {
               >
                 <span className="text-2xl text-brand-teal block mb-4">{s.icon}</span>
                 <p className="text-brand-gold text-[10px] tracking-[0.2em] uppercase font-medium mb-2">{s.step}</p>
-                <h4 className="font-display text-lg text-brand-charcoal mb-2">{s.title}</h4>
-                <p className="text-xs text-brand-charcoal/55 leading-relaxed">{s.body}</p>
+                <h4 className="font-display text-lg text-brand-dark mb-2">{s.title}</h4>
+                <p className="text-xs text-brand-dark/55 leading-relaxed">{s.body}</p>
               </motion.div>
             ))}
           </StaggerReveal>

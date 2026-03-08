@@ -1,0 +1,91 @@
+This is a Next.js 14 App Router project using TypeScript, Tailwind CSS, and Framer Motion.
+
+PROJECT
+-------
+Al Yasmine Center — a women-only psychological counseling and CBT coaching center in the UAE.
+Founder: Aliyah Al Bahari (علياء البحري), psychological counselor and CBT specialist.
+Clients: women and teenage girls dealing with anxiety, depression, OCD, panic attacks, trauma, and attachment issues.
+The brand voice is warm, grounded, and quietly confident — not corporate, not overly soft. Think calm authority.
+
+STACK
+-----
+- Next.js 14 App Router
+- TypeScript
+- Tailwind CSS (brand colors in tailwind.config.ts)
+- Framer Motion for animations
+- Lenis for smooth scroll (LenisProvider wraps the app in layout.tsx)
+- All site config lives in src/lib/config.ts
+
+BRAND COLORS
+------------
+Primary:
+- brand-blush: #FDCCBE (dusty rose — logo mark color, primary feminine accent)
+- brand-teal: #035A60 (deep teal — primary strong color, headings, buttons)
+
+Accent:
+- brand-gold: #ECA200 (jasmine gold — CTAs, stars, highlights)
+
+Backgrounds:
+- brand-cream: #F6F2E9 (main light background)
+- brand-dark: #2F2F2F (footer, dark sections, primary body text)
+
+Supporting:
+- brand-teal-light: #7FB0B4 (secondary teal, supporting text)
+
+Color usage rules:
+- For darker variants use deeper shades of blush or teal, not new colors
+- Never use hardcoded hex values — always use brand- Tailwind classes
+- Blush should appear more on feminine/soft sections, teal on strong/CTA sections
+- Gold is an accent only — never use it as a background
+
+BRAND FONT
+----------
+- Official font: Montaser Arabic (خط مونتيسر)
+- Applied via font-display class in Tailwind
+- Used for all headings and display text in both English and Arabic
+- If font files are unavailable, do not substitute without asking
+
+LOGO
+----
+- Full logo = Arabic wordmark (مركز الياسمين) + English wordmark (Alyasmine Center) + circular calligraphic mark with gold jasmine flower
+- Logo file is a JPEG with light background — needs transparent background version before use in navbar
+- Do not use the logo until an SVG or transparent PNG is available
+- Navbar currently uses text only — keep this until logo file is ready
+
+CODE RULES
+----------
+- Use existing component patterns: Reveal, StaggerReveal, staggerChild from src/components/ui/reveal.tsx
+- Keep pages split: PageClient.tsx (client component) + page.tsx (metadata + server export)
+- Do not install new npm packages without asking first
+- All client copy must use she/her when referring to clients — never he/him or they
+- Brand tone: warm, grounded, quietly confident — never corporate, never overly flowery
+
+UI/UX DESIGN RULES
+------------------
+Icons: Use SVG icons from Lucide only. Never use emojis as icons.
+Hover states: Use color/opacity transitions only. Never scale transforms that shift layout.
+Cursor: Add cursor-pointer to all clickable cards and interactive elements.
+Transitions: 150-300ms for micro-interactions. Use transform/opacity only, never width/height.
+Text contrast: Minimum 4.5:1 ratio. Never use muted colors for body text.
+Touch targets: Minimum 44x44px for all interactive elements.
+Spacing: Consistent max-w-5xl container width across all pages.
+Accessibility: All images need alt text. All form inputs need labels.
+Reduced motion: Always respect prefers-reduced-motion for animations.
+No layout shift: Hover states must never shift surrounding content.
+
+CULTURAL & BRAND CONTEXT
+-------------------------
+Al Yasmine Center is rooted in Islamic values and Arabic culture.
+- All imagery must be modest — no revealing clothing, no mixed gender photos
+- Copy tone is warm, grounded, spiritually aware — never secular-corporate
+- Aliyah Al Bahari is a descendant of the Prophet Muhammad (peace be upon him)
+  and a certified counselor at the Prophet's Mosque in Madinah
+- This background gives the brand deep trust and spiritual authority —
+  design decisions should reflect dignity and sincerity, not trendiness
+- Arabic language and calligraphy are first-class elements, not decorative afterthoughts
+- The jasmine flower (ياسمين) is the brand symbol — pure, delicate, rooted
+- Never suggest alcohol, dating, or Western lifestyle imagery or copy
+- The client base is Muslim women and teenage girls in the UAE and broader Arab world
+- Modest visual language: soft, still, introspective — not active or physical
+- Preferred imagery feel: warm natural light, quiet spaces, jasmine flowers,
+  soft morning light, stillness — never fitness, spa, or corporate wellness

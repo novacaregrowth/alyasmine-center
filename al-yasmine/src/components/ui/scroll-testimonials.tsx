@@ -50,7 +50,7 @@ function TestimonialBlock({ t, index }: { t: Testimonial; index: number }) {
       {/* Quote text */}
       <motion.p
         style={{ y: quoteY }}
-        className="font-display font-light italic text-brand-charcoal text-2xl md:text-[1.75rem] leading-relaxed mb-8 relative z-10"
+        className="font-display font-light italic text-brand-dark text-2xl md:text-[1.75rem] leading-relaxed mb-8 relative z-10"
       >
         &ldquo;{t.quote}&rdquo;
       </motion.p>
@@ -62,7 +62,7 @@ function TestimonialBlock({ t, index }: { t: Testimonial; index: number }) {
       />
 
       {/* Author */}
-      <p className="text-sm font-semibold text-brand-charcoal tracking-wide">{t.name}</p>
+      <p className="text-sm font-semibold text-brand-dark tracking-wide">{t.name}</p>
       <p className="text-xs text-brand-teal-light mt-0.5">{t.role}</p>
     </motion.div>
   );

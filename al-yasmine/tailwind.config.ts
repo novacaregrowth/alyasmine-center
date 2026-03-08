@@ -16,9 +16,8 @@ const config: Config = {
           cream:      "#F6F2E9",  // background / light surfaces
           teal:       "#035A60",  // deep teal (CTAs, headings)
           "teal-light": "#7FB0B4", // secondary teal
-          charcoal:   "#252525",  // near-black text
           dark:       "#2F2F2F",  // footer / dark surfaces
-          blush:      "#F2C4B5",  // soft pink (from logo bg)
+          blush:      "#FDCCBE",  // soft pink (from logo bg)
         },
         // Semantic aliases
         background:   "var(--background)",

@@ -4,6 +4,7 @@ import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
 import { ScrollProgress } from "@/components/ui/scroll-progress";
 import { LenisProvider } from "@/components/layout/LenisProvider";
+import { PageTransition } from "@/components/layout/PageTransition";
 
 export const metadata: Metadata = {
   title: {
@@ -43,7 +44,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           <ScrollProgress />
           <Navbar />
           {/* pb-24 lg:pb-0 — compensates for mobile bottom tab bar */}
-          <main className="flex-1 pb-24 lg:pb-0">{children}</main>
+          <main className="flex-1 pb-24 lg:pb-0">
+            <PageTransition>{children}</PageTransition>
+          </main>
           <Footer />
         </LenisProvider>
       </body>

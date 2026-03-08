@@ -5,12 +5,7 @@ import Link from "next/link";
 import { motion } from "framer-motion";
 import { ScrollTestimonials } from "@/components/ui/scroll-testimonials";
 import { Reveal, StaggerReveal, staggerChild } from "@/components/ui/reveal";
-import { WaveDivider, CurveDivider } from "@/components/ui/dividers";
 import { testimonials } from "@/lib/config";
-
-const CREAM = "#F6F2E9";
-const WHITE = "#ffffff";
-const TEAL  = "#035A60";
 
 export default function ProofPage() {
   return (
@@ -18,7 +13,7 @@ export default function ProofPage() {
 
       {/* ── Hero ── */}
       <section
-        className="relative pb-8"
+        className="relative"
         style={{ background: "linear-gradient(160deg, #f6f2e9 0%, #eef6f6 100%)" }}
       >
         <div className="section-container max-w-3xl pt-16 pb-12">
@@ -26,16 +21,15 @@ export default function ProofPage() {
             <p className="text-brand-gold text-[10px] tracking-[0.25em] uppercase font-medium mb-4">
               Real Results
             </p>
-            <h1 className="font-display font-light text-brand-charcoal mb-4">
+            <h1 className="font-display font-light text-brand-dark mb-4">
               The Proof Is in the Transformation
             </h1>
             <div className="brand-divider mx-0" />
-            <p className="text-brand-charcoal/55 text-lg mt-6 max-w-xl leading-relaxed">
+            <p className="text-brand-dark/55 text-lg mt-6 max-w-xl leading-relaxed">
               Real stories from real women who chose to invest in themselves.
             </p>
           </Reveal>
         </div>
-        <WaveDivider from="transparent" to={TEAL} />
       </section>
 
       {/* ── Stats ── */}
@@ -53,9 +47,6 @@ export default function ProofPage() {
             </motion.div>
           ))}
         </StaggerReveal>
-        <div className="-mb-1 mt-10">
-          <CurveDivider from={TEAL} to={WHITE} />
-        </div>
       </section>
 
       {/* ── Scroll Testimonials ── */}
@@ -65,7 +56,7 @@ export default function ProofPage() {
             <p className="text-brand-gold text-[10px] tracking-[0.25em] uppercase font-medium mb-3">
               Voices
             </p>
-            <h2 className="font-display font-light text-brand-charcoal mb-2">
+            <h2 className="font-display font-light text-brand-dark mb-2">
               What Our Clients Say
             </h2>
             <div className="brand-divider" />
@@ -84,9 +75,6 @@ export default function ProofPage() {
           </Reveal>
         </div>
 
-        <div className="-mb-1 mt-8">
-          <WaveDivider from={WHITE} to={CREAM} flip />
-        </div>
       </section>
 
       {/* ── Case Studies ── */}
@@ -96,7 +84,7 @@ export default function ProofPage() {
             <p className="text-brand-gold text-[10px] tracking-[0.25em] uppercase font-medium mb-3">
               In Depth
             </p>
-            <h2 className="font-display font-light text-brand-charcoal">Case Studies</h2>
+            <h2 className="font-display font-light text-brand-dark">Case Studies</h2>
             <div className="brand-divider" />
           </Reveal>
 
@@ -124,8 +112,8 @@ export default function ProofPage() {
                 <p className="text-brand-teal text-[10px] tracking-[0.2em] uppercase font-medium mb-3">
                   Case Study {cs.number}
                 </p>
-                <h3 className="font-display text-2xl text-brand-charcoal mb-3">{cs.title}</h3>
-                <p className="text-brand-charcoal/55 text-sm leading-relaxed mb-6">{cs.body}</p>
+                <h3 className="font-display text-2xl text-brand-dark mb-3">{cs.title}</h3>
+                <p className="text-brand-dark/55 text-sm leading-relaxed mb-6">{cs.body}</p>
                 <div className="flex gap-2 flex-wrap">
                   {cs.tags.map((tag) => (
                     <span
@@ -141,9 +129,6 @@ export default function ProofPage() {
           </StaggerReveal>
         </div>
 
-        <div className="-mb-1 mt-14">
-          <CurveDivider from={CREAM} to={TEAL} />
-        </div>
       </section>
 
       {/* ── CTA ── */}

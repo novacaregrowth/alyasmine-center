@@ -25,8 +25,8 @@ export function CalendlyEmbed({ url }: CalendlyEmbedProps) {
           <Calendar className="w-7 h-7 text-brand-teal/50" />
         </div>
         <div>
-          <p className="font-display text-2xl text-brand-charcoal font-light mb-2">Booking Coming Soon</p>
-          <p className="text-sm text-brand-charcoal/50 leading-relaxed max-w-xs">
+          <p className="font-display text-2xl text-brand-dark font-light mb-2">Booking Coming Soon</p>
+          <p className="text-sm text-brand-dark/50 leading-relaxed max-w-xs">
             Our online booking will be live shortly. In the meantime, reach out directly:
           </p>
         </div>
