@@ -6,7 +6,7 @@ import { motion, stagger, useAnimate } from "framer-motion";
 import Floating, { FloatingElement } from "@/components/ui/parallax-floating";
 import { InteractiveHoverButton } from "@/components/ui/interactive-hover-button";
 import { Reveal, StaggerReveal, staggerChild } from "@/components/ui/reveal";
-import { WaveDivider, CurveDivider } from "@/components/ui/dividers";
+import { WaveDivider } from "@/components/ui/dividers";
 import { ScrollTestimonials } from "@/components/ui/scroll-testimonials";
 import { services, testimonials, siteConfig } from "@/lib/config";
 import { formatPrice } from "@/lib/utils";
@@ -14,10 +14,7 @@ import { ArrowDown } from "lucide-react";
 
 // ─────────────────────────────────────────────────────────────────────────────
 // Brand color hex values (must match tailwind config — used in SVG dividers)
-const CREAM  = "#F6F2E9";
-const WHITE  = "#ffffff";
-const TEAL   = "#035A60";
-const DARK   = "#2F2F2F";
+const TEAL = "#035A60";
 
 // Coaching/wellness themed Unsplash photos
 const floatingImages = [
@@ -87,10 +84,13 @@ function Hero() {
           ✦ &nbsp;Coaching & Personal Development&nbsp; ✦
         </motion.p>
 
-        <h1 className="font-display font-light text-brand-charcoal mb-3 leading-[1.05]">
-          Grow.{" "}
-          <em className="not-italic text-brand-teal">Transform.</em>
-          <br />Bloom.
+        <h1
+          className="font-display font-[200] text-brand-charcoal mb-3 leading-[0.95] tracking-tight"
+          style={{ fontSize: "clamp(3.5rem, 9vw, 8rem)" }}
+        >
+          <span className="block">Heard.</span>
+          <span className="block text-brand-teal">Understood.</span>
+          <span className="block">Healed.</span>
         </h1>
 
         <p className="arabic text-brand-teal text-lg md:text-xl mb-5 opacity-70" lang="ar">
@@ -169,10 +169,6 @@ function Stats() {
         ))}
       </StaggerReveal>
 
-      {/* Teal → white curve */}
-      <div className="-mb-1">
-        <CurveDivider from={TEAL} to={WHITE} />
-      </div>
     </section>
   );
 }
@@ -218,10 +214,6 @@ function Services() {
         </Reveal>
       </div>
 
-      {/* White → cream wave */}
-      <div className="-mb-1 mt-16">
-        <WaveDivider from={WHITE} to={CREAM} flip />
-      </div>
     </section>
   );
 }
@@ -248,9 +240,24 @@ function Testimonials() {
         </Reveal>
       </div>
 
-      <div className="-mb-1 mt-10">
-        <CurveDivider from={CREAM} to={DARK} />
-      </div>
+    </section>
+  );
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Typographic statement — cream, no decoration
+// ─────────────────────────────────────────────────────────────────────────────
+function Statement() {
+  return (
+    <section className="bg-brand-cream py-20">
+      <Reveal className="text-center px-6">
+        <p
+          className="font-display font-[200] text-brand-charcoal tracking-tight leading-none"
+          style={{ fontSize: "clamp(2rem, 6vw, 5rem)" }}
+        >
+          You are one decision away.
+        </p>
+      </Reveal>
     </section>
   );
 }
@@ -291,10 +298,6 @@ function FreeCourseCTA() {
         </Reveal>
       </div>
 
-      {/* Dark → white */}
-      <div className="-mb-1 mt-14">
-        <WaveDivider from={DARK} to={WHITE} />
-      </div>
     </section>
   );
 }
@@ -333,6 +336,7 @@ export default function HomePage() {
       <Stats />
       <Services />
       <Testimonials />
+      <Statement />
       <FreeCourseCTA />
       <BookingCTA />
     </>
