@@ -1,9 +1,10 @@
 "use client";
 
 import React, { useEffect, useRef, useState, useCallback } from "react";
+import { createPortal } from "react-dom";
 import Link from "next/link";
 import Image from "next/image";
-import { motion, useScroll } from "framer-motion";
+import { motion, useScroll, useTransform } from "framer-motion";
 import { ArrowDown } from "lucide-react";
 
 // ─── Config ───────────────────────────────────────────────────────────────────
@@ -14,8 +15,6 @@ const frameSrc = (n: number) =>
   `/hero-frames-webp/frame${String(n).padStart(4, "0")}.webp`;
 
 // ─── Cover-crop draw ──────────────────────────────────────────────────────────
-// Replicates CSS `object-fit: cover` on a canvas by cropping the source image
-// to the canvas aspect ratio before drawing, so no black bars appear.
 
 function drawCover(
   ctx: CanvasRenderingContext2D,
@@ -31,11 +30,9 @@ function drawCover(
   let sx = 0, sy = 0, sw = iw, sh = ih;
 
   if (imgAspect > canvasAspect) {
-    // Image is wider — crop left/right, fill height
     sw = Math.round(ih * canvasAspect);
     sx = Math.round((iw - sw) / 2);
   } else {
-    // Image is taller — crop top/bottom, fill width
     sh = Math.round(iw / canvasAspect);
     sy = Math.round((ih - sh) / 2);
   }
@@ -44,26 +41,44 @@ function drawCover(
 }
 
 // ─── HeroCanvas ──────────────────────────────────────────────────────────────
-// A 300vh scroll container with a sticky full-screen canvas inside.
-// Scroll position maps linearly to frame index (0 → 192).
-// Frame 0 is loaded first and given browser priority so the hero appears
-// immediately; all other frames load in the background via a RAF-deferred loop.
+// The fixed canvas overlay is portaled to document.body so it escapes any
+// ancestor CSS transforms (e.g. PageTransition) that would break fixed/sticky
+// positioning. A spacer div stays in the document flow to create scroll distance.
 
 export function HeroCanvas() {
-  const containerRef = useRef<HTMLDivElement>(null);
-  const canvasRef    = useRef<HTMLCanvasElement>(null);
-  const imagesRef    = useRef<(HTMLImageElement | null)[]>(
+  const spacerRef  = useRef<HTMLDivElement>(null);
+  const canvasRef  = useRef<HTMLCanvasElement>(null);
+  const overlayRef = useRef<HTMLDivElement>(null);
+  const imagesRef  = useRef<(HTMLImageElement | null)[]>(
     new Array(TOTAL_FRAMES).fill(null),
   );
   const frameRef = useRef(0);
-  const [ready, setReady] = useState(false);
+  const [ready, setReady]     = useState(false);
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => setMounted(true), []);
 
   const { scrollYProgress } = useScroll({
-    target: containerRef,
-    // progress 0 = canvas top at viewport top
-    // progress 1 = canvas bottom at viewport top (user has scrolled full 300vh)
+    target: spacerRef,
     offset: ["start start", "end start"],
   });
+
+  // Hero content exits before the quote arrives
+  const heroOpacity  = useTransform(scrollYProgress, [0.35, 0.65], [1, 0]);
+
+  // Extra overlay darkens as quote appears
+  const extraDark    = useTransform(scrollYProgress, [0.65, 0.80], [0, 0.3]);
+
+  // Quote fades in starting around frame 135 (135/193 ≈ 0.70)
+  const quoteOpacity = useTransform(scrollYProgress, [0.70, 0.82], [0, 1]);
+  const quoteY       = useTransform(scrollYProgress, [0.70, 0.88], [28, 0]);
+
+  // Attribution trails the quote by a beat
+  const attrOpacity  = useTransform(scrollYProgress, [0.78, 0.90], [0, 1]);
+  const attrY        = useTransform(scrollYProgress, [0.78, 0.90], [14, 0]);
+
+  // Cream dissolve: fades in over the last 15% for a cinematic handoff
+  const creamOpacity = useTransform(scrollYProgress, [0.85, 1], [0, 1]);
 
   // ── Draw a single frame ─────────────────────────────────────────────────────
   const drawFrame = useCallback((index: number) => {
@@ -84,6 +99,7 @@ export function HeroCanvas() {
     const dpr = window.devicePixelRatio || 1;
     const w   = canvas.offsetWidth;
     const h   = canvas.offsetHeight;
+    if (w === 0 || h === 0) return;
     if (canvas.width !== w * dpr || canvas.height !== h * dpr) {
       canvas.width  = w * dpr;
       canvas.height = h * dpr;
@@ -92,8 +108,6 @@ export function HeroCanvas() {
   }, [drawFrame]);
 
   // ── Preload frames ──────────────────────────────────────────────────────────
-  // Frame 0 is loaded immediately and synchronously assigned; the rest are
-  // deferred by one RAF tick so the browser services frame-0's request first.
   useEffect(() => {
     const loadOne = (i: number) => {
       const img = new window.Image();
@@ -107,10 +121,8 @@ export function HeroCanvas() {
       img.src = frameSrc(i + 1);
     };
 
-    // Priority: frame 0
     loadOne(0);
 
-    // Deferred: frames 1–192
     const rafId = requestAnimationFrame(() => {
       for (let i = 1; i < TOTAL_FRAMES; i++) loadOne(i);
     });
@@ -118,16 +130,26 @@ export function HeroCanvas() {
     return () => cancelAnimationFrame(rafId);
   }, [syncSize]);
 
-  // ── Resize observer keeps canvas sharp after window resize ─────────────────
+  // ── Resize observer — waits until portal canvas is in the DOM ──────────────
   useEffect(() => {
+    if (!mounted) return;
+    syncSize();
+    const canvas = canvasRef.current;
+    if (!canvas) return;
     const obs = new ResizeObserver(syncSize);
-    if (canvasRef.current) obs.observe(canvasRef.current);
+    obs.observe(canvas);
     return () => obs.disconnect();
-  }, [syncSize]);
+  }, [syncSize, mounted]);
 
-  // ── Scroll → frame ──────────────────────────────────────────────────────────
+  // ── Scroll → frame + overlay visibility ────────────────────────────────────
   useEffect(() => {
     return scrollYProgress.on("change", (v) => {
+      if (overlayRef.current) {
+        const past = v >= 1;
+        overlayRef.current.style.visibility    = past ? "hidden" : "visible";
+        overlayRef.current.style.pointerEvents = past ? "none"   : "auto";
+      }
+
       const index = Math.min(
         Math.round(v * (TOTAL_FRAMES - 1)),
         TOTAL_FRAMES - 1,
@@ -138,43 +160,50 @@ export function HeroCanvas() {
     });
   }, [scrollYProgress, drawFrame]);
 
-  // ── Render ──────────────────────────────────────────────────────────────────
-  return (
-    // Tall container gives the sticky canvas its scroll travel distance
-    <div ref={containerRef} style={{ height: "300vh" }} className="relative">
+  // ── Fixed overlay (portaled to body) ───────────────────────────────────────
+  const overlay = (
+    <div
+      ref={overlayRef}
+      className="fixed inset-0 z-30"
+    >
+      {/* Frame canvas */}
+      <canvas ref={canvasRef} className="absolute inset-0 w-full h-full" />
 
-      {/* Sticky viewport-sized shell — stays fixed while container scrolls */}
-      <div className="sticky top-0 w-full h-screen overflow-hidden">
+      {/* Base dark overlay */}
+      <div className="absolute inset-0 bg-black/40" />
 
-        {/* Frame canvas */}
-        <canvas ref={canvasRef} className="absolute inset-0 w-full h-full" />
+      {/* Extra overlay that deepens as the quote appears */}
+      <motion.div
+        className="absolute inset-0 bg-black pointer-events-none"
+        style={{ opacity: extraDark }}
+      />
 
-        {/* Dark overlay for text legibility */}
-        <div className="absolute inset-0 bg-black/40" />
-
-        {/* Hero content — fades in once frame 0 is painted */}
+      {/* Hero content — scroll-exits before the quote arrives */}
+      <motion.div
+        className="absolute inset-0 z-10 flex flex-col items-center justify-center text-center px-6"
+        style={{ opacity: heroOpacity }}
+      >
         <motion.div
-          className="relative z-10 flex flex-col items-center justify-center h-full text-center px-6"
+          className="flex justify-center mb-10"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: ready ? 1 : 0 }}
+          transition={{ delay: 0.4 }}
+        >
+          <Image
+            src="/images/al-yasmine-center-logo-light.png"
+            alt="Al Yasmine Center"
+            width={200}
+            height={70}
+            className="h-16 w-auto"
+            priority
+          />
+        </motion.div>
+
+        <motion.div
           initial={{ opacity: 0, y: 24 }}
           animate={{ opacity: ready ? 1 : 0, y: ready ? 0 : 24 }}
           transition={{ duration: 1, ease: [0.22, 1, 0.36, 1] }}
         >
-          <motion.div
-            className="flex justify-center mb-10"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: ready ? 1 : 0 }}
-            transition={{ delay: 0.4 }}
-          >
-            <Image
-              src="/images/al-yasmine-center-logo-light.png"
-              alt="Al Yasmine Center"
-              width={200}
-              height={70}
-              className="h-16 w-auto"
-              priority
-            />
-          </motion.div>
-
           <h1
             className="font-display font-[200] text-white mb-6 leading-[0.9] tracking-tight"
             style={{ fontSize: "clamp(4rem, 10vw, 9rem)" }}
@@ -198,15 +227,56 @@ export function HeroCanvas() {
 
         {/* Scroll indicator */}
         <motion.div
-          className="absolute bottom-8 left-1/2 -translate-x-1/2 z-10 flex flex-col items-center gap-1.5 text-white/40"
+          className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-1.5 text-white/40"
           animate={{ y: [0, 6, 0] }}
           transition={{ duration: 2.5, repeat: Infinity }}
         >
           <span className="text-[9px] tracking-[0.25em] uppercase">Scroll</span>
           <ArrowDown className="w-3.5 h-3.5" />
         </motion.div>
+      </motion.div>
 
-      </div>
+      {/* Quote overlay — appears over frames ~135–193 */}
+      <motion.div
+        className="absolute inset-0 z-20 flex flex-col items-center justify-center text-center px-8 pointer-events-none"
+        style={{ opacity: quoteOpacity, y: quoteY }}
+      >
+        <p
+          className="font-display font-[200] italic text-white leading-[1.5] max-w-3xl"
+          style={{ fontSize: "clamp(1.5rem, 3.5vw, 3rem)" }}
+        >
+          &ldquo;I am here to help you regain your balance.
+          Listen to your inner voice instead of the voice
+          of fear, anxiety, and tension.&rdquo;
+        </p>
+
+        <motion.div
+          className="mt-10 flex flex-col items-center gap-3"
+          style={{ opacity: attrOpacity, y: attrY }}
+        >
+          <div className="w-12 h-px bg-brand-gold" />
+          <p className="text-brand-gold text-xs tracking-[0.3em] uppercase">
+            Aliyah Al Bahari
+          </p>
+        </motion.div>
+      </motion.div>
+
+      {/* Cream dissolve — cinematic fade-out over last 15% of scroll */}
+      <motion.div
+        className="absolute inset-0 z-40 bg-brand-cream pointer-events-none"
+        style={{ opacity: creamOpacity }}
+      />
     </div>
+  );
+
+  // ── Render ──────────────────────────────────────────────────────────────────
+  return (
+    <>
+      {/* Spacer in document flow — gives the fixed canvas its scroll travel */}
+      <div ref={spacerRef} style={{ height: "300vh" }} className="bg-brand-cream" />
+
+      {/* Portal overlay to body, escaping PageTransition transforms */}
+      {mounted && createPortal(overlay, document.body)}
+    </>
   );
 }

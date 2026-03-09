@@ -2,30 +2,81 @@
 
 import React from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { motion } from "framer-motion";
 import { HeroCanvas } from "@/components/ui/hero-canvas";
 import { Reveal, StaggerReveal, staggerChild } from "@/components/ui/reveal";
-import { ScrollTestimonials } from "@/components/ui/scroll-testimonials";
-import { services, testimonials } from "@/lib/config";
+import { services } from "@/lib/config";
 import { formatPrice } from "@/lib/utils";
 
 // ─────────────────────────────────────────────────────────────────────────────
-// Intro Quote — white, massive padding, single centered line
+// Aliyah — full bleed hero image with bottom-anchored text
 // ─────────────────────────────────────────────────────────────────────────────
-function IntroQuote() {
+function AliyahHero() {
   return (
-    <section className="bg-white py-40">
-      <Reveal className="text-center px-6 max-w-3xl mx-auto">
-        <p
-          className="font-display font-[200] text-brand-dark italic leading-relaxed"
-          style={{ fontSize: "clamp(1.5rem, 4vw, 3rem)" }}
+    <section className="relative min-h-screen overflow-hidden">
+      <Image
+        src="/images/aliyah-hero.jpeg"
+        alt="Aliyah Al Bahari — psychological counselor and CBT specialist"
+        fill
+        className="object-cover object-top"
+        priority
+      />
+      <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent" />
+
+      <Reveal className="absolute bottom-0 left-0 w-full p-12 md:p-24 max-w-2xl">
+        <p className="text-brand-gold text-xs tracking-[0.3em] font-light mb-4">
+          المستشارة النفسية
+        </p>
+        <h2
+          className="font-display font-[200] text-white leading-none mb-2"
+          style={{ fontSize: "clamp(3rem, 8vw, 7rem)" }}
         >
-          &ldquo;I am here to help you regain your balance. Listen to your inner voice
-          instead of the voice of fear, anxiety, and tension.&rdquo;
+          علياء البحري
+        </h2>
+        <p className="text-white/60 text-sm tracking-widest uppercase mb-8">
+          Aliyah Al Bahari
+        </p>
+        <p className="text-white/80 text-base font-light leading-relaxed max-w-lg mb-8">
+          A psychological counselor and CBT specialist dedicated exclusively to
+          women and teenage girls. Certified at the Prophet&apos;s Mosque in
+          Madinah, and a descendant of the Prophet Muhammad &#xFDFA; — her work
+          is rooted in deep spiritual trust, clinical precision, and unwavering
+          compassion.
+        </p>
+        <div className="flex flex-wrap gap-3">
+          <span className="border border-white/30 text-white/70 text-xs px-4 py-2 rounded-full">
+            CBT Specialist
+          </span>
+          <span className="border border-white/30 text-white/70 text-xs px-4 py-2 rounded-full">
+            Prophet&apos;s Mosque Certified
+          </span>
+          <span className="border border-white/30 text-white/70 text-xs px-4 py-2 rounded-full">
+            Women Only
+          </span>
+        </div>
+      </Reveal>
+    </section>
+  );
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Aliyah Quote — Arabic quote on dark background
+// ─────────────────────────────────────────────────────────────────────────────
+function AliyahQuote() {
+  return (
+    <section className="bg-brand-dark py-40">
+      <Reveal className="section-container text-center" direction="none">
+        <p
+          className="font-display font-[200] text-brand-cream leading-relaxed max-w-3xl mx-auto arabic"
+          style={{ fontSize: "clamp(1.5rem, 4vw, 2.5rem)", direction: "rtl" }}
+        >
+          الخوف شعور طبيعي، لكن البقاء في دوامة الخوف ليس قدرًا. حين يتعلم
+          الإنسان كيف يحتوي مشاعره وينظم أفكاره... يعود الهدوء إلى قلبه.
         </p>
         <div className="w-12 h-px bg-brand-gold mx-auto my-8" />
-        <p className="text-brand-teal-light text-sm tracking-widest uppercase">
-          &mdash; Aliyah Al Bahari
+        <p className="text-brand-teal-light text-sm tracking-widest">
+          — علياء البحري
         </p>
       </Reveal>
     </section>
@@ -81,7 +132,6 @@ function Services() {
               variants={staggerChild}
               className="group p-7 rounded-3xl bg-white border-l-[3px] border-l-brand-blush shadow-sm hover:border-l-brand-teal hover:shadow-lg transition-all duration-300 flex flex-col gap-4"
             >
-              <span className="text-4xl">{s.icon}</span>
               <div className="flex-1">
                 <h3 className="font-display text-xl text-brand-dark mb-1.5">{s.title}</h3>
                 <p className="text-xs text-brand-dark/55 leading-relaxed">{s.description}</p>
@@ -105,26 +155,64 @@ function Services() {
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
-// Testimonials — white background, scroll-triggered quotes
+// Testimonials — horizontal scrolling image gallery
 // ─────────────────────────────────────────────────────────────────────────────
+const testimonialImages = [
+  { src: "/images/testimonial-1.jpeg", alt: "شهادة عميلة عن تجربتها مع مركز الياسمين" },
+  { src: "/images/testimonial-2.jpeg", alt: "رأي عميلة في جلسات الاستشارة النفسية" },
+  { src: "/images/testimonial-3.jpeg", alt: "تجربة عميلة مع العلاج السلوكي المعرفي" },
+  { src: "/images/testimonial-4.jpeg", alt: "شهادة عميلة عن التحول الذي حققته" },
+  { src: "/images/testimonial-5.jpeg", alt: "رأي عميلة في برنامج التطوير الشخصي" },
+  { src: "/images/testimonial-6.jpeg", alt: "تجربة عميلة مع جلسات علياء البحري" },
+  { src: "/images/testimonial-7.jpeg", alt: "شهادة عميلة عن رحلة الشفاء والتعافي" },
+  { src: "/images/testimonial-8.jpeg", alt: "رأي عميلة في خدمات مركز الياسمين" },
+];
+
 function Testimonials() {
   return (
     <section className="bg-white py-24">
       <div className="section-container">
-        <Reveal className="text-center mb-4">
-          <p className="text-brand-gold text-xs tracking-[0.3em] uppercase font-medium mb-3">Real Results</p>
+        <Reveal className="text-center mb-14">
+          <div className="flex items-center justify-center gap-4 mb-3">
+            <p className="text-brand-gold text-xs tracking-[0.3em] uppercase font-medium">
+              What They Say
+            </p>
+            <span className="text-brand-gold/40">|</span>
+            <p className="text-brand-gold text-xs tracking-[0.3em] font-medium arabic">
+              ماذا قلن
+            </p>
+          </div>
           <h2
             className="font-display font-[200] text-brand-dark"
             style={{ fontSize: "clamp(2.5rem, 6vw, 5rem)" }}
           >
-            What Our Clients Say
+            Real Results
           </h2>
         </Reveal>
+      </div>
 
-        <ScrollTestimonials testimonials={testimonials} />
+      <div className="overflow-x-auto scrollbar-hide pb-4 px-4 sm:px-6 lg:px-8">
+        <div className="flex gap-6">
+          {testimonialImages.map((img) => (
+            <div key={img.src} className="flex-shrink-0 relative h-[500px] w-auto">
+              <Image
+                src={img.src}
+                alt={img.alt}
+                width={375}
+                height={500}
+                className="h-[500px] w-auto rounded-3xl object-cover cursor-pointer"
+              />
+            </div>
+          ))}
+        </div>
+      </div>
 
+      <div className="section-container">
         <Reveal delay={0.2} className="text-center mt-6 pb-4">
-          <Link href="/proof" className="inline-block px-6 py-2.5 border border-brand-teal/40 text-brand-teal rounded-full text-xs font-medium hover:bg-brand-teal hover:text-brand-cream hover:border-brand-teal transition-all duration-300">
+          <Link
+            href="/proof"
+            className="inline-block px-6 py-2.5 border border-brand-teal/40 text-brand-teal rounded-full text-xs font-medium hover:bg-brand-teal hover:text-brand-cream hover:border-brand-teal transition-all duration-300"
+          >
             See all stories
           </Link>
         </Reveal>
@@ -134,7 +222,7 @@ function Testimonials() {
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
-// Dark Statement — single typographic line, massive padding
+// Dark Statement — single typographic line
 // ─────────────────────────────────────────────────────────────────────────────
 function DarkStatement() {
   return (
@@ -181,7 +269,8 @@ export default function HomePage() {
   return (
     <>
       <HeroCanvas />
-      <IntroQuote />
+      <AliyahHero />
+      <AliyahQuote />
       <Stats />
       <Services />
       <Testimonials />
