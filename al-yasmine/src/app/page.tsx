@@ -1,85 +1,128 @@
 "use client";
 
-import React from "react";
+import React, { useRef } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { motion } from "framer-motion";
+import { motion, useScroll, useTransform } from "framer-motion";
 import { HeroCanvas } from "@/components/ui/hero-canvas";
 import { Reveal, StaggerReveal, staggerChild } from "@/components/ui/reveal";
 import { services } from "@/lib/config";
 import { formatPrice } from "@/lib/utils";
 
 // ─────────────────────────────────────────────────────────────────────────────
-// Aliyah — full bleed hero image with bottom-anchored text
+// Aliyah — 3D parallax entrance, image depth, scroll-driven text reveal
 // ─────────────────────────────────────────────────────────────────────────────
 function AliyahHero() {
-  return (
-    <section className="relative min-h-screen overflow-hidden">
-      <Image
-        src="/images/aliyah-hero.jpeg"
-        alt="Aliyah Al Bahari — psychological counselor and CBT specialist"
-        fill
-        className="object-cover object-top"
-        priority
-      />
-      <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent" />
+  const wrapperRef = useRef<HTMLDivElement>(null);
 
-      <Reveal className="absolute bottom-0 left-0 w-full p-12 md:p-24 max-w-2xl">
-        <p className="text-brand-gold text-xs tracking-[0.3em] font-light mb-4">
-          المستشارة النفسية
-        </p>
-        <h2
-          className="font-display font-[200] text-white leading-none mb-2"
-          style={{ fontSize: "clamp(3rem, 8vw, 7rem)" }}
-        >
-          علياء البحري
-        </h2>
-        <p className="text-white/60 text-sm tracking-widest uppercase mb-8">
-          Aliyah Al Bahari
-        </p>
-        <p className="text-white/80 text-base font-light leading-relaxed max-w-lg mb-8">
-          A psychological counselor and CBT specialist dedicated exclusively to
-          women and teenage girls. Certified at the Prophet&apos;s Mosque in
-          Madinah, and a descendant of the Prophet Muhammad &#xFDFA; — her work
-          is rooted in deep spiritual trust, clinical precision, and unwavering
-          compassion.
-        </p>
-        <div className="flex flex-wrap gap-3">
-          <span className="border border-white/30 text-white/70 text-xs px-4 py-2 rounded-full">
-            CBT Specialist
-          </span>
-          <span className="border border-white/30 text-white/70 text-xs px-4 py-2 rounded-full">
-            Prophet&apos;s Mosque Certified
-          </span>
-          <span className="border border-white/30 text-white/70 text-xs px-4 py-2 rounded-full">
-            Women Only
-          </span>
-        </div>
-      </Reveal>
-    </section>
-  );
-}
+  // 3D entrance — completes as section reaches viewport center
+  const { scrollYProgress: enterProgress } = useScroll({
+    target: wrapperRef,
+    offset: ["start end", "center center"],
+  });
 
-// ─────────────────────────────────────────────────────────────────────────────
-// Aliyah Quote — Arabic quote on dark background
-// ─────────────────────────────────────────────────────────────────────────────
-function AliyahQuote() {
+  const rotateX        = useTransform(enterProgress, [0, 1], [8, 0]);
+  const sectionY       = useTransform(enterProgress, [0, 1], [60, 0]);
+  const sectionOpacity = useTransform(enterProgress, [0, 1], [0.4, 1]);
+  const sectionScale   = useTransform(enterProgress, [0, 1], [0.97, 1]);
+
+  // Image parallax — separate range for depth within the section
+  const { scrollYProgress: throughProgress } = useScroll({
+    target: wrapperRef,
+    offset: ["start end", "end start"],
+  });
+
+  const imgY         = useTransform(throughProgress, [0, 1], [0, -60]);
+  const textOpacity  = useTransform(enterProgress, [0.3, 0.8], [0, 1]);
+  const textY        = useTransform(enterProgress, [0.3, 0.8], [40, 0]);
+  const quoteOpacity = useTransform(enterProgress, [0.4, 0.9], [0, 1]);
+  const quoteY       = useTransform(enterProgress, [0.4, 0.9], [40, 0]);
+
   return (
-    <section className="bg-brand-dark py-40">
-      <Reveal className="section-container text-center" direction="none">
-        <p
-          className="font-display font-[200] text-brand-cream leading-relaxed max-w-3xl mx-auto arabic"
-          style={{ fontSize: "clamp(1.5rem, 4vw, 2.5rem)", direction: "rtl" }}
-        >
-          الخوف شعور طبيعي، لكن البقاء في دوامة الخوف ليس قدرًا. حين يتعلم
-          الإنسان كيف يحتوي مشاعره وينظم أفكاره... يعود الهدوء إلى قلبه.
-        </p>
-        <div className="w-12 h-px bg-brand-gold mx-auto my-8" />
-        <p className="text-brand-teal-light text-sm tracking-widest">
-          — علياء البحري
-        </p>
-      </Reveal>
-    </section>
+    <div ref={wrapperRef} className="w-full bg-black" style={{ perspective: "1200px", margin: 0, padding: 0 }}>
+      <motion.div
+        style={{
+          rotateX,
+          y: sectionY,
+          opacity: sectionOpacity,
+          scale: sectionScale,
+          transformOrigin: "center bottom",
+        }}
+      >
+        <section className="relative w-full bg-black overflow-hidden" style={{ margin: 0, padding: 0 }}>
+          {/* Parallax image wrapper */}
+          <motion.div style={{ y: imgY }}>
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src="/images/aliyah-hero-cropped.png"
+              alt="Aliyah Al Bahari — psychological counselor and CBT specialist"
+              className="block w-full h-auto"
+            />
+          </motion.div>
+
+          {/* Top gradient — hero-bleed */}
+          <div className="absolute top-0 left-0 w-full h-48 z-10 bg-gradient-to-b from-black to-transparent" />
+
+          {/* Bottom gradient — quote legibility */}
+          <div className="absolute bottom-0 left-0 w-full h-64 z-10 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
+
+          {/* Credentials — top left, scroll-driven fade-in */}
+          <motion.div
+            className="absolute top-0 left-0 z-20 p-12 md:p-24 max-w-lg"
+            style={{ opacity: textOpacity, y: textY }}
+          >
+            <p className="text-brand-gold text-xs tracking-[0.3em] font-light mb-4">
+              المستشارة النفسية
+            </p>
+            <h2
+              className="font-display font-[200] text-white leading-none mb-2"
+              style={{ fontSize: "clamp(3rem, 8vw, 7rem)" }}
+            >
+              علياء البحري
+            </h2>
+            <p className="text-white/60 text-sm tracking-widest uppercase mb-8">
+              Aliyah Al Bahari
+            </p>
+            <p className="text-white/80 text-base font-light leading-relaxed max-w-lg mb-8">
+              A psychological counselor and CBT specialist dedicated exclusively to
+              women and teenage girls. Certified at the Prophet&apos;s Mosque in
+              Madinah, and a descendant of the Prophet Muhammad &#xFDFA; — her work
+              is rooted in deep spiritual trust, clinical precision, and unwavering
+              compassion.
+            </p>
+            <div className="flex flex-wrap gap-3">
+              <span className="border border-white/30 text-white/70 text-xs px-4 py-2 rounded-full">
+                CBT Specialist
+              </span>
+              <span className="border border-white/30 text-white/70 text-xs px-4 py-2 rounded-full">
+                Prophet&apos;s Mosque Certified
+              </span>
+              <span className="border border-white/30 text-white/70 text-xs px-4 py-2 rounded-full">
+                Women Only
+              </span>
+            </div>
+          </motion.div>
+
+          {/* Arabic quote — bottom center, scroll-driven fade-in (slightly delayed) */}
+          <motion.div
+            className="absolute bottom-0 inset-x-0 z-20 pb-12 md:pb-20 px-8 text-center"
+            style={{ opacity: quoteOpacity, y: quoteY }}
+          >
+            <p
+              className="font-display font-[200] text-brand-cream leading-relaxed max-w-2xl mx-auto arabic"
+              style={{ fontSize: "clamp(1.2rem, 3vw, 2rem)", direction: "rtl" }}
+            >
+              الخوف شعور طبيعي، لكن البقاء في دوامة الخوف ليس قدرًا. حين يتعلم
+              الإنسان كيف يحتوي مشاعره وينظم أفكاره... يعود الهدوء إلى قلبه.
+            </p>
+            <div className="w-12 h-px bg-brand-gold mx-auto my-8" />
+            <p className="text-brand-teal-light text-sm tracking-widest">
+              — علياء البحري
+            </p>
+          </motion.div>
+        </section>
+      </motion.div>
+    </div>
   );
 }
 
@@ -270,7 +313,6 @@ export default function HomePage() {
     <>
       <HeroCanvas />
       <AliyahHero />
-      <AliyahQuote />
       <Stats />
       <Services />
       <Testimonials />

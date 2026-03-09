@@ -1,7 +1,6 @@
 "use client";
 
 import React, { useEffect, useRef, useState, useCallback } from "react";
-import { createPortal } from "react-dom";
 import Link from "next/link";
 import Image from "next/image";
 import { motion, useScroll, useTransform } from "framer-motion";
@@ -41,25 +40,21 @@ function drawCover(
 }
 
 // ─── HeroCanvas ──────────────────────────────────────────────────────────────
-// The fixed canvas overlay is portaled to document.body so it escapes any
-// ancestor CSS transforms (e.g. PageTransition) that would break fixed/sticky
-// positioning. A spacer div stays in the document flow to create scroll distance.
+// A tall scroll container with a sticky full-screen canvas inside. The canvas
+// sticks while frames advance, then naturally releases — no portal, no fixed
+// positioning, no snap. The next section scrolls up from below like a normal page.
 
 export function HeroCanvas() {
-  const spacerRef  = useRef<HTMLDivElement>(null);
-  const canvasRef  = useRef<HTMLCanvasElement>(null);
-  const overlayRef = useRef<HTMLDivElement>(null);
-  const imagesRef  = useRef<(HTMLImageElement | null)[]>(
+  const containerRef = useRef<HTMLDivElement>(null);
+  const canvasRef    = useRef<HTMLCanvasElement>(null);
+  const imagesRef    = useRef<(HTMLImageElement | null)[]>(
     new Array(TOTAL_FRAMES).fill(null),
   );
   const frameRef = useRef(0);
-  const [ready, setReady]     = useState(false);
-  const [mounted, setMounted] = useState(false);
-
-  useEffect(() => setMounted(true), []);
+  const [ready, setReady] = useState(false);
 
   const { scrollYProgress } = useScroll({
-    target: spacerRef,
+    target: containerRef,
     offset: ["start start", "end start"],
   });
 
@@ -77,8 +72,8 @@ export function HeroCanvas() {
   const attrOpacity  = useTransform(scrollYProgress, [0.78, 0.90], [0, 1]);
   const attrY        = useTransform(scrollYProgress, [0.78, 0.90], [14, 0]);
 
-  // Cream dissolve: fades in over the last 15% for a cinematic handoff
-  const creamOpacity = useTransform(scrollYProgress, [0.85, 1], [0, 1]);
+  // Bottom gradient — hidden on load, fades in after 60% scroll progress
+  const bottomGradientOpacity = useTransform(scrollYProgress, [0.6, 0.85], [0, 1]);
 
   // ── Draw a single frame ─────────────────────────────────────────────────────
   const drawFrame = useCallback((index: number) => {
@@ -130,26 +125,18 @@ export function HeroCanvas() {
     return () => cancelAnimationFrame(rafId);
   }, [syncSize]);
 
-  // ── Resize observer — waits until portal canvas is in the DOM ──────────────
+  // ── Resize observer keeps canvas sharp after window resize ─────────────────
   useEffect(() => {
-    if (!mounted) return;
-    syncSize();
     const canvas = canvasRef.current;
     if (!canvas) return;
     const obs = new ResizeObserver(syncSize);
     obs.observe(canvas);
     return () => obs.disconnect();
-  }, [syncSize, mounted]);
+  }, [syncSize]);
 
-  // ── Scroll → frame + overlay visibility ────────────────────────────────────
+  // ── Scroll → frame ──────────────────────────────────────────────────────────
   useEffect(() => {
     return scrollYProgress.on("change", (v) => {
-      if (overlayRef.current) {
-        const past = v >= 1;
-        overlayRef.current.style.visibility    = past ? "hidden" : "visible";
-        overlayRef.current.style.pointerEvents = past ? "none"   : "auto";
-      }
-
       const index = Math.min(
         Math.round(v * (TOTAL_FRAMES - 1)),
         TOTAL_FRAMES - 1,
@@ -160,123 +147,111 @@ export function HeroCanvas() {
     });
   }, [scrollYProgress, drawFrame]);
 
-  // ── Fixed overlay (portaled to body) ───────────────────────────────────────
-  const overlay = (
-    <div
-      ref={overlayRef}
-      className="fixed inset-0 z-30"
-    >
-      {/* Frame canvas */}
-      <canvas ref={canvasRef} className="absolute inset-0 w-full h-full" />
-
-      {/* Base dark overlay */}
-      <div className="absolute inset-0 bg-black/40" />
-
-      {/* Extra overlay that deepens as the quote appears */}
-      <motion.div
-        className="absolute inset-0 bg-black pointer-events-none"
-        style={{ opacity: extraDark }}
-      />
-
-      {/* Hero content — scroll-exits before the quote arrives */}
-      <motion.div
-        className="absolute inset-0 z-10 flex flex-col items-center justify-center text-center px-6"
-        style={{ opacity: heroOpacity }}
-      >
-        <motion.div
-          className="flex justify-center mb-10"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: ready ? 1 : 0 }}
-          transition={{ delay: 0.4 }}
-        >
-          <Image
-            src="/images/al-yasmine-center-logo-light.png"
-            alt="Al Yasmine Center"
-            width={200}
-            height={70}
-            className="h-16 w-auto"
-            priority
-          />
-        </motion.div>
-
-        <motion.div
-          initial={{ opacity: 0, y: 24 }}
-          animate={{ opacity: ready ? 1 : 0, y: ready ? 0 : 24 }}
-          transition={{ duration: 1, ease: [0.22, 1, 0.36, 1] }}
-        >
-          <h1
-            className="font-display font-[200] text-white mb-6 leading-[0.9] tracking-tight"
-            style={{ fontSize: "clamp(4rem, 10vw, 9rem)" }}
-          >
-            <span className="block">Heard.</span>
-            <span className="block">Understood.</span>
-            <span className="block">Healed.</span>
-          </h1>
-
-          <p className="text-white/70 text-lg font-light max-w-md mx-auto mb-10">
-            I&apos;m here to help you regain your balance.
-          </p>
-
-          <Link
-            href="/booking"
-            className="inline-block bg-brand-gold text-brand-dark rounded-full px-8 py-4 font-medium text-sm hover:scale-105 transition-transform"
-          >
-            Book a Free Call
-          </Link>
-        </motion.div>
-
-        {/* Scroll indicator */}
-        <motion.div
-          className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-1.5 text-white/40"
-          animate={{ y: [0, 6, 0] }}
-          transition={{ duration: 2.5, repeat: Infinity }}
-        >
-          <span className="text-[9px] tracking-[0.25em] uppercase">Scroll</span>
-          <ArrowDown className="w-3.5 h-3.5" />
-        </motion.div>
-      </motion.div>
-
-      {/* Quote overlay — appears over frames ~135–193 */}
-      <motion.div
-        className="absolute inset-0 z-20 flex flex-col items-center justify-center text-center px-8 pointer-events-none"
-        style={{ opacity: quoteOpacity, y: quoteY }}
-      >
-        <p
-          className="font-display font-[200] italic text-white leading-[1.5] max-w-3xl"
-          style={{ fontSize: "clamp(1.5rem, 3.5vw, 3rem)" }}
-        >
-          &ldquo;I am here to help you regain your balance.
-          Listen to your inner voice instead of the voice
-          of fear, anxiety, and tension.&rdquo;
-        </p>
-
-        <motion.div
-          className="mt-10 flex flex-col items-center gap-3"
-          style={{ opacity: attrOpacity, y: attrY }}
-        >
-          <div className="w-12 h-px bg-brand-gold" />
-          <p className="text-brand-gold text-xs tracking-[0.3em] uppercase">
-            Aliyah Al Bahari
-          </p>
-        </motion.div>
-      </motion.div>
-
-      {/* Cream dissolve — cinematic fade-out over last 15% of scroll */}
-      <motion.div
-        className="absolute inset-0 z-40 bg-brand-cream pointer-events-none"
-        style={{ opacity: creamOpacity }}
-      />
-    </div>
-  );
-
   // ── Render ──────────────────────────────────────────────────────────────────
   return (
-    <>
-      {/* Spacer in document flow — gives the fixed canvas its scroll travel */}
-      <div ref={spacerRef} style={{ height: "300vh" }} className="bg-brand-cream" />
+    <div ref={containerRef} style={{ height: "300vh" }} className="relative bg-black">
+      <div className="sticky top-0 w-full h-screen">
+        {/* Frame canvas */}
+        <canvas ref={canvasRef} className="absolute inset-0 w-full h-full" />
 
-      {/* Portal overlay to body, escaping PageTransition transforms */}
-      {mounted && createPortal(overlay, document.body)}
-    </>
+        {/* Base dark overlay */}
+        <div className="absolute inset-0 bg-black/40" />
+
+        {/* Extra overlay that deepens as the quote appears */}
+        <motion.div
+          className="absolute inset-0 bg-black pointer-events-none"
+          style={{ opacity: extraDark }}
+        />
+
+        {/* Hero content — scroll-exits before the quote arrives */}
+        <motion.div
+          className="absolute inset-0 z-10 flex flex-col items-center justify-center text-center px-6"
+          style={{ opacity: heroOpacity }}
+        >
+          <motion.div
+            className="flex justify-center mb-10"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: ready ? 1 : 0 }}
+            transition={{ delay: 0.4 }}
+          >
+            <Image
+              src="/images/al-yasmine-center-logo-light.png"
+              alt="Al Yasmine Center"
+              width={200}
+              height={70}
+              className="h-16 w-auto"
+              priority
+            />
+          </motion.div>
+
+          <motion.div
+            initial={{ opacity: 0, y: 24 }}
+            animate={{ opacity: ready ? 1 : 0, y: ready ? 0 : 24 }}
+            transition={{ duration: 1, ease: [0.22, 1, 0.36, 1] }}
+          >
+            <h1
+              className="font-display font-[200] text-white mb-6 leading-[0.9] tracking-tight"
+              style={{ fontSize: "clamp(4rem, 10vw, 9rem)" }}
+            >
+              <span className="block">Heard.</span>
+              <span className="block">Understood.</span>
+              <span className="block">Healed.</span>
+            </h1>
+
+            <p className="text-white/70 text-lg font-light max-w-md mx-auto mb-10">
+              I&apos;m here to help you regain your balance.
+            </p>
+
+            <Link
+              href="/booking"
+              className="inline-block bg-brand-gold text-brand-dark rounded-full px-8 py-4 font-medium text-sm hover:scale-105 transition-transform"
+            >
+              Book a Free Call
+            </Link>
+          </motion.div>
+
+          {/* Scroll indicator */}
+          <motion.div
+            className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-1.5 text-white/40"
+            animate={{ y: [0, 6, 0] }}
+            transition={{ duration: 2.5, repeat: Infinity }}
+          >
+            <span className="text-[9px] tracking-[0.25em] uppercase">Scroll</span>
+            <ArrowDown className="w-3.5 h-3.5" />
+          </motion.div>
+        </motion.div>
+
+        {/* Quote overlay — appears over frames ~135–193 */}
+        <motion.div
+          className="absolute inset-0 z-20 flex flex-col items-center justify-center text-center px-8 pointer-events-none"
+          style={{ opacity: quoteOpacity, y: quoteY }}
+        >
+          <p
+            className="font-display font-[200] italic text-white leading-[1.5] max-w-3xl"
+            style={{ fontSize: "clamp(1.5rem, 3.5vw, 3rem)" }}
+          >
+            &ldquo;I am here to help you regain your balance.
+            Listen to your inner voice instead of the voice
+            of fear, anxiety, and tension.&rdquo;
+          </p>
+
+          <motion.div
+            className="mt-10 flex flex-col items-center gap-3"
+            style={{ opacity: attrOpacity, y: attrY }}
+          >
+            <div className="w-12 h-px bg-brand-gold" />
+            <p className="text-brand-gold text-xs tracking-[0.3em] uppercase">
+              Aliyah Al Bahari
+            </p>
+          </motion.div>
+        </motion.div>
+
+        {/* Bottom edge gradient — hidden on load, appears after 60% scroll */}
+        <motion.div
+          className="absolute bottom-0 left-0 w-full h-48 z-30 bg-gradient-to-b from-transparent to-black pointer-events-none"
+          style={{ opacity: bottomGradientOpacity }}
+        />
+      </div>
+    </div>
   );
 }
