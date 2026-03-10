@@ -1,57 +1,65 @@
 "use client";
 
 import React from "react";
-import { siteConfig } from "@/lib/config";
 import Link from "next/link";
 import { Reveal, StaggerReveal, staggerChild } from "@/components/ui/reveal";
-import { ContainerScroll } from "@/components/ui/container-scroll-animation";
 import { motion } from "framer-motion";
 
 export default function AboutPage() {
   return (
-    <div className="pt-20">
+    <div>
 
-      {/* Hero */}
-      <section className="relative" style={{ background: "linear-gradient(160deg,#f6f2e9 0%,#eef6f6 100%)" }}>
-        <div className="section-container max-w-3xl pt-16 pb-12">
-          <Reveal>
-            <p className="text-brand-gold text-[10px] tracking-[0.25em] uppercase font-medium mb-4">Our Story</p>
-            <h1 className="font-display font-light text-brand-dark mb-4">About Al Yasmine Center</h1>
-            <div className="brand-divider mx-0" />
-            <p className="text-brand-dark/55 text-lg mt-6 max-w-xl leading-relaxed">
-              Born from a belief that every woman carries within her the seeds of greatness — we exist to help those seeds bloom.
-            </p>
-          </Reveal>
-        </div>
-      </section>
+      {/* Full-bleed Aliyah Hero */}
+      <section className="relative w-full bg-black">
+        <img
+          src="/images/aliyah-hero-cropped.png"
+          alt="Aliyah Al Bahari"
+          className="block w-full h-auto"
+        />
 
-      {/* 3D scroll showcase */}
-      <section className="bg-white overflow-hidden">
-        <ContainerScroll
-          titleComponent={
-            <Reveal>
-              <p className="text-brand-gold text-[10px] tracking-[0.25em] uppercase font-medium mb-3">Our Approach</p>
-              <h2 className="font-display font-light text-brand-dark text-4xl md:text-5xl mb-2">Where Science Meets Heart</h2>
-              <p className="text-brand-dark/45 text-sm max-w-md mx-auto mt-3">A glimpse inside how we work — and the space we create for you.</p>
-            </Reveal>
-          }
-        >
-          <div className="w-full h-full relative overflow-hidden rounded-2xl">
-            <img
-              src="https://images.unsplash.com/photo-1551836022-d5d88e9218df?w=1400&q=80"
-              alt="Coaching session at Al Yasmine Center"
-              className="w-full h-full object-cover object-center"
-            />
-            <div className="absolute inset-0 bg-gradient-to-t from-brand-teal/80 via-transparent to-transparent flex items-end p-8">
-              <div>
-                <p className="font-display text-2xl text-brand-cream font-light mb-1">
-                  &ldquo;You are one decision away from a completely different life.&rdquo;
-                </p>
-                <p className="text-brand-gold text-sm">— Al Yasmine Center</p>
-              </div>
-            </div>
+        {/* Top gradient connecting to navbar */}
+        <div className="absolute top-0 left-0 w-full h-48 z-10 bg-gradient-to-b from-black/70 to-transparent" />
+
+        {/* Bottom gradient for quote legibility */}
+        <div className="absolute bottom-0 left-0 w-full h-64 z-10 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
+
+        {/* Credentials block */}
+        <Reveal className="absolute top-0 left-0 z-20 p-12 md:p-24 max-w-lg">
+          <p className="text-brand-gold text-xs tracking-[0.3em] font-light mb-4">المستشارة النفسية</p>
+          <h1
+            className="font-display font-[200] text-white leading-none mb-2"
+            style={{ fontSize: "clamp(3rem, 8vw, 7rem)" }}
+          >
+            علياء البحري
+          </h1>
+          <p className="text-white/60 text-sm tracking-widest uppercase mb-8">Aliyah Al Bahari</p>
+          <p className="text-white/80 text-base font-light leading-relaxed max-w-lg mb-8">
+            A psychological counselor and CBT specialist dedicated exclusively to women and teenage girls.
+            Certified at the Prophet&#39;s Mosque in Madinah, and a descendant of the Prophet Muhammad ﷺ
+            — her work is rooted in deep spiritual trust, clinical precision, and unwavering compassion.
+          </p>
+          <div className="flex flex-wrap gap-3">
+            {["CBT Specialist", "Prophet's Mosque Certified", "Women Only"].map((label) => (
+              <span key={label} className="border border-white/30 text-white/70 text-xs px-4 py-2 rounded-full">
+                {label}
+              </span>
+            ))}
           </div>
-        </ContainerScroll>
+        </Reveal>
+
+        {/* Arabic quote */}
+        <Reveal className="absolute bottom-0 inset-x-0 z-20 pb-12 md:pb-20 px-8 text-center" delay={0.2}>
+          <p
+            className="font-display font-[200] text-brand-cream leading-relaxed max-w-2xl mx-auto"
+            style={{ fontSize: "clamp(1.2rem, 3vw, 2rem)", direction: "rtl" }}
+          >
+            الخوف شعور طبيعي، لكن البقاء في دوامة الخوف ليس قدرًا.
+            حين يتعلم الإنسان كيف يحتوي مشاعره وينظم أفكاره...
+            يعود الهدوء إلى قلبه.
+          </p>
+          <div className="w-12 h-px bg-brand-gold mx-auto my-6" />
+          <p className="text-brand-teal-light text-sm tracking-widest">— علياء البحري</p>
+        </Reveal>
       </section>
 
       {/* Mission + Values */}
@@ -84,26 +92,6 @@ export default function AboutPage() {
               </motion.div>
             ))}
           </StaggerReveal>
-        </div>
-      </section>
-
-      {/* Meet the Coach */}
-      <section className="bg-white pt-6 pb-8">
-        <div className="section-container max-w-2xl mx-auto text-center py-20">
-          <Reveal>
-            <p className="text-brand-gold text-[10px] tracking-[0.25em] uppercase font-medium mb-3">The Team</p>
-            <h2 className="font-display font-light text-brand-dark mb-4">Meet Your Coach</h2>
-            <div className="brand-divider" />
-            <div className="mt-12 w-28 h-28 rounded-full overflow-hidden border-4 border-white mx-auto mb-6 shadow-md">
-              <img src={siteConfig.coachPhoto} alt={siteConfig.coachName} className="w-full h-full object-cover" />
-            </div>
-            <h3 className="font-display text-2xl text-brand-dark mb-0.5">{siteConfig.coachName}</h3>
-            <p className="arabic text-brand-teal text-sm mb-1" lang="ar">{siteConfig.coachNameAr}</p>
-            <p className="text-brand-teal-light text-sm mb-5">{siteConfig.coachTitle}</p>
-            <p className="text-brand-dark/55 leading-relaxed text-sm max-w-md mx-auto">
-              {siteConfig.coachBio}
-            </p>
-          </Reveal>
         </div>
       </section>
 

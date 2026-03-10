@@ -64,13 +64,13 @@ export function HeroCanvas() {
   // Extra overlay darkens as quote appears
   const extraDark    = useTransform(scrollYProgress, [0.65, 0.80], [0, 0.3]);
 
-  // Quote fades in starting around frame 135 (135/193 ≈ 0.70)
-  const quoteOpacity = useTransform(scrollYProgress, [0.70, 0.82], [0, 1]);
-  const quoteY       = useTransform(scrollYProgress, [0.70, 0.88], [28, 0]);
+  // Quote fades in starting around frame 120 (0.62 × 193 ≈ 120)
+  const quoteOpacity = useTransform(scrollYProgress, [0.62, 0.72], [0, 1]);
+  const quoteY       = useTransform(scrollYProgress, [0.62, 0.78], [28, 0]);
 
   // Attribution trails the quote by a beat
-  const attrOpacity  = useTransform(scrollYProgress, [0.78, 0.90], [0, 1]);
-  const attrY        = useTransform(scrollYProgress, [0.78, 0.90], [14, 0]);
+  const attrOpacity  = useTransform(scrollYProgress, [0.70, 0.82], [0, 1]);
+  const attrY        = useTransform(scrollYProgress, [0.70, 0.82], [14, 0]);
 
   // Bottom gradient — hidden on load, fades in after 60% scroll progress
   const bottomGradientOpacity = useTransform(scrollYProgress, [0.6, 0.85], [0, 1]);
