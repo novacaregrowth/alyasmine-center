@@ -58,22 +58,22 @@ export function HeroCanvas() {
     offset: ["start start", "end start"],
   });
 
-  // Hero content exits before the quote arrives
-  const heroOpacity  = useTransform(scrollYProgress, [0.35, 0.65], [1, 0]);
+  // Hero content exits as the quote begins (frames 0–90)
+  const heroOpacity  = useTransform(scrollYProgress, [0.35, 0.47], [1, 0]);
 
   // Extra overlay darkens as quote appears
-  const extraDark    = useTransform(scrollYProgress, [0.65, 0.80], [0, 0.3]);
+  const extraDark    = useTransform(scrollYProgress, [0.42, 0.55], [0, 0.3]);
 
-  // Quote fades in starting around frame 120 (0.62 × 193 ≈ 120)
-  const quoteOpacity = useTransform(scrollYProgress, [0.62, 0.72], [0, 1]);
-  const quoteY       = useTransform(scrollYProgress, [0.62, 0.78], [28, 0]);
+  // Quote fades in then out (frames 90–145 visible, 145–193 exit)
+  const quoteOpacity = useTransform(scrollYProgress, [0.47, 0.57, 0.72, 0.78], [0, 1, 1, 0]);
+  const quoteY       = useTransform(scrollYProgress, [0.47, 0.60], [28, 0]);
 
-  // Attribution trails the quote by a beat
-  const attrOpacity  = useTransform(scrollYProgress, [0.70, 0.82], [0, 1]);
-  const attrY        = useTransform(scrollYProgress, [0.70, 0.82], [14, 0]);
+  // Attribution trails the quote, then exits with it
+  const attrOpacity  = useTransform(scrollYProgress, [0.54, 0.64, 0.72, 0.78], [0, 1, 1, 0]);
+  const attrY        = useTransform(scrollYProgress, [0.54, 0.64], [14, 0]);
 
-  // Bottom gradient — hidden on load, fades in after 60% scroll progress
-  const bottomGradientOpacity = useTransform(scrollYProgress, [0.6, 0.85], [0, 1]);
+  // Bottom gradient — appears in final transition frames (145–193)
+  const bottomGradientOpacity = useTransform(scrollYProgress, [0.72, 0.85], [0, 1]);
 
   // ── Draw a single frame ─────────────────────────────────────────────────────
   const drawFrame = useCallback((index: number) => {
@@ -149,7 +149,7 @@ export function HeroCanvas() {
 
   // ── Render ──────────────────────────────────────────────────────────────────
   return (
-    <div ref={containerRef} style={{ height: "300vh" }} className="relative bg-black">
+    <div ref={containerRef} style={{ height: "500vh" }} className="relative bg-black">
       <div className="sticky top-0 w-full h-screen">
         {/* Frame canvas */}
         <canvas ref={canvasRef} className="absolute inset-0 w-full h-full" />

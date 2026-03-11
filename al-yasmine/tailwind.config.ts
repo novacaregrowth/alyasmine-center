@@ -17,6 +17,7 @@ const config: Config = {
           teal:       "#035A60",  // deep teal (CTAs, headings)
           "teal-light": "#7FB0B4", // secondary teal
           dark:       "#2F2F2F",  // footer / dark surfaces
+          charcoal:   "#2F2F2F",  // body text / neutral dark
           blush:      "#FDCCBE",  // soft pink (from logo bg)
         },
         // Semantic aliases
@@ -104,6 +105,21 @@ const config: Config = {
           "0%":   { backgroundPosition: "-200% center" },
           "100%": { backgroundPosition: "200% center" },
         },
+        moveHorizontal: {
+          "0%":   { transform: "translateX(-50%) translateY(-10%)" },
+          "50%":  { transform: "translateX(50%) translateY(10%)" },
+          "100%": { transform: "translateX(-50%) translateY(-10%)" },
+        },
+        moveInCircle: {
+          "0%":   { transform: "rotate(0deg)" },
+          "50%":  { transform: "rotate(180deg)" },
+          "100%": { transform: "rotate(360deg)" },
+        },
+        moveVertical: {
+          "0%":   { transform: "translateY(-50%)" },
+          "50%":  { transform: "translateY(50%)" },
+          "100%": { transform: "translateY(-50%)" },
+        },
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
@@ -113,6 +129,11 @@ const config: Config = {
         "bloom":          "bloom 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) both",
         "float":          "float 3s ease-in-out infinite",
         "shimmer":        "shimmer 2.5s linear infinite",
+        "first":          "moveVertical 30s ease infinite",
+        "second":         "moveInCircle 20s reverse infinite",
+        "third":          "moveInCircle 40s linear infinite",
+        "fourth":         "moveHorizontal 40s ease infinite",
+        "fifth":          "moveInCircle 20s ease infinite",
       },
 
       // ─── Background Patterns ───────────────────────────────────────────
