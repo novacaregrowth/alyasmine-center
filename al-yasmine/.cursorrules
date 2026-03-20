@@ -78,8 +78,7 @@ CULTURAL & BRAND CONTEXT
 Al Yasmine Center is rooted in Islamic values and Arabic culture.
 - All imagery must be modest — no revealing clothing, no mixed gender photos
 - Copy tone is warm, grounded, spiritually aware — never secular-corporate
-- Aliyah Al Bahari is a descendant of the Prophet Muhammad (peace be upon him)
-  and a certified counselor at the Prophet's Mosque in Madinah
+-  Aliyah Al Bahari holds an unbroken chain of Islamic knowledge transmission (سند متصل) — this spiritual foundation is woven into her clinical work and gives the brand deep trust and spiritual authority
 - This background gives the brand deep trust and spiritual authority —
   design decisions should reflect dignity and sincerity, not trendiness
 - Arabic language and calligraphy are first-class elements, not decorative afterthoughts
@@ -89,3 +88,34 @@ Al Yasmine Center is rooted in Islamic values and Arabic culture.
 - Modest visual language: soft, still, introspective — not active or physical
 - Preferred imagery feel: warm natural light, quiet spaces, jasmine flowers,
   soft morning light, stillness — never fitness, spa, or corporate wellness
+
+FONTS
+-----
+- font-display = Montaser Arabic (headings, display text, Arabic)
+- font-body = body text font
+- font-arabic does NOT exist — use font-display for all Arabic text
+
+I18N
+----
+- Project uses Next.js App Router i18n with [lang] routing
+- Supported locales: en, ar
+- All pages live under src/app/[lang]/
+- Use inline lang ternaries for bilingual content: lang === 'ar' ? 'Arabic' : 'English'
+- Arabic text always needs style={{ direction: "rtl" }}
+- RTL layouts use Tailwind rtl: variant
+
+FILE STRUCTURE
+--------------
+- Pages: src/app/[lang]/[page]/page.tsx + PageClient.tsx
+- Components: src/components/
+- Brand config: src/lib/config.ts
+- Translations: src/locales/en.json + ar.json
+
+ANIMATIONS
+----------
+- All whileInView animations must use viewport={{ once: true }}
+- Only animate transform and opacity — never width, height, or layout properties
+- GPU-accelerated properties only — no layout-triggering animations
+- Lenis is globally configured — never add a second scroll instance
+- Gradient transitions between sections must route through an intermediate color
+  (e.g. cream → blush → teal, never cream → teal directly)
