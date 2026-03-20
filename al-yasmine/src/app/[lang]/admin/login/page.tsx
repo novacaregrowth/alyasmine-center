@@ -1,11 +1,13 @@
 "use client";
 
 import { useState } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter, useParams } from "next/navigation";
 import Link from "next/link";
 
 export default function AdminLoginPage() {
   const router  = useRouter();
+  const params  = useParams();
+  const lang    = (params?.lang as string) || "en";
   const [input,   setInput]   = useState("");
   const [error,   setError]   = useState("");
   const [loading, setLoading] = useState(false);
@@ -23,7 +25,7 @@ export default function AdminLoginPage() {
       });
 
       if (res.ok) {
-        router.push("/admin/dashboard");
+        router.push(`/${lang}/admin/dashboard`);
         router.refresh();
       } else {
         const data = await res.json();
@@ -64,7 +66,7 @@ export default function AdminLoginPage() {
           {loading ? "Checking…" : "Enter"}
         </button>
 
-        <Link href="/" className="text-xs text-brand-cream/30 hover:text-brand-cream/60 text-center transition-colors">
+        <Link href={`/${lang}`} className="text-xs text-brand-cream/30 hover:text-brand-cream/60 text-center transition-colors">
           ← Back to site
         </Link>
       </div>

@@ -1,34 +1,89 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
 import { motion } from "framer-motion";
 import { Home, User, Star, Briefcase, DollarSign, Calendar, Menu, X } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { getTranslator, type Locale } from "@/lib/i18n";
 
-const navItems = [
-  { name: "Home",     url: "/",         icon: Home       },
-  { name: "About",    url: "/about",    icon: User       },
-  { name: "Services", url: "/services", icon: Briefcase  },
-  { name: "Proof",    url: "/proof",    icon: Star       },
-  { name: "Pricing",  url: "/pricing",  icon: DollarSign },
-];
-
-function getActiveName(pathname: string): string {
-  if (pathname === "/") return "Home";
-  const match = navItems.find((item) => item.url !== "/" && pathname.startsWith(item.url));
-  return match?.name ?? "Home";
+function getNavItems(lang: Locale, t: (key: string) => string) {
+  return [
+    { name: t("nav.home"),     url: `/${lang}`,          icon: Home       },
+    { name: t("nav.about"),    url: `/${lang}/about`,    icon: User       },
+    { name: t("nav.services"), url: `/${lang}/services`, icon: Briefcase  },
+    { name: t("nav.proof"),    url: `/${lang}/proof`,    icon: Star       },
+    { name: t("nav.pricing"),  url: `/${lang}/pricing`,  icon: DollarSign },
+  ];
 }
 
-export function Navbar() {
+function getActiveName(pathname: string, navItems: ReturnType<typeof getNavItems>): string {
+  const stripped = pathname.replace(/^\/(en|ar)/, "") || "/";
+  if (stripped === "/" || stripped === "") return navItems[0].name;
+  const match = navItems.find((item) => {
+    const itemStripped = item.url.replace(/^\/(en|ar)/, "") || "/";
+    return itemStripped !== "/" && stripped.startsWith(itemStripped);
+  });
+  return match?.name ?? navItems[0].name;
+}
+
+function LanguageSwitcher({ lang, heroMode }: { lang: Locale; heroMode: boolean }) {
+  const pathname = usePathname();
+  const router = useRouter();
+
+  const switchTo = (target: Locale) => {
+    if (target === lang) return;
+    const newPath = pathname.replace(/^\/(en|ar)/, `/${target}`);
+    router.push(newPath);
+  };
+
+  return (
+    <div className={cn(
+      "flex items-center rounded-full p-0.5 text-xs font-medium",
+      heroMode ? "bg-white/10" : "bg-brand-cream/80 border border-brand-cream"
+    )}>
+      <button
+        onClick={() => switchTo("en")}
+        className={cn(
+          "px-3 py-1.5 rounded-full transition-colors duration-200",
+          lang === "en"
+            ? "bg-brand-teal text-brand-cream"
+            : heroMode
+              ? "text-white/50 hover:text-white"
+              : "text-brand-dark/50 hover:text-brand-dark"
+        )}
+      >
+        EN
+      </button>
+      <button
+        onClick={() => switchTo("ar")}
+        className={cn(
+          "px-3 py-1.5 rounded-full transition-colors duration-200",
+          lang === "ar"
+            ? "bg-brand-teal text-brand-cream"
+            : heroMode
+              ? "text-white/50 hover:text-white"
+              : "text-brand-dark/50 hover:text-brand-dark"
+        )}
+      >
+        عر
+      </button>
+    </div>
+  );
+}
+
+export function Navbar({ lang = "en" as Locale }: { lang?: Locale }) {
+  const t = getTranslator(lang);
+  const navItems = getNavItems(lang, t);
   const pathname  = usePathname();
-  const activeTab = getActiveName(pathname);
+  const activeTab = getActiveName(pathname, navItems);
   const [scrolled,    setScrolled]    = useState(false);
   const [mobileOpen,  setMobileOpen]  = useState(false);
 
-  const isHome = pathname === "/";
+  const strippedPath = pathname.replace(/^\/(en|ar)/, "") || "/";
+  const isHome = strippedPath === "/";
   const heroMode = isHome && !scrolled;
   const heroModeMobile = isHome && !scrolled && !mobileOpen;
 
@@ -49,7 +104,7 @@ export function Navbar() {
           ? "bg-white/95 backdrop-blur-md shadow-sm border-b border-brand-cream"
           : "bg-transparent"
       )}>
-        <Link href="/" className="flex items-center">
+        <Link href={`/${lang}`} className="flex items-center">
           <Image
             src={heroMode
               ? "/images/al-yasmine-center-logo-light.png"
@@ -108,10 +163,13 @@ export function Navbar() {
           })}
         </div>
 
-        <Link href="/booking"
-          className="px-5 py-2.5 rounded-full bg-brand-gold text-brand-dark text-sm font-medium hover:bg-brand-gold/90 transition-all hover:scale-105 shadow-md shadow-brand-gold/20">
-          Book Now
-        </Link>
+        <div className="flex items-center gap-3">
+          <LanguageSwitcher lang={lang} heroMode={heroMode} />
+          <Link href={`/${lang}/booking`}
+            className="px-5 py-2.5 rounded-full bg-brand-gold text-brand-dark text-sm font-medium hover:bg-brand-gold/90 transition-all hover:scale-105 shadow-md shadow-brand-gold/20">
+            {t("nav.bookNow")}
+          </Link>
+        </div>
       </header>
 
       {/* ── Mobile top bar ── */}
@@ -121,7 +179,7 @@ export function Navbar() {
           ? "bg-white/95 backdrop-blur-md shadow-sm border-b border-brand-cream"
           : "bg-transparent"
       )}>
-        <Link href="/" className="flex items-center">
+        <Link href={`/${lang}`} className="flex items-center">
           <Image
             src={heroModeMobile
               ? "/images/al-yasmine-center-logo-light.png"
@@ -132,16 +190,19 @@ export function Navbar() {
             className="h-9 w-auto transition-all duration-300"
           />
         </Link>
-        <button onClick={() => setMobileOpen(!mobileOpen)}
-          className="p-2 rounded-lg transition-colors" aria-label="Toggle menu" aria-expanded={mobileOpen}>
-          {mobileOpen
-            ? <X className="w-5 h-5 text-brand-dark" />
-            : <Menu className={cn(
-                "w-5 h-5 transition-colors duration-300",
-                heroModeMobile ? "text-white" : "text-brand-dark"
-              )} />
-          }
-        </button>
+        <div className="flex items-center gap-2">
+          <LanguageSwitcher lang={lang} heroMode={heroModeMobile} />
+          <button onClick={() => setMobileOpen(!mobileOpen)}
+            className="p-2 rounded-lg transition-colors" aria-label="Toggle menu" aria-expanded={mobileOpen}>
+            {mobileOpen
+              ? <X className="w-5 h-5 text-brand-dark" />
+              : <Menu className={cn(
+                  "w-5 h-5 transition-colors duration-300",
+                  heroModeMobile ? "text-white" : "text-brand-dark"
+                )} />
+            }
+          </button>
+        </div>
       </header>
 
       {/* ── Mobile drawer ── */}
@@ -163,9 +224,9 @@ export function Navbar() {
               </Link>
             );
           })}
-          <Link href="/booking"
+          <Link href={`/${lang}/booking`}
             className="mt-2 flex items-center justify-center gap-2 px-4 py-3 rounded-xl bg-brand-gold text-brand-dark text-sm font-medium">
-            <Calendar className="w-4 h-4" /> Book Now
+            <Calendar className="w-4 h-4" /> {t("nav.bookNow")}
           </Link>
         </div>
       </div>
@@ -195,7 +256,7 @@ export function Navbar() {
               </Link>
             );
           })}
-          <Link href="/booking"
+          <Link href={`/${lang}/booking`}
             className="flex flex-col items-center p-2 rounded-full bg-brand-gold text-brand-dark min-w-[48px]">
             <Calendar size={20} strokeWidth={2} />
           </Link>

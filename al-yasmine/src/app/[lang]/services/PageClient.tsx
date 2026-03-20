@@ -7,8 +7,13 @@ import { formatPrice } from "@/lib/utils";
 import { Reveal, StaggerReveal, staggerChild } from "@/components/ui/reveal";
 import { InteractiveHoverButton } from "@/components/ui/interactive-hover-button";
 import { motion } from "framer-motion";
+import { useParams } from "next/navigation";
+import type { Locale } from "@/lib/i18n";
 
 export default function ServicesPage() {
+  const params = useParams();
+  const lang = (params?.lang as Locale) || "en";
+
   return (
     <div className="pt-20">
 
@@ -47,7 +52,7 @@ export default function ServicesPage() {
                 </div>
                 <div className="mt-auto pt-4 border-t border-[#ede8de] flex items-center justify-between">
                   <span className="text-xs px-3 py-1 rounded-full bg-brand-cream text-brand-teal">{s.duration}</span>
-                  <Link href="/booking">
+                  <Link href={`/${lang}/booking`}>
                     <InteractiveHoverButton text="Book this" className="border-brand-teal text-brand-teal w-28 h-9 text-xs"
                       style={{ "--primary": "#035A60", "--primary-foreground": "#F6F2E9" } as React.CSSProperties} />
                   </Link>

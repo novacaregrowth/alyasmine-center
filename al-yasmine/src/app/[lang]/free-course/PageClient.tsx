@@ -5,6 +5,8 @@ import Link from "next/link";
 import { Reveal, StaggerReveal, staggerChild } from "@/components/ui/reveal";
 import { WaveDivider, CurveDivider } from "@/components/ui/dividers";
 import { motion } from "framer-motion";
+import { useParams } from "next/navigation";
+import type { Locale } from "@/lib/i18n";
 
 const CREAM = "#F6F2E9";
 const WHITE = "#ffffff";
@@ -18,6 +20,9 @@ const modules = [
 ];
 
 export default function FreeCoursePage() {
+  const params = useParams();
+  const lang = (params?.lang as Locale) || "en";
+
   return (
     <div className="pt-20">
 
@@ -112,7 +117,7 @@ export default function FreeCoursePage() {
           <p className="text-brand-cream/55 mb-8 text-sm leading-relaxed">
             Book your session with Aliyah and you'll receive access to this guide as part of your welcome package.
           </p>
-          <Link href="/booking"
+          <Link href={`/${lang}/booking`}
             className="inline-block px-8 py-4 bg-brand-gold text-brand-dark rounded-full text-sm font-semibold hover:bg-brand-gold/90 transition-all hover:scale-105">
             Book Your Session
           </Link>

@@ -9,7 +9,6 @@ import { siteConfig } from "@/lib/config";
 
 const CREAM = "#F6F2E9";
 const WHITE = "#ffffff";
-const TEAL  = "#035A60";
 
 export default function BookingPage() {
   return (

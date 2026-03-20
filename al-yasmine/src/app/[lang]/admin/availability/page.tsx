@@ -12,7 +12,6 @@ export default function AdminAvailabilityPage() {
         </p>
       </div>
 
-      {/* Calendly availability link */}
       <div className="bg-brand-teal/20 border border-brand-teal/40 rounded-2xl p-6">
         <p className="text-brand-cream text-sm mb-4">
           Your availability is managed directly in Calendly. Changes sync automatically with your booking page.
@@ -27,22 +26,17 @@ export default function AdminAvailabilityPage() {
         </a>
       </div>
 
-      {/* Availability settings form — stub */}
       <div className="bg-brand-cream/5 border border-brand-cream/10 rounded-2xl p-8 space-y-6">
         <h2 className="font-display text-xl text-brand-cream font-light">Custom Blocked Dates</h2>
         <p className="text-brand-cream/50 text-sm">
-          Block out specific dates (e.g. holidays, personal time). These will be synced with your Calendly schedule.
+          Block out specific dates (e.g. holidays, personal time).
         </p>
-
-        {/* TODO: Build date-blocking UI with a calendar picker and API integration */}
         <div className="text-center py-12 text-brand-cream/30">
           <p className="text-4xl mb-3">◇</p>
           <p className="text-sm">Date blocking UI coming soon.</p>
-          <p className="text-xs mt-1">For now, manage blocked dates directly in Calendly.</p>
         </div>
       </div>
 
-      {/* Buffer time settings */}
       <div className="bg-brand-cream/5 border border-brand-cream/10 rounded-2xl p-8">
         <h2 className="font-display text-xl text-brand-cream mb-4 font-light">Session Settings</h2>
         <div className="grid grid-cols-2 gap-4">

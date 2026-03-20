@@ -5,15 +5,12 @@ import Link from "next/link";
 import Image from "next/image";
 import { motion, useScroll, useTransform } from "framer-motion";
 import { ArrowDown } from "lucide-react";
-
-// ─── Config ───────────────────────────────────────────────────────────────────
+import { getTranslator, type Locale } from "@/lib/i18n";
 
 const TOTAL_FRAMES = 193;
 
 const frameSrc = (n: number) =>
   `/hero-frames-webp/frame${String(n).padStart(4, "0")}.webp`;
-
-// ─── Cover-crop draw ──────────────────────────────────────────────────────────
 
 function drawCover(
   ctx: CanvasRenderingContext2D,
@@ -39,12 +36,8 @@ function drawCover(
   ctx.drawImage(img, sx, sy, sw, sh, 0, 0, cw, ch);
 }
 
-// ─── HeroCanvas ──────────────────────────────────────────────────────────────
-// A tall scroll container with a sticky full-screen canvas inside. The canvas
-// sticks while frames advance, then naturally releases — no portal, no fixed
-// positioning, no snap. The next section scrolls up from below like a normal page.
-
-export function HeroCanvas() {
+export function HeroCanvas({ lang = "en" }: { lang?: Locale }) {
+  const t = getTranslator(lang);
   const containerRef = useRef<HTMLDivElement>(null);
   const canvasRef    = useRef<HTMLCanvasElement>(null);
   const imagesRef    = useRef<(HTMLImageElement | null)[]>(
@@ -58,24 +51,14 @@ export function HeroCanvas() {
     offset: ["start start", "end start"],
   });
 
-  // Hero content exits as the quote begins (frames 0–90)
   const heroOpacity  = useTransform(scrollYProgress, [0.35, 0.47], [1, 0]);
-
-  // Extra overlay darkens as quote appears
   const extraDark    = useTransform(scrollYProgress, [0.42, 0.55], [0, 0.3]);
-
-  // Quote fades in then out (frames 90–145 visible, 145–193 exit)
   const quoteOpacity = useTransform(scrollYProgress, [0.47, 0.57, 0.72, 0.78], [0, 1, 1, 0]);
   const quoteY       = useTransform(scrollYProgress, [0.47, 0.60], [28, 0]);
-
-  // Attribution trails the quote, then exits with it
   const attrOpacity  = useTransform(scrollYProgress, [0.54, 0.64, 0.72, 0.78], [0, 1, 1, 0]);
   const attrY        = useTransform(scrollYProgress, [0.54, 0.64], [14, 0]);
-
-  // Bottom gradient — appears in final transition frames (145–193)
   const bottomGradientOpacity = useTransform(scrollYProgress, [0.72, 0.85], [0, 1]);
 
-  // ── Draw a single frame ─────────────────────────────────────────────────────
   const drawFrame = useCallback((index: number) => {
     const canvas = canvasRef.current;
     const img    = imagesRef.current[index];
@@ -87,7 +70,6 @@ export function HeroCanvas() {
     drawCover(ctx, img, canvas.width, canvas.height);
   }, []);
 
-  // ── Sync canvas pixel dimensions to its CSS size (DPR-aware) ───────────────
   const syncSize = useCallback(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
@@ -102,7 +84,6 @@ export function HeroCanvas() {
     drawFrame(frameRef.current);
   }, [drawFrame]);
 
-  // ── Preload frames ──────────────────────────────────────────────────────────
   useEffect(() => {
     const loadOne = (i: number) => {
       const img = new window.Image();
@@ -125,7 +106,6 @@ export function HeroCanvas() {
     return () => cancelAnimationFrame(rafId);
   }, [syncSize]);
 
-  // ── Resize observer keeps canvas sharp after window resize ─────────────────
   useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
@@ -134,7 +114,6 @@ export function HeroCanvas() {
     return () => obs.disconnect();
   }, [syncSize]);
 
-  // ── Scroll → frame ──────────────────────────────────────────────────────────
   useEffect(() => {
     return scrollYProgress.on("change", (v) => {
       const index = Math.min(
@@ -147,23 +126,18 @@ export function HeroCanvas() {
     });
   }, [scrollYProgress, drawFrame]);
 
-  // ── Render ──────────────────────────────────────────────────────────────────
   return (
     <div ref={containerRef} style={{ height: "500vh" }} className="relative bg-black">
       <div className="sticky top-0 w-full h-screen">
-        {/* Frame canvas */}
         <canvas ref={canvasRef} className="absolute inset-0 w-full h-full" />
 
-        {/* Base dark overlay */}
         <div className="absolute inset-0 bg-black/40" />
 
-        {/* Extra overlay that deepens as the quote appears */}
         <motion.div
           className="absolute inset-0 bg-black pointer-events-none"
           style={{ opacity: extraDark }}
         />
 
-        {/* Hero content — scroll-exits before the quote arrives */}
         <motion.div
           className="absolute inset-0 z-10 flex flex-col items-center justify-center text-center px-6"
           style={{ opacity: heroOpacity }}
@@ -193,35 +167,33 @@ export function HeroCanvas() {
               className="font-display font-[200] text-white mb-6 leading-[0.9] tracking-tight"
               style={{ fontSize: "clamp(4rem, 10vw, 9rem)" }}
             >
-              <span className="block">Heard.</span>
-              <span className="block">Understood.</span>
-              <span className="block">Healed.</span>
+              <span className="block">{t("hero.line1")}</span>
+              <span className="block">{t("hero.line2")}</span>
+              <span className="block">{t("hero.line3")}</span>
             </h1>
 
             <p className="text-white/70 text-lg font-light max-w-md mx-auto mb-10">
-              I&apos;m here to help you regain your balance.
+              {t("hero.subtitle")}
             </p>
 
             <Link
-              href="/booking"
+              href={`/${lang}/booking`}
               className="inline-block bg-brand-gold text-brand-dark rounded-full px-8 py-4 font-medium text-sm hover:scale-105 transition-transform"
             >
-              Book a Free Call
+              {t("hero.cta")}
             </Link>
           </motion.div>
 
-          {/* Scroll indicator */}
           <motion.div
             className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-1.5 text-white/40"
             animate={{ y: [0, 6, 0] }}
             transition={{ duration: 2.5, repeat: Infinity }}
           >
-            <span className="text-[9px] tracking-[0.25em] uppercase">Scroll</span>
+            <span className="text-[9px] tracking-[0.25em] uppercase">{t("hero.scroll")}</span>
             <ArrowDown className="w-3.5 h-3.5" />
           </motion.div>
         </motion.div>
 
-        {/* Quote overlay — appears over frames ~135–193 */}
         <motion.div
           className="absolute inset-0 z-20 flex flex-col items-center justify-center text-center px-8 pointer-events-none"
           style={{ opacity: quoteOpacity, y: quoteY }}
@@ -230,9 +202,7 @@ export function HeroCanvas() {
             className="font-display font-[200] italic text-white leading-[1.5] max-w-3xl"
             style={{ fontSize: "clamp(1.5rem, 3.5vw, 3rem)" }}
           >
-            &ldquo;I am here to help you regain your balance.
-            Listen to your inner voice instead of the voice
-            of fear, anxiety, and tension.&rdquo;
+            {t("hero.quote")}
           </p>
 
           <motion.div
@@ -241,12 +211,11 @@ export function HeroCanvas() {
           >
             <div className="w-12 h-px bg-brand-gold" />
             <p className="text-brand-gold text-xs tracking-[0.3em] uppercase">
-              Aliyah Al Bahari
+              {t("hero.quoteAttribution")}
             </p>
           </motion.div>
         </motion.div>
 
-        {/* Bottom edge gradient — hidden on load, appears after 60% scroll */}
         <motion.div
           className="absolute bottom-0 left-0 w-full h-48 z-30 bg-gradient-to-b from-transparent to-black pointer-events-none"
           style={{ opacity: bottomGradientOpacity }}

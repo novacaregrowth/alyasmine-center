@@ -6,8 +6,13 @@ import { motion } from "framer-motion";
 import { ScrollTestimonials } from "@/components/ui/scroll-testimonials";
 import { Reveal, StaggerReveal, staggerChild } from "@/components/ui/reveal";
 import { testimonials } from "@/lib/config";
+import { useParams } from "next/navigation";
+import type { Locale } from "@/lib/i18n";
 
 export default function ProofPage() {
+  const params = useParams();
+  const lang = (params?.lang as Locale) || "en";
+
   return (
     <div className="pt-20">
 
@@ -62,12 +67,11 @@ export default function ProofPage() {
             <div className="brand-divider" />
           </Reveal>
 
-          {/* Testimonials — each fades + rises as it enters the viewport */}
           <ScrollTestimonials testimonials={testimonials} />
 
           <Reveal delay={0.2} className="text-center mt-4 pb-8">
             <Link
-              href="/booking"
+              href={`/${lang}/booking`}
               className="inline-block px-8 py-3.5 bg-brand-teal text-brand-cream rounded-full text-sm font-semibold hover:bg-brand-teal/90 transition-all hover:scale-105"
             >
               Start Your Story
@@ -139,7 +143,7 @@ export default function ProofPage() {
             Join the women who chose to invest in themselves.
           </p>
           <Link
-            href="/booking"
+            href={`/${lang}/booking`}
             className="inline-block px-8 py-4 bg-brand-gold text-brand-dark rounded-full text-sm font-semibold hover:bg-brand-gold/90 transition-all hover:scale-105"
           >
             Book a Discovery Call

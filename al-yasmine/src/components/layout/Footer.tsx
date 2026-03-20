@@ -1,103 +1,110 @@
-import Link from "next/link";
-import { Instagram, Mail, Phone } from "lucide-react";
-import { siteConfig, navLinks } from "@/lib/config";
+"use client";
 
-export function Footer() {
-  const year = new Date().getFullYear();
+import { motion } from "framer-motion";
+import Link from "next/link";
+import { Instagram, Phone } from "lucide-react";
+import { getTranslator, type Locale } from "@/lib/i18n";
+
+function getLinkGroups(lang: Locale, t: (key: string) => string) {
+  return [
+    {
+      label: t("footer.navigate"),
+      links: [
+        { text: t("footer.home"),         href: `/${lang}` },
+        { text: t("footer.aboutLink"),    href: `/${lang}/about` },
+        { text: t("footer.servicesLink"), href: `/${lang}/services` },
+        { text: t("footer.proofLink"),    href: `/${lang}/proof` },
+        { text: t("footer.pricingLink"),  href: `/${lang}/pricing` },
+      ],
+    },
+    {
+      label: t("footer.support"),
+      links: [
+        { text: t("footer.bookSession"), href: `/${lang}/booking` },
+        { text: t("footer.contact"),     href: `/${lang}/contact` },
+        { text: t("footer.faq"),         href: `/${lang}/faq` },
+      ],
+    },
+    {
+      label: t("footer.legal"),
+      links: [
+        { text: t("footer.privacy"), href: `/${lang}/privacy` },
+        { text: t("footer.terms"),   href: `/${lang}/terms` },
+      ],
+    },
+  ];
+}
+
+function columnVariants(delay: number) {
+  return {
+    initial: { filter: "blur(4px)", translateY: -8, opacity: 0 },
+    whileInView: { filter: "blur(0px)", translateY: 0, opacity: 1 },
+    transition: { duration: 0.8, delay, ease: [0.25, 0.1, 0.25, 1] },
+    viewport: { once: true } as const,
+  };
+}
+
+export function Footer({ lang = "en" as Locale }: { lang?: Locale }) {
+  const t = getTranslator(lang);
+  const linkGroups = getLinkGroups(lang, t);
 
   return (
-    <footer className="bg-brand-dark text-brand-cream/80">
-      {/* Main footer */}
-      <div className="section-container py-16 grid grid-cols-1 md:grid-cols-3 gap-12">
-        {/* Brand */}
-        <div className="space-y-4">
-          <div>
-            <p className="font-display text-2xl text-brand-cream font-light">
-              {siteConfig.name}
-            </p>
-            <p className="arabic text-brand-teal-light text-sm mt-1" lang="ar">
-              {siteConfig.nameAr}
-            </p>
-          </div>
-          <p className="text-sm leading-relaxed max-w-xs">
-            {siteConfig.description}
+    <footer className="relative bg-brand-charcoal text-brand-cream border-t border-brand-cream/10 overflow-hidden">
+      <div className="absolute inset-0 bg-[radial-gradient(40%_120px_at_50%_0%,rgba(253,204,190,0.12),transparent)] pointer-events-none" />
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_0%_50%,rgba(253,204,190,0.07),transparent)] pointer-events-none" />
+
+      <div className="relative section-container py-20 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-12">
+        {/* Brand column */}
+        <motion.div className="lg:col-span-2 space-y-5" {...columnVariants(0)}>
+          <p className="font-display text-brand-gold text-2xl">{t("footer.siteName")}</p>
+          <p className="text-brand-cream/50 text-sm max-w-xs">
+            {t("footer.tagline")}
           </p>
-          {/* Social */}
-          <div className="flex gap-3 pt-2">
+
+          <div className="space-y-3 pt-2">
             <a
-              href={siteConfig.instagram}
+              href="https://instagram.com/alyasmine_center"
               target="_blank"
               rel="noopener noreferrer"
-              className="p-2 rounded-full border border-brand-cream/20 hover:border-brand-gold hover:text-brand-gold transition-colors"
-              aria-label="Instagram"
+              className="flex items-center gap-2 text-brand-cream/60 text-sm hover:text-brand-gold transition-colors duration-300"
             >
               <Instagram className="w-4 h-4" />
+              @alyasmine_center
             </a>
             <a
-              href={`mailto:${siteConfig.email}`}
-              className="p-2 rounded-full border border-brand-cream/20 hover:border-brand-gold hover:text-brand-gold transition-colors"
-              aria-label="Email"
-            >
-              <Mail className="w-4 h-4" />
-            </a>
-            <a
-              href={`tel:${siteConfig.phone}`}
-              className="p-2 rounded-full border border-brand-cream/20 hover:border-brand-gold hover:text-brand-gold transition-colors"
-              aria-label="Phone"
+              href="tel:+971524117078"
+              className="flex items-center gap-2 text-brand-cream/60 text-sm hover:text-brand-gold transition-colors duration-300"
             >
               <Phone className="w-4 h-4" />
+              +971 52 411 7078
             </a>
           </div>
-        </div>
 
-        {/* Quick links */}
-        <div className="space-y-4">
-          <h4 className="text-brand-cream text-sm font-medium tracking-widest uppercase">
-            Pages
-          </h4>
-          <ul className="space-y-2">
-            {navLinks
-              .filter((l) => !l.isButton)
-              .map((link) => (
+          <p className="text-brand-cream/30 text-xs pt-4">
+            {t("footer.copyright")}
+          </p>
+        </motion.div>
+
+        {/* Link columns */}
+        {linkGroups.map((group, i) => (
+          <motion.div key={group.label} {...columnVariants(0.1 * (i + 1))}>
+            <h4 className="text-brand-gold uppercase tracking-[0.2em] text-xs mb-4">
+              {group.label}
+            </h4>
+            <ul className="space-y-3">
+              {group.links.map((link) => (
                 <li key={link.href}>
                   <Link
                     href={link.href}
-                    className="text-sm hover:text-brand-gold transition-colors"
+                    className="text-brand-cream/60 hover:text-brand-gold transition-colors duration-300 text-sm"
                   >
-                    {link.label}
+                    {link.text}
                   </Link>
                 </li>
               ))}
-          </ul>
-        </div>
-
-        {/* Contact + CTA */}
-        <div className="space-y-4">
-          <h4 className="text-brand-cream text-sm font-medium tracking-widest uppercase">
-            Get in Touch
-          </h4>
-          <div className="space-y-2 text-sm">
-            <p>{siteConfig.email}</p>
-            <p>{siteConfig.phone}</p>
-          </div>
-          <Link
-            href="/booking"
-            className="inline-block mt-4 px-6 py-3 bg-brand-gold text-brand-dark rounded-full text-sm font-medium hover:bg-brand-gold/90 transition-colors"
-          >
-            Book a Session ✦
-          </Link>
-        </div>
-      </div>
-
-      {/* Bottom bar */}
-      <div className="border-t border-brand-cream/10">
-        <div className="section-container py-5 flex flex-col sm:flex-row items-center justify-between gap-2 text-xs text-brand-cream/40">
-          <p>© {year} {siteConfig.name}. All rights reserved.</p>
-          <div className="flex gap-4">
-            <Link href="/privacy" className="hover:text-brand-cream/70 transition-colors">Privacy Policy</Link>
-            <Link href="/terms" className="hover:text-brand-cream/70 transition-colors">Terms</Link>
-          </div>
-        </div>
+            </ul>
+          </motion.div>
+        ))}
       </div>
     </footer>
   );

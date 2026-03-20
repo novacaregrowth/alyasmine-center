@@ -7,8 +7,13 @@ import { formatPrice } from "@/lib/utils";
 import { Check } from "lucide-react";
 import { Reveal, StaggerReveal, staggerChild } from "@/components/ui/reveal";
 import { motion } from "framer-motion";
+import { useParams } from "next/navigation";
+import type { Locale } from "@/lib/i18n";
 
 export default function PricingPage() {
+  const params = useParams();
+  const lang = (params?.lang as Locale) || "en";
+
   return (
     <div className="pt-20">
 
@@ -35,7 +40,7 @@ export default function PricingPage() {
                 }`}
                 style={!plan.highlighted ? { boxShadow: "0 2px 20px rgba(3,90,96,0.05)" } : {}}
               >
-                {plan.badge && (
+                {"badge" in plan && plan.badge && (
                   <div className="absolute -top-3 left-1/2 -translate-x-1/2">
                     <span className="px-4 py-1 bg-brand-gold text-brand-dark text-xs font-bold rounded-full">{plan.badge}</span>
                   </div>
@@ -47,7 +52,7 @@ export default function PricingPage() {
                 </div>
                 <div className={`pb-5 border-b ${plan.highlighted ? "border-brand-cream/20" : "border-[#ede8de]"}`}>
                   <span className="font-display text-4xl font-light">{formatPrice(plan.price)}</span>
-                  <span className={`text-xs ml-1 ${plan.highlighted ? "text-brand-cream/45" : "text-brand-dark/35"}`}>/ {plan.period}</span>
+                  <span className={`text-xs ltr:ml-1 rtl:mr-1 ${plan.highlighted ? "text-brand-cream/45" : "text-brand-dark/35"}`}>/ {plan.period}</span>
                 </div>
                 <ul className="space-y-3 flex-1">
                   {plan.features.map((f) => (
@@ -57,7 +62,7 @@ export default function PricingPage() {
                     </li>
                   ))}
                 </ul>
-                <Link href="/booking"
+                <Link href={`/${lang}/booking`}
                   className={`block text-center px-5 py-3 rounded-full text-sm font-semibold transition-all hover:scale-105 ${
                     plan.highlighted ? "bg-brand-gold text-brand-dark hover:bg-brand-gold/90" : "bg-brand-teal text-brand-cream hover:bg-brand-teal/90"
                   }`}
@@ -66,7 +71,7 @@ export default function PricingPage() {
             ))}
           </StaggerReveal>
           <Reveal delay={0.3} className="text-center mt-10">
-            <p className="text-xs text-brand-dark/35">All prices in AED. Payment plans available. <Link href="/booking" className="text-brand-teal hover:underline">Talk to us</Link> about custom options.</p>
+            <p className="text-xs text-brand-dark/35">All prices in AED. Payment plans available. <Link href={`/${lang}/booking`} className="text-brand-teal hover:underline">Talk to us</Link> about custom options.</p>
           </Reveal>
         </div>
       </section>

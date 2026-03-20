@@ -1,0 +1,116 @@
+{
+  "nav": {
+    "home": "Home",
+    "about": "About",
+    "services": "Services",
+    "proof": "Proof",
+    "pricing": "Pricing",
+    "bookNow": "Book Now"
+  },
+  "hero": {
+    "line1": "Heard.",
+    "line2": "Understood.",
+    "line3": "Healed.",
+    "subtitle": "I'm here to help you regain your balance.",
+    "cta": "Book a Free Call",
+    "scroll": "Scroll",
+    "quote": "\"I am here to help you regain your balance. Listen to your inner voice instead of the voice of fear, anxiety, and tension.\"",
+    "quoteAttribution": "Aliyah Al Bahari"
+  },
+  "stats": {
+    "label": "By the Numbers",
+    "clientsTransformed": "Clients Transformed",
+    "satisfactionRate": "Satisfaction Rate",
+    "yearsOfImpact": "Years of Impact",
+    "averageRating": "Average Rating"
+  },
+  "whyAliyah": {
+    "eyebrow": "Why Aliyah",
+    "heading": "What Makes Her Different",
+    "card1Title": "Connected to the Source",
+    "card1Body": "Holds an unbroken chain of knowledge transmission traced back to the Prophet Muhammad ﷺ — her guidance carries spiritual weight and authenticity that is rare.",
+    "card2Title": "Clinically Certified",
+    "card2Body": "A certified psychologist specializing in CBT. Evidence-based methodology with real, measurable results — not just words.",
+    "card3Title": "Women Only",
+    "card3Body": "A space created exclusively for women and teenage girls. Safe, private, and deeply understood."
+  },
+  "services": {
+    "eyebrow": "What We Offer",
+    "heading": "Our Services",
+    "exploreAll": "Explore all services"
+  },
+  "testimonials": {
+    "eyebrowEn": "What They Say",
+    "eyebrowAr": "ماذا قلن",
+    "heading": "Real Results",
+    "seeAll": "See all stories"
+  },
+  "darkStatement": {
+    "eyebrow": "A Tradition of Healing",
+    "quoteAr": "الخوف شعور طبيعي، لكن البقاء في دوامة الخوف ليس قدرًا",
+    "quoteEn": "Fear is natural — but staying trapped in it is not your destiny.",
+    "attribution": "— علياء البحري"
+  },
+  "bookingCta": {
+    "eyebrow": "Ready to Begin?",
+    "heading": "Book Your First Session",
+    "body": "Your first discovery call is completely free. This is your first step.",
+    "cta": "Book a Free Call"
+  },
+  "about": {
+    "heroEyebrow": "المستشارة النفسية",
+    "heroName": "علياء البحري",
+    "heroNameEn": "Aliyah Al Bahari",
+    "heroBio": "A psychological counselor and CBT specialist dedicated exclusively to women and teenage girls. Certified at the Prophet's Mosque in Madinah, and a descendant of the Prophet Muhammad ﷺ — her work is rooted in deep spiritual trust, clinical precision, and unwavering compassion.",
+    "heroBadge1": "CBT Specialist",
+    "heroBadge2": "Prophet's Mosque Certified",
+    "heroBadge3": "Women Only",
+    "heroQuote": "الخوف شعور طبيعي، لكن البقاء في دوامة الخوف ليس قدرًا.\nحين يتعلم الإنسان كيف يحتوي مشاعره وينظم أفكاره...\nيعود الهدوء إلى قلبه.",
+    "heroQuoteAttribution": "— علياء البحري",
+    "storyEyebrow": "The Founder",
+    "storyHeading": "Her Story",
+    "storyP1": "For over 20 years, Aliyah Al Bahari has worked in the field of psychological counseling and Cognitive Behavioral Therapy — not as a career choice, but as a calling. She founded Al Yasmine Center with a single belief: that every woman deserves access to grounded, evidence-based support that honors both her mind and her spirit.",
+    "storyP2": "Based in Dubai and working across the Arab world, Aliyah combines clinical precision with deep human understanding. Her approach is practical, warm, and rooted in the latest CBT methodologies — designed to help women build lasting psychological balance, not just temporary relief.",
+    "silsilaEyebrow": "سند متصل",
+    "silsilaHeading": "An Unbroken Chain",
+    "silsilaBody": "Aliyah holds an unbroken chain of Islamic knowledge transmission traced back to the Prophet Muhammad ﷺ. This spiritual foundation is not separate from her clinical work — it is woven into it. Her clients find in her a rare combination: a certified psychologist who understands the soul as deeply as she understands the mind.",
+    "cbtEyebrow": "The Method",
+    "cbtHeading": "What is CBT?",
+    "cbtCard1Title": "Your Thoughts Shape Your Reality",
+    "cbtCard1Body": "CBT helps you identify patterns of thinking that keep you feeling stuck, anxious, or overwhelmed.",
+    "cbtCard2Title": "Change the Pattern, Change the Feeling",
+    "cbtCard2Body": "Practical, proven tools to interrupt cycles of anxiety and fear before they take hold.",
+    "cbtCard3Title": "Lasting Change, Not Just Relief",
+    "cbtCard3Body": "Builds long-term resilience and emotional regulation — not dependency on sessions.",
+    "credentialsEyebrow": "Qualifications",
+    "credentialsHeading": "Education & Certifications",
+    "cred1Title": "Master's in Psychological Counseling",
+    "cred1Desc": "Specialized postgraduate qualification in CBT-based psychological counseling.",
+    "cred2Title": "British Board Certified Trainer",
+    "cred2Desc": "Certified Professional Trainer (CPT) accredited by the British Board and endorsed by the Knowledge and Human Development Authority (KHDA), Dubai.",
+    "cred3Title": "20+ Years of Practice",
+    "cred3Desc": "Over two decades of clinical experience in CBT, trauma therapy, and child and adolescent counseling across Dubai and the Arab world.",
+    "cred4Title": "3000+ Hours of Impact",
+    "cred4Desc": "More than 1,000 consulting hours and 2,000 training hours delivered across leading centers in Dubai, including in collaboration with the Dubai Community Development Authority.",
+    "ctaHeading": "Ready to work together?",
+    "ctaCta": "Book a Discovery Call"
+  },
+  "footer": {
+    "siteName": "مركز الياسمين",
+    "tagline": "A sanctuary for women's healing and growth.",
+    "copyright": "© 2026 Al Yasmine Center. All rights reserved.",
+    "navigate": "Navigate",
+    "support": "Support",
+    "legal": "Legal",
+    "home": "Home",
+    "aboutLink": "About",
+    "servicesLink": "Services",
+    "proofLink": "Proof",
+    "pricingLink": "Pricing",
+    "bookSession": "Book a Session",
+    "contact": "Contact",
+    "faq": "FAQ",
+    "privacy": "Privacy Policy",
+    "terms": "Terms of Service"
+  }
+}

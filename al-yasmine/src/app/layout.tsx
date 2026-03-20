@@ -1,10 +1,5 @@
 import type { Metadata } from "next";
 import "@/styles/globals.css";
-import { Navbar } from "@/components/layout/Navbar";
-import { Footer } from "@/components/layout/Footer";
-import { ScrollProgress } from "@/components/ui/scroll-progress";
-import { LenisProvider } from "@/components/layout/LenisProvider";
-import { BreathWrapper } from "@/components/layout/BreathWrapper";
 
 export const metadata: Metadata = {
   title: {
@@ -34,21 +29,12 @@ export const metadata: Metadata = {
     title:       "Al Yasmine Center",
     description: "Transformative coaching & CBT-based personal development",
   },
+  icons: {
+    icon: "/icon.png",
+    apple: "/icon.png",
+  },
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
-  return (
-    <html lang="en" suppressHydrationWarning>
-      <body className="min-h-screen flex flex-col bg-background font-body antialiased">
-        <LenisProvider>
-          <ScrollProgress />
-          <Navbar />
-          <main>
-            <BreathWrapper>{children}</BreathWrapper>
-          </main>
-          <Footer />
-        </LenisProvider>
-      </body>
-    </html>
-  );
+  return children;
 }

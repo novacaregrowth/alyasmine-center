@@ -3,7 +3,9 @@ import { Metadata } from "next";
 
 export const metadata: Metadata = { title: "Terms & Conditions" };
 
-export default function TermsPage() {
+export default function TermsPage({ params }: { params: { lang: string } }) {
+  const lang = params.lang;
+
   return (
     <div className="pt-20 pb-28">
       <div className="section-container max-w-2xl mx-auto pt-16">
@@ -47,7 +49,7 @@ export default function TermsPage() {
         </div>
 
         <div className="mt-12">
-          <Link href="/" className="text-sm text-brand-teal hover:underline underline-offset-4">← Back to home</Link>
+          <Link href={`/${lang}`} className="text-sm text-brand-teal hover:underline underline-offset-4">← Back to home</Link>
         </div>
       </div>
     </div>
