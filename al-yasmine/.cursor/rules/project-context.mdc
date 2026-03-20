@@ -1,0 +1,53 @@
+---
+alwaysApply: true
+---
+
+# Al Yasmine Center — Project Context
+
+## What We're Building
+A luxury wellness website for a women's psychological counseling center in the UAE.
+Founder: Aliyah Al Bahari (علياء البحري), CBT specialist with 20+ years experience.
+Clients: Muslim women and teenage girls in the UAE and Arab world.
+
+## Stack
+- Next.js 14 App Router
+- TypeScript (strict mode)
+- Tailwind CSS (brand tokens in tailwind.config.ts)
+- Framer Motion
+- Lenis (smooth scroll — globally configured in layout.tsx)
+
+## File Structure
+- Pages: src/app/[lang]/[page]/page.tsx + PageClient.tsx
+- Components: src/components/
+- UI primitives: src/components/ui/
+- Layout: src/components/layout/
+- Brand config: src/lib/config.ts
+- Translations: src/locales/en.json + ar.json
+
+## Brand Colors (always use tokens, never hex)
+- brand-cream: #F6F2E9 — main background
+- brand-blush: #FDCCBE — feminine accent, 20% of page
+- brand-teal: #035A60 — strong color, headings, CTAs
+- brand-teal-light: #7FB0B4 — supporting text
+- brand-gold: #ECA200 — accent only, never background
+- brand-dark: #2F2F2F — body text, footer
+
+## Fonts
+- font-display = Montaser Arabic — all headings and Arabic text
+- font-body = body text
+- font-arabic does NOT exist — use font-display for Arabic
+
+## i18n
+- Locales: en, ar
+- All pages under src/app/[lang]/
+- Bilingual content: lang === 'ar' ? 'Arabic' : 'English'
+- Arabic text always needs style={{ direction: "rtl" }}
+- RTL layouts use Tailwind rtl: variant
+
+## Cultural Rules
+- All copy uses she/her for clients — never he/him or they
+- Aliyah holds an unbroken chain of Islamic knowledge (سند متصل)
+- Never suggest alcohol, dating, or Western lifestyle content
+- Modest visual language — soft, still, introspective
+- Arabic is a first-class language, not decorative
+- The jasmine flower (ياسمين) is the brand symbol

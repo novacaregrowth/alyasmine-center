@@ -1,0 +1,22 @@
+---
+globs: src/lib/**, tailwind.config.ts, src/locales/**
+---
+
+# Config Rules
+
+## Tailwind
+- Never add new colors not already in the brand system
+- Never add new font families without asking first
+- Brand tokens are the source of truth — never override with arbitrary values
+- Animation keyframes must be added to tailwind.config.ts not inline styles
+
+## Translations
+- src/locales/en.json and ar.json are the source of truth for all copy
+- Never hardcode translatable strings in components
+- Keep translation keys consistent between en and ar files
+- Use nested keys: page.section.element
+
+## Config
+- All site-wide config lives in src/lib/config.ts
+- Never hardcode phone numbers, emails, social handles in components
+- Reference config values instead

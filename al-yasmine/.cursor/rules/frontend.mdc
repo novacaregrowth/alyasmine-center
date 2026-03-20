@@ -1,0 +1,60 @@
+---
+globs: src/app/**/*.tsx, src/app/**/*.ts
+---
+
+# Frontend Rules
+
+## Design System
+- Use brand tokens only — never hardcoded hex values
+- Color ratios: cream 65%, blush 20%, teal 10%, gold 5%
+- Blush on feminine/soft sections, teal on strong/CTA sections
+- Gold is accent only — never use as background
+- Consistent max-w-5xl container width across all pages
+- Section padding minimum py-32 — generous spacing always
+- Cards: rounded-3xl minimum, never sharp corners
+
+## Typography
+- font-display for all headings and Arabic text
+- font-body for all body copy
+- Eyebrow labels: text-brand-gold uppercase tracking-[0.2em] text-xs font-light
+- Display headings: font-display font-[200] for cinematic lightness
+- Use clamp() for responsive display text sizing
+- Use relative units (rem, em) for font sizes
+- Adjust line-height and letter-spacing for Arabic readability
+
+## Layout
+- Mobile-first approach always
+- Use CSS Grid and Flexbox — avoid fixed positioning for layout
+- Use relative units (%, rem, em) not fixed pixels
+- Establish clear visual hierarchy to guide user attention
+- Maintain consistent positioning of recurring elements
+- Use progressive disclosure to reveal content as needed
+- Consider thumb zones for important mobile interactive elements
+
+## Responsive
+- Use Tailwind breakpoints: sm, md, lg, xl
+- Test at mobile viewport before desktop
+- Touch targets minimum 44x44px with adequate spacing between them
+- Design for content needs not specific devices
+
+## Interactions
+- Hover states: color/opacity transitions only — never scale that shifts layout
+- Transitions: 150-300ms for micro-interactions
+- Use transform/opacity only — never animate width, height, or layout properties
+- Add cursor-pointer to all clickable cards and interactive elements
+- No layout shift on hover states
+- Use loading indicators for async operations
+- Provide clear error messages and recovery options
+
+## Gradient Transitions
+- Never use hard color edges between sections
+- Always route through intermediate color: cream → blush → teal
+- Never cream → teal directly
+- Gradient bridge minimum h-32, preferred h-48 for large color shifts
+- Add pointer-events-none to all gradient bridge divs
+
+## Images
+- Always use next/image with explicit width and height
+- Use unoptimized prop for external URLs (Unsplash etc.)
+- All images need descriptive alt text
+- Modest imagery only — no revealing clothing, no mixed gender

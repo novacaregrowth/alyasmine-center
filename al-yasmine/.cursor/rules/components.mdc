@@ -1,0 +1,42 @@
+---
+globs: src/components/**/*.tsx, src/components/**/*.ts
+---
+
+# Component Rules
+
+## Existing Patterns — Use These
+- Reveal — scroll-driven fade/slide reveal: src/components/ui/reveal.tsx
+- StaggerReveal + staggerChild — staggered children reveal
+- LenisProvider — smooth scroll wrapper (already in layout, never add another)
+
+## Animation Standards
+- All whileInView must use viewport={{ once: true }}
+- Only animate transform and opacity — never width, height, top, left
+- GPU-accelerated properties only — no layout-triggering animations
+- Lenis is globally configured — never add a second scroll instance
+- Use useSpring for weighted, cinematic scroll feels
+- Respect prefers-reduced-motion always
+
+## Framer Motion Patterns
+- useScroll + useTransform for scroll-linked values
+- useInView for time-based stagger animations
+- staggerChildren: 0.12-0.15, delayChildren: 0.3-0.4 for cascades
+- Duration 0.8-1.0s for premium feel — never fast bouncy animations
+- Ease [0.25, 0.1, 0.25, 1] for cinematic motion
+
+## Accessibility
+- All images need alt text
+- All form inputs need labels
+- Ensure keyboard navigability for all interactive elements
+- Implement ARIA labels and roles on interactive components
+- Color contrast minimum 4.5:1 (WCAG 2.1 AA)
+- Use semantic HTML elements
+
+## Icons
+- Use Lucide React only — never emojis as icons
+- Always include aria-label on icon-only buttons
+
+## Component Quality
+- Minimal props — break complex components into smaller parts
+- Use composition over large monolithic components
+- Export reusable subcomponents when they might be used elsewhere

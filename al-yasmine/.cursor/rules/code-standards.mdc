@@ -1,0 +1,45 @@
+---
+alwaysApply: true
+---
+
+# Code Standards
+
+## TypeScript
+- Use TypeScript for all code — no plain JS files
+- Prefer interfaces over types
+- Define types for all props, params, and return values
+- Use descriptive names with auxiliary verbs: isLoading, hasError, isVisible, shouldShow
+
+## Component Patterns
+- Functional components only — no classes
+- Use consts: const MyComponent = () => rather than function MyComponent()
+- Favor named exports over default exports where possible
+- Break components into smaller parts with minimal props
+- Use composition to build complex UI from simple components
+- File structure order: exported component, subcomponents, helpers, static content, types
+- Place static content and interfaces at end of file
+- Keep pages split: PageClient.tsx (use client) + page.tsx (metadata + server export)
+
+## Code Quality
+- DRY principle — never duplicate logic, modularize repeated patterns
+- Use early returns for error conditions and guard clauses
+- Avoid unnecessary else — use if-return pattern
+- Avoid deeply nested conditionals
+- Event functions named with handle prefix: handleClick, handleKeyDown
+- Use lowercase with dashes for directories: components/auth-wizard
+- File extensions: .config.ts, .test.ts, .context.tsx, .type.ts, .hook.ts
+
+## Next.js
+- Minimize use of 'use client' — favor React Server Components
+- Use 'use client' only for components that need browser APIs or animations
+- Wrap client components in Suspense with fallback
+- Use dynamic imports for non-critical heavy components
+- Optimize images: WebP format, explicit sizes, lazy loading via next/image
+- Prioritize Web Vitals: LCP, CLS, FID
+
+## Rules
+- Leave NO todos, placeholders, or missing pieces
+- Include all required imports
+- Reference file names explicitly
+- Do not install new npm packages without asking first
+- If something is uncertain, say so instead of guessing

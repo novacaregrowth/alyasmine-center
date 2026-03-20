@@ -1,0 +1,40 @@
+---
+description: Framer Motion animation patterns, scroll effects, cinematic transitions. Load when building animation-heavy features, scroll-driven effects, or new motion components.
+---
+
+# Animation & Motion Rules
+
+## Core Rules
+- Only animate transform and opacity — never width, height, top, left, or layout properties
+- GPU-accelerated properties only — no layout-triggering animations
+- All whileInView must use viewport={{ once: true }}
+- Always respect prefers-reduced-motion
+- Lenis is globally configured — never add a second scroll instance
+- Target 60fps — if in doubt, simplify
+
+## Framer Motion Patterns
+- Scroll-linked values: useScroll + useTransform
+- Viewport entry: useInView + motion variants
+- Weighted scroll: useSpring({ stiffness: 100, damping: 30 })
+- Stagger cascades: staggerChildren 0.12-0.15, delayChildren 0.3-0.4
+- Cinematic ease: [0.25, 0.1, 0.25, 1] or [0.19, 1, 0.22, 1] for dramatic reveals
+- Duration: 0.8-1.4s for premium feel — never fast or bouncy
+
+## Animation Types
+- Image reveal: clipPath inset(100% 0% 0% 0%) → inset(0% 0% 0% 0%)
+- Gold line draw: width 0 → 96px on useInView
+- Floating orbs: animate={{ y: [0, -8, 0] }} duration 6-13s infinite
+- Breathing glow: animate={{ scale: [1, 1.2, 1], opacity: [0.3, 0.5, 0.3] }} duration 4s
+- Shimmer: backgroundPosition "200% auto" → "0% auto" infinite
+
+## Gradient Transitions
+- Never hard edges between sections
+- Always route: cream → blush → teal (never cream → teal directly)
+- Bridge height: h-32 minimum, h-48 for large color shifts
+- Always pointer-events-none on bridges
+
+## Canvas Hero
+- Preload all WebP frames before scrubbing
+- Use requestAnimationFrame for frame drawing loop
+- Map scroll progress to frame index: floor(progress × (totalFrames - 1))
+- Handle resize for high-DPI canvas clarity

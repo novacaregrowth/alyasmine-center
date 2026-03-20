@@ -1,0 +1,31 @@
+---
+globs: src/app/[lang]/**/PageClient.tsx
+---
+
+# Page Rules
+
+## Page Structure
+- Every page: page.tsx (metadata + server export) + PageClient.tsx (use client + all UI)
+- PageClient.tsx always starts with "use client"
+- page.tsx exports metadata and re-exports PageClient as default
+
+## Bilingual Content
+- Use inline lang ternaries: lang === 'ar' ? 'Arabic text' : 'English text'
+- Arabic text always needs style={{ direction: "rtl" }}
+- Arabic display text uses font-display class
+- Arabic body text: leading-relaxed minimum — never tighter
+- Arabic numerals: ١ ٢ ٣ ٤ use font-display for consistent rendering
+- Font size for Arabic display: always use clamp() for responsive sizing
+
+## Section Standards
+- Every section needs a clear visual hierarchy
+- Gold eyebrow labels before every heading: tracking-[0.2em] uppercase text-xs text-brand-gold
+- Heading: font-display font-[200] text-brand-teal
+- Gradient bridge between every section color change
+- py-32 minimum padding on all sections
+
+## Brand Tone
+- Warm, grounded, quietly confident — never corporate
+- Never overly flowery or dramatic copy
+- All client copy uses she/her — never he/him or they
+- Spiritually aware tone — never secular-corporate

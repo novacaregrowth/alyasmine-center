@@ -1,0 +1,30 @@
+---
+description: Islamic cultural context, brand voice, Arabic design. Load when building new sections, components with content, or anything involving copy or imagery.
+---
+
+# Brand & Cultural Rules
+
+## Islamic & Cultural Context
+- Al Yasmine Center is rooted in Islamic values and Arabic culture
+- Aliyah holds an unbroken chain of Islamic knowledge (سند متصل) traced to the Prophet Muhammad ﷺ
+- This spiritual authority is woven into all clinical work — reflect dignity and sincerity
+- Design decisions should feel sacred and grounded, not trendy
+
+## Visual Language
+- Soft, still, introspective — never active, fitness, or spa aesthetic
+- Preferred imagery: warm natural light, quiet spaces, jasmine flowers, soft morning light
+- Never: fitness, corporate wellness, revealing clothing, mixed gender photos
+- The jasmine flower (ياسمين) is the brand symbol — pure, delicate, rooted
+
+## Copy Rules
+- Brand voice: warm, grounded, quietly confident — calm authority
+- Never corporate, never overly flowery
+- All client copy uses she/her — never he/him or they
+- Never suggest alcohol, dating, or Western lifestyle content
+- Spiritually aware tone always
+
+## Arabic as First Class
+- Arabic language and calligraphy are first-class elements, not decorative
+- Arabic text at 1.1-1.2x size of English equivalent for equal legibility
+- Use rtl: Tailwind variant for directional layout flipping
+- Flip directional icons (arrows, chevrons) for RTL — never flip logos or brand marks
