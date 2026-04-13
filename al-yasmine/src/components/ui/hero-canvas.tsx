@@ -8,6 +8,8 @@ import { ArrowDown } from "lucide-react";
 import { getTranslator, type Locale } from "@/lib/i18n";
 
 const TOTAL_FRAMES = 193;
+const FRAME_OFFSET = 50; // skip first ~26% — start with flower quarter-open
+const ACTIVE_FRAMES = TOTAL_FRAMES - FRAME_OFFSET;
 
 const frameSrc = (n: number) =>
   `/hero-frames-webp/frame${String(n).padStart(4, "0")}.webp`;
@@ -43,7 +45,7 @@ export function HeroCanvas({ lang = "en" }: { lang?: Locale }) {
   const imagesRef    = useRef<(HTMLImageElement | null)[]>(
     new Array(TOTAL_FRAMES).fill(null),
   );
-  const frameRef = useRef(0);
+  const frameRef = useRef(FRAME_OFFSET);
   const [ready, setReady] = useState(false);
 
   const { scrollYProgress } = useScroll({
@@ -89,7 +91,7 @@ export function HeroCanvas({ lang = "en" }: { lang?: Locale }) {
       const img = new window.Image();
       img.onload = () => {
         imagesRef.current[i] = img;
-        if (i === 0) {
+        if (i === FRAME_OFFSET) {
           syncSize();
           setReady(true);
         }
@@ -97,10 +99,10 @@ export function HeroCanvas({ lang = "en" }: { lang?: Locale }) {
       img.src = frameSrc(i + 1);
     };
 
-    loadOne(0);
+    loadOne(FRAME_OFFSET);
 
     const rafId = requestAnimationFrame(() => {
-      for (let i = 1; i < TOTAL_FRAMES; i++) loadOne(i);
+      for (let i = FRAME_OFFSET + 1; i < TOTAL_FRAMES; i++) loadOne(i);
     });
 
     return () => cancelAnimationFrame(rafId);
@@ -116,9 +118,9 @@ export function HeroCanvas({ lang = "en" }: { lang?: Locale }) {
 
   useEffect(() => {
     return scrollYProgress.on("change", (v) => {
-      const index = Math.min(
-        Math.round(v * (TOTAL_FRAMES - 1)),
-        TOTAL_FRAMES - 1,
+      const index = FRAME_OFFSET + Math.min(
+        Math.round(v * (ACTIVE_FRAMES - 1)),
+        ACTIVE_FRAMES - 1,
       );
       if (index === frameRef.current) return;
       frameRef.current = index;
