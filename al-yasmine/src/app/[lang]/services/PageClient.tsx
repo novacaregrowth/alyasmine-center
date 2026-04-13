@@ -4,9 +4,12 @@ import React, { useRef } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { Reveal } from "@/components/ui/reveal";
+import { MashrabiyaCanvas } from "@/components/ui/mashrabiya-canvas";
 import { motion, useInView, useScroll, useTransform } from "framer-motion";
 import { useParams } from "next/navigation";
+import { ChevronDown } from "lucide-react";
 import type { Locale } from "@/lib/i18n";
+import { services } from "@/lib/config";
 
 // ─── Hooks ───────────────────────────────────────────────────────────────────
 
@@ -26,51 +29,19 @@ const sectionAnim = {
   },
 };
 
-const staggerContainer = {
+const pathwayStaggerVariants = {
   hidden: {},
   visible: {
-    transition: { staggerChildren: 0.15, delayChildren: 0.2 },
+    transition: { staggerChildren: 0.25, delayChildren: 0.2 },
   },
 };
 
-const staggerItem = {
-  hidden: { opacity: 0, y: 30 },
+const pathwayStep = {
+  hidden: { opacity: 0, y: 32 },
   visible: {
     opacity: 1,
     y: 0,
-    transition: { duration: 1, ease: [0.25, 0.1, 0.25, 1] },
-  },
-};
-
-const heroStagger = {
-  hidden: {},
-  visible: { transition: { staggerChildren: 0.15, delayChildren: 0.4 } },
-};
-
-const heroItem = {
-  hidden: { opacity: 0, y: 20 },
-  visible: {
-    opacity: 1,
-    y: 0,
-    transition: { duration: 1, ease: [0.25, 0.1, 0.25, 1] },
-  },
-};
-
-const heroArabicLine = {
-  hidden: { opacity: 0, x: 60 },
-  visible: {
-    opacity: 1,
-    x: 0,
-    transition: { duration: 1.2, ease: [0.25, 0.1, 0.25, 1] },
-  },
-};
-
-const heroEnglishLine = {
-  hidden: { opacity: 0, x: -60 },
-  visible: {
-    opacity: 1,
-    x: 0,
-    transition: { duration: 1.2, ease: [0.25, 0.1, 0.25, 1] },
+    transition: { duration: 0.9, ease: [0.25, 0.1, 0.25, 1] },
   },
 };
 
@@ -87,6 +58,16 @@ const ctaItem = {
     transition: { duration: 0.8, ease: [0.25, 0.1, 0.25, 1] },
   },
 };
+
+// ─── Differentiated Card Entrances ───────────────────────────────────────────
+
+const cardEntrances = [
+  { initial: { opacity: 0, y: 24 }, whileInView: { opacity: 1, y: 0 }, transition: { duration: 0.8, ease: [0.25, 0.1, 0.25, 1] } },
+  { initial: { opacity: 0, x: -60 }, whileInView: { opacity: 1, x: 0 }, transition: { duration: 0.9, ease: [0.25, 0.1, 0.25, 1] } },
+  { initial: { opacity: 0, x: 60 }, whileInView: { opacity: 1, x: 0 }, transition: { duration: 0.9, ease: [0.25, 0.1, 0.25, 1] } },
+  { initial: { opacity: 0, y: 32 }, whileInView: { opacity: 1, y: 0 }, transition: { duration: 0.8, delay: 0.3, ease: [0.25, 0.1, 0.25, 1] } },
+  { initial: { opacity: 0, y: 32 }, whileInView: { opacity: 1, y: 0 }, transition: { duration: 0.8, delay: 0.4, ease: [0.25, 0.1, 0.25, 1] } },
+];
 
 // ─── Section Wrapper ─────────────────────────────────────────────────────────
 
@@ -148,99 +129,31 @@ function ParallaxImage({
   );
 }
 
-// ─── Service Data ────────────────────────────────────────────────────────────
+// ─── Service Images (UI placeholders — replace with real branded photos) ─────
 
-interface ServiceItem {
-  id: string;
-  title: string;
-  titleAr: string;
-  description: string;
-  sensory: string;
-  image: string;
-  duration: string;
-}
+const serviceImages: Record<string, string> = {
+  consultation: "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=800&q=80",
+  "cbt-sessions": "https://images.unsplash.com/photo-1544787219-7f47ccb76574?w=800&q=80",
+  prewedding: "https://images.unsplash.com/photo-1517842645767-c639042777db?w=800&q=80",
+  adolescent: "https://images.unsplash.com/photo-1481627834876-b7833e8f5570?w=800&q=80",
+  "red-eye": "https://images.unsplash.com/photo-1490750967868-88aa4f44baee?w=800&q=80",
+  "smart-memory": "https://images.unsplash.com/photo-1506784983877-45594efa4cbe?w=800&q=80",
+};
 
-const serviceOfferings: ServiceItem[] = [
-  {
-    id: "one-on-one",
-    title: "1-on-1 Coaching",
-    titleAr: "جلسات فردية",
-    description:
-      "Personalised CBT-based sessions tailored to your unique goals and challenges. A private space where your story is heard and honoured.",
-    sensory: "warm light, quiet conversation",
-    image:
-      "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=800&q=80",
-    duration: "60 min",
-  },
-  {
-    id: "group-sessions",
-    title: "Group Sessions",
-    titleAr: "جلسات جماعية",
-    description:
-      "Grow alongside a community of like-minded women in a safe, supportive setting. Shared vulnerability becomes shared strength.",
-    sensory: "shared warmth, collective strength",
-    image:
-      "https://images.unsplash.com/photo-1544787219-7f47ccb76574?w=800&q=80",
-    duration: "90 min",
-  },
-  {
-    id: "intensive",
-    title: "Intensive Program",
-    titleAr: "برنامج مكثّف",
-    description:
-      "Deep-dive transformation over 8 weeks with full CBT support and accountability. For women ready to do the deep work.",
-    sensory: "deep immersion, lasting change",
-    image:
-      "https://images.unsplash.com/photo-1517842645767-c639042777db?w=800&q=80",
-    duration: "8 weeks",
-  },
-  {
-    id: "workshops",
-    title: "Workshops",
-    titleAr: "ورش العمل",
-    description:
-      "Focused skill-building sessions on specific life areas using proven CBT techniques. Practical tools you can use immediately.",
-    sensory: "hands-on learning, practical tools",
-    image:
-      "https://images.unsplash.com/photo-1481627834876-b7833e8f5570?w=800&q=80",
-    duration: "Half-day",
-  },
-  {
-    id: "teen-coaching",
-    title: "Teen Coaching",
-    titleAr: "استشارات المراهقات",
-    description:
-      "Age-appropriate counseling designed for teenage girls navigating identity, pressure, and growth. A gentle space to be herself.",
-    sensory: "gentle guidance, safe space",
-    image:
-      "https://images.unsplash.com/photo-1490750967868-88aa4f44baee?w=800&q=80",
-    duration: "45 min",
-  },
-];
-
+const gridOrder = ["consultation", "cbt-sessions", "adolescent", "red-eye", "smart-memory"] as const;
 const arabicNumerals = ["١", "٢", "٣", "٤", "٥"];
-
 const gridBorderColors = [
   "border-l-brand-gold",
   "border-l-brand-blush",
   "border-l-brand-teal-light",
   "border-l-brand-gold",
+  "border-l-brand-blush",
 ];
 
 // ─── Page Component ──────────────────────────────────────────────────────────
 
 export default function ServicesPage() {
   const lang = useLocale();
-
-  const heroSectionRef = useRef<HTMLElement>(null);
-  const { scrollYProgress: heroScroll } = useScroll({
-    target: heroSectionRef,
-    offset: ["start start", "end start"],
-  });
-  const watermarkY = useTransform(heroScroll, [0, 1], ["0%", "-30%"]);
-
-  const heroRef = useRef<HTMLDivElement>(null);
-  const heroInView = useInView(heroRef, { once: true });
 
   const pathwaySectionRef = useRef<HTMLElement>(null);
   const { scrollYProgress: pathwayProgress } = useScroll({
@@ -258,8 +171,8 @@ export default function ServicesPage() {
   const ctaLineRef = useRef<HTMLDivElement>(null);
   const ctaLineInView = useInView(ctaLineRef, { once: true, margin: "-40px" });
 
-  const featuredService = serviceOfferings[0];
-  const gridServices = serviceOfferings.slice(1);
+  const featuredService = services.find((s) => s.id === "prewedding")!;
+  const gridServices = gridOrder.map((id) => services.find((s) => s.id === id)!);
 
   const pathwaySteps = [
     {
@@ -298,154 +211,144 @@ export default function ServicesPage() {
     <div>
 
       {/* ── Hero — The Opening (الافتتاح) ──────────────────────────────── */}
-      <section
-        ref={heroSectionRef}
-        className="relative min-h-screen bg-brand-cream flex items-center justify-center overflow-hidden"
-      >
-        {/* Atmospheric layers */}
-        <div className="absolute inset-0 bg-grain pointer-events-none" />
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_50%_45%,rgba(253,204,190,0.16)_0%,transparent_70%)] pointer-events-none" />
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_50%_20%,rgba(236,162,0,0.05)_0%,transparent_50%)] pointer-events-none" />
-
-        {/* Breathing orbs — polyrhythmic, unique to this page */}
-        <motion.div
-          className="absolute top-[18%] left-[12%] w-32 h-32 bg-brand-blush/[0.10] rounded-full blur-2xl pointer-events-none"
-          animate={{ y: [0, -16, 0], x: [0, 8, 0] }}
-          transition={{ duration: 14, repeat: Infinity, ease: "easeInOut" }}
-        />
-        <motion.div
-          className="absolute bottom-[20%] right-[14%] w-24 h-24 bg-brand-gold/[0.06] rounded-full blur-2xl pointer-events-none"
-          animate={{ y: [0, 12, 0] }}
-          transition={{ duration: 11, repeat: Infinity, ease: "easeInOut" }}
-        />
-
-        {/* Watermark — "شفاء" (healing), scroll-parallax */}
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none">
-          <motion.span
-            className="font-arabic text-brand-teal/[0.03] select-none whitespace-nowrap block"
-            style={{ fontSize: "clamp(10rem, 24vw, 22rem)", y: watermarkY }}
-            aria-hidden="true"
-          >
-            شفاء
-          </motion.span>
-        </div>
-
-        {/* Sacred geometry — Jasmine 5-petal motif */}
-        <svg
-          className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[400px] h-[400px] md:w-[540px] md:h-[540px] opacity-[0.03] pointer-events-none"
-          viewBox="0 0 200 200"
-          aria-hidden="true"
-        >
-          <g fill="none" stroke="#ECA200">
-            <path d="M100,30 C115,60 115,85 100,130 C85,85 85,60 100,30Z" strokeWidth="0.3" />
-            <path d="M100,30 C115,60 115,85 100,130 C85,85 85,60 100,30Z" strokeWidth="0.3" transform="rotate(72 100 100)" />
-            <path d="M100,30 C115,60 115,85 100,130 C85,85 85,60 100,30Z" strokeWidth="0.3" transform="rotate(144 100 100)" />
-            <path d="M100,30 C115,60 115,85 100,130 C85,85 85,60 100,30Z" strokeWidth="0.3" transform="rotate(216 100 100)" />
-            <path d="M100,30 C115,60 115,85 100,130 C85,85 85,60 100,30Z" strokeWidth="0.3" transform="rotate(288 100 100)" />
-            <circle cx="100" cy="100" r="12" strokeWidth="0.2" />
-          </g>
-        </svg>
+      <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
+        {/* Animated mashrabiya background */}
+        <MashrabiyaCanvas className="absolute inset-0 z-0" />
 
         {/* Content — centered composition */}
-        <div ref={heroRef} className="relative z-10 text-center px-6 py-40 w-full">
+        <div className="relative z-10 text-center px-6 py-40 w-full max-w-5xl mx-auto">
 
           {/* Gold thread — the curtain pull */}
-          <div className="flex justify-center mb-10">
-            <motion.div
-              className="w-px bg-gradient-to-b from-brand-gold/0 via-brand-gold to-brand-gold/0"
-              initial={{ height: 0, opacity: 0 }}
-              animate={heroInView ? { height: "4rem", opacity: 1 } : { height: 0, opacity: 0 }}
-              transition={{ duration: 1.2, ease: "easeOut" }}
-            />
-          </div>
-
           <motion.div
-            initial="hidden"
-            animate={heroInView ? "visible" : "hidden"}
-            variants={heroStagger}
-            className="flex flex-col items-center"
-          >
+            className="w-0.5 h-16 bg-brand-gold mx-auto mb-10"
+            style={{ boxShadow: "0 0 16px rgba(236,162,0,0.25)" }}
+            initial={{ scaleY: 0, transformOrigin: "top center" }}
+            whileInView={{ scaleY: 1 }}
+            transition={{ duration: 1.2, ease: [0.19, 1, 0.22, 1] }}
+            viewport={{ once: true }}
+          />
+
+          <div className="flex flex-col items-center">
             {/* Eyebrow */}
             <motion.p
-              variants={heroItem}
+              initial={{ opacity: 0 }}
+              whileInView={{ opacity: 1 }}
+              transition={{ duration: 1.2 }}
+              viewport={{ once: true }}
               className="text-brand-gold tracking-[0.3em] text-xs uppercase mb-10"
             >
               {lang === "ar" ? "مسارات الشفاء" : "Pathways of Healing"}
             </motion.p>
 
-            {/* Arabic headline — enters from the right */}
+            {/* Arabic headline — cinematic curtain reveal */}
             <motion.h1
-              variants={heroArabicLine}
               className="font-display font-[200] text-brand-teal leading-[0.9]"
               style={{
                 fontSize: "clamp(3.5rem, 9vw, 8rem)",
                 direction: "rtl",
               }}
+              initial={{ clipPath: "inset(100% 0% 0% 0%)" }}
+              whileInView={{ clipPath: "inset(0% 0% 0% 0%)" }}
+              transition={{ duration: 1.4, ease: [0.19, 1, 0.22, 1] }}
+              viewport={{ once: true }}
             >
               هُنا يبدأ شفاؤكِ
             </motion.h1>
 
-            {/* English headline — enters from the left */}
-            <motion.p
-              variants={heroEnglishLine}
+            {/* English headline — delayed curtain reveal */}
+            <motion.h2
               className="font-display font-[200] text-brand-teal leading-[0.9] mt-3"
-              style={{
-                fontSize: "clamp(2.5rem, 6vw, 5.5rem)",
-              }}
+              style={{ fontSize: "clamp(2.5rem, 6vw, 5.5rem)" }}
+              initial={{ clipPath: "inset(100% 0% 0% 0%)" }}
+              whileInView={{ clipPath: "inset(0% 0% 0% 0%)" }}
+              transition={{ duration: 1.4, ease: [0.19, 1, 0.22, 1], delay: 0.3 }}
+              viewport={{ once: true }}
             >
               Here, Your Healing Begins
-            </motion.p>
+            </motion.h2>
 
             {/* Shimmer thread */}
             <motion.div
-              variants={heroItem}
               className="w-20 h-px my-10 animate-shimmer"
               style={{
                 backgroundImage:
                   "linear-gradient(90deg, transparent 0%, #ECA200 50%, transparent 100%)",
                 backgroundSize: "200% auto",
               }}
+              initial={{ opacity: 0 }}
+              whileInView={{ opacity: 1 }}
+              transition={{ duration: 0.8, delay: 0.6, ease: [0.25, 0.1, 0.25, 1] }}
+              viewport={{ once: true }}
             />
 
             {/* Cross-script echo */}
             <motion.p
-              variants={heroItem}
               className={
                 lang === "ar"
                   ? "font-display text-sm text-brand-teal/20 mb-10"
-                  : "font-arabic text-sm text-brand-teal/20 mb-10"
+                  : "font-display text-sm text-brand-teal/20 mb-10"
               }
               style={{ direction: lang === "ar" ? "ltr" : "rtl" }}
+              initial={{ opacity: 0, y: 16 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, delay: 0.7, ease: [0.25, 0.1, 0.25, 1] }}
+              viewport={{ once: true }}
             >
               {lang === "ar" ? "Here, Your Healing Begins" : "هُنا يبدأ شفاؤكِ"}
             </motion.p>
 
-            {/* Pills */}
-            <motion.div variants={heroItem} className="flex flex-wrap justify-center gap-3">
+            {/* Pills — staggered with frosted glass */}
+            <motion.div
+              className="flex flex-wrap justify-center gap-3"
+              variants={{
+                hidden: {},
+                visible: { transition: { staggerChildren: 0.12, delayChildren: 0.8 } },
+              }}
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true }}
+            >
               {(lang === "ar"
                 ? ["٥ مسارات", "للنساء فقط", "منهج CBT"]
                 : ["5 Pathways", "Women Only", "CBT-Based"]
               ).map((label) => (
-                <span
+                <motion.span
                   key={label}
-                  className="border border-brand-teal/20 text-brand-teal/70 text-xs px-4 py-2 rounded-full backdrop-blur-sm"
+                  variants={{
+                    hidden: { opacity: 0, y: 24 },
+                    visible: {
+                      opacity: 1,
+                      y: 0,
+                      transition: { duration: 0.8, ease: [0.25, 0.1, 0.25, 1] },
+                    },
+                  }}
+                  className="border border-brand-teal/20 text-brand-teal/70 text-xs px-4 py-2 rounded-full backdrop-blur-sm bg-brand-cream/70"
                 >
                   {label}
-                </span>
+                </motion.span>
               ))}
             </motion.div>
 
             {/* Body */}
-            <motion.p
-              variants={heroItem}
-              className="text-brand-dark/50 text-sm leading-relaxed max-w-md mt-8"
-            >
-              {lang === "ar"
-                ? "كل خدمة هي مسار — صُمّمت لتلاقيكِ أينما كنتِ وتمشي معكِ نحو ما تريدين أن تكوني."
-                : "Each service is a pathway — designed to meet you where you are and walk with you toward where you want to be."}
-            </motion.p>
-          </motion.div>
+            <Reveal direction="up" delay={1.0} className="mt-8">
+              <p className="text-brand-dark/50 text-sm leading-relaxed max-w-md mx-auto">
+                {lang === "ar"
+                  ? "كل خدمة هي مسار — صُمّمت لتلاقيكِ أينما كنتِ وتمشي معكِ نحو ما تريدين أن تكوني."
+                  : "Each service is a pathway — designed to meet you where you are and walk with you toward where you want to be."}
+              </p>
+            </Reveal>
+          </div>
         </div>
+
+        {/* Scroll indicator */}
+        <motion.div
+          className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-1 z-10"
+          animate={{ y: [0, 6, 0], opacity: [0.4, 0.8, 0.4] }}
+          transition={{ duration: 2.5, repeat: Infinity, ease: "easeInOut" }}
+        >
+          <div className="w-px h-5 bg-gradient-to-b from-transparent to-brand-teal-light" />
+          <ChevronDown className="w-3 h-3 text-brand-teal-light opacity-50" />
+        </motion.div>
       </section>
 
       {/* ── Gradient Bridge — Cream → Blush ─────────────────────────────── */}
@@ -464,17 +367,17 @@ export default function ServicesPage() {
             {lang === "ar" ? "خدماتنا" : "Our Services"}
           </h2>
 
-          {/* ── Featured Service — "The Window" ── */}
+          {/* ── Featured Service — "The Window" (Pre-Wedding) ── */}
           <motion.div
             className="relative rounded-3xl overflow-hidden min-h-[400px] lg:min-h-[560px] mb-10"
             style={{ boxShadow: "0 4px 40px rgba(3,90,96,0.08)" }}
             initial={{ clipPath: "inset(100% 0% 0% 0%)" }}
             whileInView={{ clipPath: "inset(0% 0% 0% 0%)" }}
             viewport={{ once: true }}
-            transition={{ duration: 1.2, ease: [0.25, 0.1, 0.25, 1] }}
+            transition={{ duration: 1.4, ease: [0.19, 1, 0.22, 1] }}
           >
             <ParallaxImage
-              src={featuredService.image}
+              src={serviceImages[featuredService.id]}
               alt={featuredService.title}
               className="absolute inset-0"
               speed={5}
@@ -487,7 +390,7 @@ export default function ServicesPage() {
               style={{ fontSize: "clamp(8rem, 15vw, 14rem)" }}
               aria-hidden="true"
             >
-              ١
+              {featuredService.icon}
             </span>
 
             <div className="absolute bottom-12 right-12 w-64 h-64 bg-brand-blush/30 rounded-full blur-[80px] pointer-events-none" />
@@ -500,19 +403,19 @@ export default function ServicesPage() {
                 className="font-display text-brand-teal mb-1"
                 style={{ fontSize: "clamp(1.6rem, 2.5vw, 2.2rem)" }}
               >
-                {featuredService.title}
+                {lang === "ar" ? featuredService.titleAr : featuredService.title}
               </h3>
               <p
                 className="font-display text-brand-teal-light text-sm mb-4"
-                style={{ direction: "rtl" }}
+                style={{ direction: lang === "ar" ? "ltr" : "rtl" }}
               >
-                {featuredService.titleAr}
+                {lang === "ar" ? featuredService.title : featuredService.titleAr}
               </p>
               <p className="text-brand-dark/60 text-sm leading-relaxed mb-3">
-                {featuredService.description}
+                {lang === "ar" ? featuredService.descriptionAr : featuredService.description}
               </p>
               <p className="text-brand-gold/60 text-xs italic tracking-wide mb-6">
-                {featuredService.sensory}
+                {featuredService.format}
               </p>
               <Link
                 href={`/${lang}/booking`}
@@ -523,20 +426,16 @@ export default function ServicesPage() {
             </div>
           </motion.div>
 
-          {/* ── Grid — Remaining Services ── */}
-          <motion.div
-            className="grid grid-cols-1 md:grid-cols-2 gap-10"
-            variants={staggerContainer}
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true, margin: "-80px" }}
-          >
+          {/* ── Grid — Remaining Services (differentiated entrances) ── */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
             {gridServices.map((service, i) => (
               <motion.div
                 key={service.id}
-                variants={staggerItem}
-                whileHover={{ y: -4 }}
-                transition={{ duration: 0.3 }}
+                initial={cardEntrances[i].initial}
+                whileInView={cardEntrances[i].whileInView}
+                transition={cardEntrances[i].transition}
+                viewport={{ once: true }}
+                whileHover={{ y: -4, transition: { duration: 0.3 } }}
                 className={`relative overflow-hidden bg-white/60 backdrop-blur-md rounded-3xl border-l-4 ${gridBorderColors[i]} group ${
                   i % 2 === 1 ? "md:mt-12" : ""
                 }`}
@@ -547,38 +446,42 @@ export default function ServicesPage() {
                   style={{ fontSize: "7rem" }}
                   aria-hidden="true"
                 >
-                  {arabicNumerals[i + 1]}
+                  {arabicNumerals[i]}
                 </span>
 
-                <div className="relative h-56 overflow-hidden">
+                {/* Image with cinematic curtain lift */}
+                <motion.div
+                  className="relative h-56 overflow-hidden"
+                  initial={{ clipPath: "inset(100% 0% 0% 0%)" }}
+                  whileInView={{ clipPath: "inset(0% 0% 0% 0%)" }}
+                  transition={{ duration: 1.4, ease: [0.19, 1, 0.22, 1] }}
+                  viewport={{ once: true }}
+                >
                   <ParallaxImage
-                    src={service.image}
+                    src={serviceImages[service.id]}
                     alt={service.title}
                     className="absolute inset-0"
                     speed={3}
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-brand-teal/15 to-transparent" />
                   <div className="absolute inset-0 bg-brand-blush/25 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-                  <p className="absolute bottom-4 left-5 right-5 text-white/80 font-display italic text-lg opacity-0 group-hover:opacity-100 transition-opacity duration-700 z-10">
-                    {service.sensory}
-                  </p>
-                </div>
+                </motion.div>
 
                 <div className="p-10 relative">
                   <h3 className="font-display text-xl text-brand-teal mb-1">
-                    {service.title}
+                    {lang === "ar" ? service.titleAr : service.title}
                   </h3>
                   <p
                     className="font-display text-brand-teal-light text-sm mb-4"
-                    style={{ direction: "rtl" }}
+                    style={{ direction: lang === "ar" ? "ltr" : "rtl" }}
                   >
-                    {service.titleAr}
+                    {lang === "ar" ? service.title : service.titleAr}
                   </p>
                   <p className="text-brand-dark/60 text-sm leading-relaxed mb-3">
-                    {service.description}
+                    {lang === "ar" ? service.descriptionAr : service.description}
                   </p>
                   <p className="text-brand-gold/60 text-xs italic tracking-wide mb-6">
-                    {service.sensory}
+                    {service.format}
                   </p>
                   <div className="pt-4 border-t border-brand-cream flex items-center justify-between">
                     <span className="text-xs px-3 py-1.5 rounded-full bg-brand-cream text-brand-teal">
@@ -596,7 +499,7 @@ export default function ServicesPage() {
                 <div className="absolute bottom-0 left-1/4 right-1/4 h-px bg-brand-gold/40 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
               </motion.div>
             ))}
-          </motion.div>
+          </div>
         </div>
       </Section>
 
@@ -708,15 +611,16 @@ export default function ServicesPage() {
 
           <div ref={pathwayLineRef} className="flex justify-center">
             <motion.div
-              className="h-px animate-shimmer"
+              className="h-px w-32 animate-shimmer"
               style={{
                 backgroundImage:
                   "linear-gradient(90deg, transparent 0%, #ECA200 50%, transparent 100%)",
                 backgroundSize: "200% auto",
+                transformOrigin: "left center",
               }}
-              initial={{ width: 0 }}
-              animate={pathwayLineInView ? { width: "8rem" } : { width: 0 }}
-              transition={{ duration: 1.2, ease: "easeOut" }}
+              initial={{ scaleX: 0 }}
+              animate={pathwayLineInView ? { scaleX: 1 } : { scaleX: 0 }}
+              transition={{ duration: 1.2, ease: [0.19, 1, 0.22, 1], delay: 0.2 }}
             />
           </div>
         </Reveal>
@@ -735,7 +639,7 @@ export default function ServicesPage() {
             />
 
             <motion.div
-              variants={staggerContainer}
+              variants={pathwayStaggerVariants}
               initial="hidden"
               whileInView="visible"
               viewport={{ once: true, margin: "-80px" }}
@@ -745,7 +649,7 @@ export default function ServicesPage() {
                 return (
                   <motion.div
                     key={step.num}
-                    variants={staggerItem}
+                    variants={pathwayStep}
                     className="relative mb-24 last:mb-0"
                   >
                     {/* Node circle */}
@@ -854,14 +758,15 @@ export default function ServicesPage() {
         <div className="relative z-10 text-center max-w-lg mx-auto px-6 py-32">
           <div ref={ctaLineRef} className="flex justify-center mb-10">
             <motion.div
-              className="w-px bg-gradient-to-b from-brand-gold/0 via-brand-gold to-brand-gold/0"
-              initial={{ height: 0, opacity: 0 }}
+              className="w-px h-24 bg-gradient-to-b from-brand-gold/0 via-brand-gold to-brand-gold/0"
+              initial={{ scaleY: 0, opacity: 0 }}
               animate={
                 ctaLineInView
-                  ? { height: "6rem", opacity: 1 }
-                  : { height: 0, opacity: 0 }
+                  ? { scaleY: 1, opacity: 1 }
+                  : { scaleY: 0, opacity: 0 }
               }
               transition={{ duration: 1.2, ease: "easeOut" }}
+              style={{ transformOrigin: "top center" }}
             />
           </div>
 
