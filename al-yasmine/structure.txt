@@ -1,0 +1,84 @@
+﻿src/
+├── app/
+│   ├── api/
+│   │   ├── admin/
+│   │   │   └── auth/
+│   │   │       └── route.ts
+│   │   └── webhooks/
+│   │       └── calendly/
+│   │           └── route.ts
+│   ├── [lang]/
+│   │   ├── about/
+│   │   │   ├── page.tsx
+│   │   │   └── PageClient.tsx
+│   │   ├── admin/
+│   │   │   ├── availability/
+│   │   │   │   └── page.tsx
+│   │   │   ├── calendar/
+│   │   │   │   └── page.tsx
+│   │   │   ├── dashboard/
+│   │   │   │   └── page.tsx
+│   │   │   ├── login/
+│   │   │   │   └── page.tsx
+│   │   │   └── layout.tsx
+│   │   ├── booking/
+│   │   │   ├── page.tsx
+│   │   │   └── PageClient.tsx
+│   │   ├── free-course/
+│   │   │   ├── page.tsx
+│   │   │   └── PageClient.tsx
+│   │   ├── pricing/
+│   │   │   ├── page.tsx
+│   │   │   └── PageClient.tsx
+│   │   ├── privacy/
+│   │   │   └── page.tsx
+│   │   ├── proof/
+│   │   │   ├── page.tsx
+│   │   │   └── PageClient.tsx
+│   │   ├── services/
+│   │   │   ├── page.tsx
+│   │   │   └── PageClient.tsx
+│   │   ├── terms/
+│   │   │   └── page.tsx
+│   │   ├── layout.tsx
+│   │   └── page.tsx
+│   ├── {about,proof,services,pricing,free-course,booking}/
+│   ├── icon.png
+│   └── layout.tsx
+├── components/
+│   ├── booking/
+│   │   └── CalendlyEmbed.tsx
+│   ├── layout/
+│   │   ├── BreathWrapper.tsx
+│   │   ├── CinematicWrapper.tsx
+│   │   ├── Footer.tsx
+│   │   ├── LenisProvider.tsx
+│   │   ├── Navbar.tsx
+│   │   └── PageTransition.tsx
+│   ├── ui/
+│   │   ├── ai-chat.tsx
+│   │   ├── background-gradient-animation.tsx
+│   │   ├── button.tsx
+│   │   ├── container-scroll-animation.tsx
+│   │   ├── dividers.tsx
+│   │   ├── hero-canvas.tsx
+│   │   ├── interactive-hover-button.tsx
+│   │   ├── parallax-floating.tsx
+│   │   ├── reveal.tsx
+│   │   ├── scroll-progress.tsx
+│   │   └── scroll-testimonials.tsx
+│   └── {ui,layout,sections,booking}/
+├── hooks/
+│   └── use-mouse-position-ref.ts
+├── lib/
+│   ├── config.ts
+│   ├── i18n.ts
+│   └── utils.ts
+├── locales/
+│   ├── ar.json
+│   └── en.json
+├── styles/
+│   └── globals.css
+├── types/
+│   └── index.ts
+└── middleware.ts

@@ -5,17 +5,16 @@ import { usePathname, useRouter } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
 import { motion } from "framer-motion";
-import { Home, User, Star, Briefcase, DollarSign, Calendar, Menu, X } from "lucide-react";
+import { Home, User, Star, Briefcase, Calendar, Menu, X } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { getTranslator, type Locale } from "@/lib/i18n";
 
 function getNavItems(lang: Locale, t: (key: string) => string) {
   return [
-    { name: t("nav.home"),     url: `/${lang}`,          icon: Home       },
-    { name: t("nav.about"),    url: `/${lang}/about`,    icon: User       },
-    { name: t("nav.services"), url: `/${lang}/services`, icon: Briefcase  },
-    { name: t("nav.proof"),    url: `/${lang}/proof`,    icon: Star       },
-    { name: t("nav.pricing"),  url: `/${lang}/pricing`,  icon: DollarSign },
+    { name: t("nav.home"),     url: `/${lang}`,          icon: Home      },
+    { name: t("nav.about"),    url: `/${lang}/about`,    icon: User      },
+    { name: t("nav.services"), url: `/${lang}/services`, icon: Briefcase },
+    { name: t("nav.proof"),    url: `/${lang}/proof`,    icon: Star      },
   ];
 }
 

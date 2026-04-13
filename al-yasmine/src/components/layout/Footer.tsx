@@ -4,6 +4,7 @@ import { motion } from "framer-motion";
 import Link from "next/link";
 import { Instagram, Phone } from "lucide-react";
 import { getTranslator, type Locale } from "@/lib/i18n";
+import { siteConfig } from "@/lib/config";
 
 function getLinkGroups(lang: Locale, t: (key: string) => string) {
   return [
@@ -14,15 +15,12 @@ function getLinkGroups(lang: Locale, t: (key: string) => string) {
         { text: t("footer.aboutLink"),    href: `/${lang}/about` },
         { text: t("footer.servicesLink"), href: `/${lang}/services` },
         { text: t("footer.proofLink"),    href: `/${lang}/proof` },
-        { text: t("footer.pricingLink"),  href: `/${lang}/pricing` },
       ],
     },
     {
       label: t("footer.support"),
       links: [
         { text: t("footer.bookSession"), href: `/${lang}/booking` },
-        { text: t("footer.contact"),     href: `/${lang}/contact` },
-        { text: t("footer.faq"),         href: `/${lang}/faq` },
       ],
     },
     {
@@ -72,11 +70,11 @@ export function Footer({ lang = "en" as Locale }: { lang?: Locale }) {
               @alyasmine_center
             </a>
             <a
-              href="tel:+971524117078"
+              href={`tel:${siteConfig.phone.replace(/\s+/g, "")}`}
               className="flex items-center gap-2 text-brand-cream/60 text-sm hover:text-brand-gold transition-colors duration-300"
             >
               <Phone className="w-4 h-4" />
-              +971 52 411 7078
+              {siteConfig.phone}
             </a>
           </div>
 
