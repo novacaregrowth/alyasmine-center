@@ -59,10 +59,8 @@ const config: Config = {
 
       // ─── Typography ────────────────────────────────────────────────────
       fontFamily: {
-        // Montaser Arabic equivalent for display/headings
         display: ["var(--font-display)", "serif"],
-        // Clean body font
-        body:    ["var(--font-body)", "sans-serif"],
+        body:    ["var(--font-body)", "serif"],
         arabic:  ["var(--font-arabic)", "serif"],
       },
 

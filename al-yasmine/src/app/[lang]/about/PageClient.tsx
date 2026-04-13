@@ -416,7 +416,7 @@ export default function AboutPage() {
                 style={{ boxShadow: "0 2px 20px rgba(3,90,96,0.06)" }}
               >
                 <span className="font-display text-5xl text-brand-blush block mb-4">{card.num}</span>
-                <h3 className="font-display text-lg text-brand-teal mb-2">{card.title}</h3>
+                <h3 className="font-display text-lg font-semibold text-brand-teal mb-2">{card.title}</h3>
                 <p className="text-brand-dark/50 text-sm leading-relaxed">{card.desc}</p>
               </motion.div>
             ))}
