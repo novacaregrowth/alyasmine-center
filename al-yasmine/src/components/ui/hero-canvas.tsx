@@ -141,11 +141,11 @@ export function HeroCanvas({ lang = "en" }: { lang?: Locale }) {
         />
 
         <motion.div
-          className="absolute inset-0 z-10 flex flex-col items-center justify-center text-center px-6"
+          className="absolute inset-0 z-10 flex flex-col items-center justify-center text-center px-6 pt-16"
           style={{ opacity: heroOpacity }}
         >
           <motion.div
-            className="flex justify-center mb-10"
+            className="flex justify-center mb-8"
             initial={{ opacity: 0 }}
             animate={{ opacity: ready ? 1 : 0 }}
             transition={{ delay: 0.4 }}
@@ -155,7 +155,7 @@ export function HeroCanvas({ lang = "en" }: { lang?: Locale }) {
               alt="Al Yasmine Center"
               width={200}
               height={70}
-              className="h-16 w-auto"
+              className="h-14 w-auto"
               priority
             />
           </motion.div>
@@ -166,8 +166,11 @@ export function HeroCanvas({ lang = "en" }: { lang?: Locale }) {
             transition={{ duration: 1, ease: [0.22, 1, 0.36, 1] }}
           >
             <h1
-              className="font-display font-medium text-white mb-6 leading-[0.9] tracking-tight"
-              style={{ fontSize: "clamp(4rem, 10vw, 9rem)" }}
+              className="font-display font-medium text-white mb-6 tracking-tight"
+              style={{
+                fontSize: lang === "ar" ? "clamp(2.8rem, 7vw, 6.5rem)" : "clamp(4rem, 10vw, 9rem)",
+                lineHeight: lang === "ar" ? "1.2" : "0.9",
+              }}
             >
               <span className="block">{t("hero.line1")}</span>
               <span className="block">{t("hero.line2")}</span>

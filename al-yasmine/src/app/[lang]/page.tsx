@@ -2,7 +2,6 @@
 
 import React, { useRef } from "react";
 import Link from "next/link";
-import Image from "next/image";
 import { motion, useScroll, useTransform } from "framer-motion";
 import { HeroCanvas } from "@/components/ui/hero-canvas";
 import { Reveal, StaggerReveal, staggerChild } from "@/components/ui/reveal";
@@ -151,18 +150,26 @@ function Services() {
             <motion.div
               key={s.id}
               variants={staggerChild}
-              className="group p-7 rounded-3xl bg-white border-l-[3px] border-l-brand-blush shadow-sm hover:border-l-brand-teal hover:bg-brand-blush/10 hover:shadow-[0_0_30px_rgba(253,204,190,0.3)] transition-all duration-300 flex flex-col gap-4 rtl:border-l-0 rtl:border-r-[3px] rtl:border-r-brand-blush rtl:hover:border-r-brand-teal w-full sm:w-[calc(50%-0.625rem)] lg:w-[calc(25%-0.9375rem)]"
+              className="group p-7 rounded-3xl bg-white border-l-[3px] border-l-brand-blush shadow-sm hover:bg-brand-teal hover:border-l-brand-gold hover:shadow-xl transition-all duration-500 cursor-pointer flex flex-col gap-4 rtl:border-l-0 rtl:border-r-[3px] rtl:border-r-brand-blush rtl:hover:border-r-brand-gold w-full sm:w-[calc(50%-0.625rem)] lg:w-[calc(25%-0.9375rem)]"
             >
+              <span className="text-2xl text-brand-gold group-hover:text-brand-cream transition-colors duration-500 block">{s.icon}</span>
               <div className="flex-1">
-                <h3 className="font-display text-xl text-brand-dark mb-1.5">{lang === "ar" ? s.titleAr : s.title}</h3>
-                <p className="text-xs text-brand-dark/55 leading-relaxed">{s.description}</p>
+                <h3 className="font-display text-xl text-brand-dark group-hover:text-brand-cream transition-colors duration-500 mb-1.5">{lang === "ar" ? s.titleAr : s.title}</h3>
+                <p className="text-xs text-brand-dark/55 group-hover:text-brand-cream/70 transition-colors duration-500 leading-relaxed">{lang === "ar" ? s.descriptionAr : s.description}</p>
               </div>
-              <div className="flex items-center justify-between text-xs pt-4 border-t border-brand-cream">
-                <span className="text-brand-teal-light">{s.duration}</span>
-                <span className={s.price ? "font-semibold text-brand-teal" : "text-brand-teal-light"}>
-                  {s.price ? formatPrice(s.price) : "Price on request"}
+              <div className="flex items-center justify-between text-xs pt-4 border-t border-brand-cream group-hover:border-brand-cream/20 transition-colors duration-500">
+                <span className="text-brand-teal-light group-hover:text-brand-cream/60 transition-colors duration-500">{s.duration}</span>
+                <span className={`${s.price ? "font-semibold text-brand-teal" : "text-brand-teal-light"} group-hover:text-brand-gold transition-colors duration-500`}>
+                  {s.price ? formatPrice(s.price) : "[PLACEHOLDER]"}
                 </span>
               </div>
+              <Link
+                href={`/${lang}/services#${s.id}`}
+                className="mt-3 inline-flex items-center gap-1.5 text-xs font-medium text-brand-teal group-hover:text-brand-gold transition-colors duration-500 tracking-wide"
+              >
+                {lang === "ar" ? "اكتشفي المزيد" : "Learn More"}
+                <span className="text-[10px] rtl:rotate-180">→</span>
+              </Link>
             </motion.div>
           ))}
         </StaggerReveal>
@@ -177,30 +184,57 @@ function Services() {
   );
 }
 
-const testimonialImages = [
-  { src: "/images/testimonial-1.jpeg", alt: "شهادة عميلة عن تجربتها مع مركز الياسمين" },
-  { src: "/images/testimonial-2.jpeg", alt: "رأي عميلة في جلسات الاستشارة النفسية" },
-  { src: "/images/testimonial-3.jpeg", alt: "تجربة عميلة مع العلاج السلوكي المعرفي" },
-  { src: "/images/testimonial-4.jpeg", alt: "شهادة عميلة عن التحول الذي حققته" },
-  { src: "/images/testimonial-5.jpeg", alt: "رأي عميلة في برنامج التطوير الشخصي" },
-  { src: "/images/testimonial-6.jpeg", alt: "تجربة عميلة مع جلسات علياء البحري" },
-  { src: "/images/testimonial-7.jpeg", alt: "شهادة عميلة عن رحلة الشفاء والتعافي" },
-  { src: "/images/testimonial-8.jpeg", alt: "رأي عميلة في خدمات مركز الياسمين" },
-];
+const textTestimonials = {
+  en: [
+    {
+      quote: "[PLACEHOLDER — Client testimonial 1]",
+      author: "[PLACEHOLDER]",
+      role: "[PLACEHOLDER]",
+    },
+    {
+      quote: "[PLACEHOLDER — Client testimonial 2]",
+      author: "[PLACEHOLDER]",
+      role: "[PLACEHOLDER]",
+    },
+    {
+      quote: "[PLACEHOLDER — Client testimonial 3]",
+      author: "[PLACEHOLDER]",
+      role: "[PLACEHOLDER]",
+    },
+  ],
+  ar: [
+    {
+      quote: "[PLACEHOLDER — شهادة عميلة ١]",
+      author: "[PLACEHOLDER]",
+      role: "[PLACEHOLDER]",
+    },
+    {
+      quote: "[PLACEHOLDER — شهادة عميلة ٢]",
+      author: "[PLACEHOLDER]",
+      role: "[PLACEHOLDER]",
+    },
+    {
+      quote: "[PLACEHOLDER — شهادة عميلة ٣]",
+      author: "[PLACEHOLDER]",
+      role: "[PLACEHOLDER]",
+    },
+  ],
+};
 
 function Testimonials() {
   const lang = useLocale();
   const t = getTranslator(lang);
+  const items = lang === "ar" ? textTestimonials.ar : textTestimonials.en;
 
   return (
     <section className="bg-brand-blush py-24">
       <div className="section-container">
-        <Reveal className="text-center mb-14">
-          <div className="flex items-center justify-center gap-4 mb-3">
+        <Reveal className="text-center mb-16">
+          <div className="flex items-center justify-center gap-4 mb-4">
             <p className="text-brand-teal text-xs tracking-[0.3em] uppercase font-medium">
               {t("testimonials.eyebrowEn")}
             </p>
-            <span className="text-brand-teal/40">|</span>
+            <span className="text-brand-teal/30">|</span>
             <p className="text-brand-teal text-xs tracking-[0.3em] font-medium arabic">
               {t("testimonials.eyebrowAr")}
             </p>
@@ -211,28 +245,46 @@ function Testimonials() {
           >
             {t("testimonials.heading")}
           </h2>
+          <div className="w-16 h-px bg-brand-teal/30 mx-auto mt-6" />
         </Reveal>
-      </div>
 
-      <div className="overflow-x-auto scrollbar-hide pb-4 px-4 sm:px-6 lg:px-8">
-        <div className="flex gap-6">
-          {testimonialImages.map((img) => (
-            <div key={img.src} className="flex-shrink-0 relative h-[500px] w-auto">
-              <Image
-                src={img.src}
-                alt={img.alt}
-                width={375}
-                height={500}
-                className="h-[500px] w-auto rounded-3xl object-cover cursor-pointer"
-              />
-              <div className="absolute inset-0 rounded-3xl bg-gradient-to-t from-brand-blush/20 to-transparent pointer-events-none" />
-            </div>
+        <StaggerReveal className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          {items.map((item, i) => (
+            <motion.div
+              key={i}
+              variants={staggerChild}
+              className="relative bg-white/60 backdrop-blur-sm rounded-3xl p-8 border border-brand-blush shadow-sm flex flex-col"
+            >
+              <div
+                className="font-display text-brand-teal/20 leading-none select-none mb-4"
+                style={{ fontSize: "5rem", lineHeight: 1 }}
+                aria-hidden="true"
+              >
+                "
+              </div>
+              <p
+                className="text-brand-dark/75 leading-relaxed flex-1 mb-6"
+                style={{ fontSize: "0.9375rem" }}
+                dir={lang === "ar" ? "rtl" : "ltr"}
+              >
+                {item.quote}
+              </p>
+              <div className="border-t border-brand-blush/60 pt-5 flex items-center gap-3">
+                <div className="w-8 h-8 rounded-full bg-brand-teal/10 flex items-center justify-center flex-shrink-0">
+                  <span className="text-brand-teal font-display font-semibold text-sm">
+                    {item.author.charAt(0)}
+                  </span>
+                </div>
+                <div>
+                  <p className="font-display font-semibold text-brand-teal text-sm">{item.author}</p>
+                  <p className="text-brand-dark/40 text-xs mt-0.5">{item.role}</p>
+                </div>
+              </div>
+            </motion.div>
           ))}
-        </div>
-      </div>
+        </StaggerReveal>
 
-      <div className="section-container">
-        <Reveal delay={0.2} className="text-center mt-6 pb-4">
+        <Reveal delay={0.3} className="text-center mt-12">
           <Link
             href={`/${lang}/proof`}
             className="inline-block px-6 py-2.5 border border-brand-teal/40 text-brand-teal rounded-full text-xs font-medium hover:bg-brand-teal hover:text-brand-cream hover:border-brand-teal transition-all duration-300"

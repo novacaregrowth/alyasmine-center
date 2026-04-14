@@ -1,15 +1,15 @@
 "use client";
 
-import React, { useRef } from "react";
+import React, { useRef, useState, useEffect, useCallback } from "react";
 import Link from "next/link";
-import Image from "next/image";
 import { Reveal } from "@/components/ui/reveal";
 import { MashrabiyaCanvas } from "@/components/ui/mashrabiya-canvas";
-import { motion, useInView, useScroll, useTransform } from "framer-motion";
+import { motion, useInView, useScroll, useTransform, AnimatePresence } from "framer-motion";
 import { useParams } from "next/navigation";
 import { ChevronDown } from "lucide-react";
 import type { Locale } from "@/lib/i18n";
 import { services } from "@/lib/config";
+import { formatPrice } from "@/lib/utils";
 
 // ─── Hooks ───────────────────────────────────────────────────────────────────
 
@@ -58,16 +58,6 @@ const ctaItem = {
     transition: { duration: 0.8, ease: [0.25, 0.1, 0.25, 1] },
   },
 };
-
-// ─── Differentiated Card Entrances ───────────────────────────────────────────
-
-const cardEntrances = [
-  { initial: { opacity: 0, y: 24 }, whileInView: { opacity: 1, y: 0 }, transition: { duration: 0.8, ease: [0.25, 0.1, 0.25, 1] } },
-  { initial: { opacity: 0, x: -60 }, whileInView: { opacity: 1, x: 0 }, transition: { duration: 0.9, ease: [0.25, 0.1, 0.25, 1] } },
-  { initial: { opacity: 0, x: 60 }, whileInView: { opacity: 1, x: 0 }, transition: { duration: 0.9, ease: [0.25, 0.1, 0.25, 1] } },
-  { initial: { opacity: 0, y: 32 }, whileInView: { opacity: 1, y: 0 }, transition: { duration: 0.8, delay: 0.3, ease: [0.25, 0.1, 0.25, 1] } },
-  { initial: { opacity: 0, y: 32 }, whileInView: { opacity: 1, y: 0 }, transition: { duration: 0.8, delay: 0.4, ease: [0.25, 0.1, 0.25, 1] } },
-];
 
 // ─── Section Wrapper ─────────────────────────────────────────────────────────
 
@@ -120,10 +110,11 @@ function ParallaxImage({
   return (
     <div ref={ref} className={`relative overflow-hidden ${className || ""}`}>
       <motion.div
-        className="absolute"
-        style={{ y, top: "-10%", bottom: "-10%", left: 0, right: 0 }}
+        className="absolute inset-0"
+        style={{ y, top: "-10%", bottom: "-10%" }}
       >
-        <Image src={src} alt={alt} fill className="object-cover" unoptimized />
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img src={src} alt={alt} className="w-full h-full object-cover" />
       </motion.div>
     </div>
   );
@@ -132,28 +123,216 @@ function ParallaxImage({
 // ─── Service Images (UI placeholders — replace with real branded photos) ─────
 
 const serviceImages: Record<string, string> = {
-  consultation: "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=800&q=80",
-  "cbt-sessions": "https://images.unsplash.com/photo-1544787219-7f47ccb76574?w=800&q=80",
-  prewedding: "https://images.unsplash.com/photo-1517842645767-c639042777db?w=800&q=80",
-  adolescent: "https://images.unsplash.com/photo-1481627834876-b7833e8f5570?w=800&q=80",
-  "red-eye": "https://images.unsplash.com/photo-1490750967868-88aa4f44baee?w=800&q=80",
-  "smart-memory": "https://images.unsplash.com/photo-1506784983877-45594efa4cbe?w=800&q=80",
+  consultation: "https://images.unsplash.com/photo-1573497620053-ea5300f94f21?w=800&q=80",
+  "cbt-sessions": "https://images.unsplash.com/photo-1499209974431-9dddcece7f88?w=800&q=80",
+  prewedding: "https://images.unsplash.com/photo-1519741497674-611481863552?w=800&q=80",
+  adolescent: "https://images.unsplash.com/photo-1491438590914-bc09fcaaf77a?w=800&q=80",
+  "red-eye": "https://images.unsplash.com/photo-1474552226712-ac0f0961a954?w=800&q=80",
+  "smart-memory": "https://images.unsplash.com/photo-1456324504439-367cee3b3c32?w=800&q=80",
 };
 
-const gridOrder = ["consultation", "cbt-sessions", "adolescent", "red-eye", "smart-memory"] as const;
-const arabicNumerals = ["١", "٢", "٣", "٤", "٥"];
-const gridBorderColors = [
-  "border-l-brand-gold",
-  "border-l-brand-blush",
-  "border-l-brand-teal-light",
-  "border-l-brand-gold",
-  "border-l-brand-blush",
+const featuredServiceId = "smart-memory";
+const remainingServiceOrder = ["consultation", "cbt-sessions", "prewedding", "adolescent", "red-eye"] as const;
+const gridAccentColors = [
+  "bg-brand-gold",
+  "bg-brand-blush",
+  "bg-brand-teal",
+  "bg-brand-teal-light",
+  "bg-brand-gold",
 ];
+
+// ─── Timeline accent colors per service ─────────────────────────────────────
+
+const timelineAccents: Record<string, { dot: string; line: string; bg: string }> = {
+  consultation:   { dot: "bg-brand-gold",       line: "from-brand-gold/40 via-brand-gold to-brand-gold/40", bg: "bg-brand-gold/[0.06]" },
+  "cbt-sessions": { dot: "bg-brand-teal",       line: "from-brand-teal/40 via-brand-teal to-brand-teal/40", bg: "bg-brand-teal/[0.06]" },
+  prewedding:     { dot: "bg-brand-blush",       line: "from-brand-blush/60 via-brand-blush to-brand-blush/60", bg: "bg-brand-blush/[0.08]" },
+  adolescent:     { dot: "bg-brand-teal-light", line: "from-brand-teal-light/40 via-brand-teal-light to-brand-teal-light/40", bg: "bg-brand-teal-light/[0.06]" },
+  "red-eye":      { dot: "bg-brand-gold",       line: "from-brand-gold/40 via-brand-gold to-brand-gold/40", bg: "bg-brand-gold/[0.06]" },
+  "smart-memory": { dot: "bg-brand-teal",       line: "from-brand-teal/40 via-brand-teal to-brand-teal/40", bg: "bg-brand-teal/[0.06]" },
+};
+
+// ─── Service Timeline Component ─────────────────────────────────────────────
+
+function ServiceTimeline({
+  service,
+  lang,
+  isOpen,
+  onToggle,
+}: {
+  service: typeof services[number];
+  lang: Locale;
+  isOpen: boolean;
+  onToggle: () => void;
+}) {
+  const accent = timelineAccents[service.id] || timelineAccents.consultation;
+  const isAr = lang === "ar";
+  const items = service.timeline;
+
+  return (
+    <div id={service.id} className="scroll-mt-24">
+      {/* Header — clickable to expand/collapse */}
+      <motion.button
+        onClick={onToggle}
+        className="w-full text-left group"
+        whileHover={{ x: isAr ? -4 : 4 }}
+        transition={{ duration: 0.2 }}
+      >
+        <div
+          className={`flex items-center gap-5 py-8 px-6 lg:px-10 rounded-3xl transition-colors duration-300 ${
+            isOpen ? "bg-white/70 backdrop-blur-sm shadow-sm" : "hover:bg-white/40"
+          }`}
+          dir={isAr ? "rtl" : "ltr"}
+        >
+          <span className="text-3xl flex-shrink-0">{service.icon}</span>
+          <div className="flex-1 min-w-0">
+            <h3 className="font-display text-brand-teal text-xl lg:text-2xl mb-1 truncate">
+              {isAr ? service.titleAr : service.title}
+            </h3>
+            <p className="text-brand-dark/50 text-sm truncate">
+              {isAr ? service.descriptionAr : service.description}
+            </p>
+          </div>
+          <div className="flex items-center gap-4 flex-shrink-0">
+            {service.price && (
+              <span className="hidden sm:block text-brand-teal font-semibold text-sm">
+                {formatPrice(service.price)}
+              </span>
+            )}
+            <motion.div
+              animate={{ rotate: isOpen ? 180 : 0 }}
+              transition={{ duration: 0.3 }}
+              className="w-8 h-8 rounded-full border border-brand-teal/20 flex items-center justify-center"
+            >
+              <ChevronDown className="w-4 h-4 text-brand-teal/60" />
+            </motion.div>
+          </div>
+        </div>
+      </motion.button>
+
+      {/* Expandable timeline content */}
+      <AnimatePresence initial={false}>
+        {isOpen && (
+          <motion.div
+            initial={{ height: 0, opacity: 0 }}
+            animate={{ height: "auto", opacity: 1 }}
+            exit={{ height: 0, opacity: 0 }}
+            transition={{ duration: 0.5, ease: [0.25, 0.1, 0.25, 1] }}
+            className="overflow-hidden"
+          >
+            <div className="pt-4 pb-12 px-6 lg:px-10" dir={isAr ? "rtl" : "ltr"}>
+              {/* Info pills */}
+              <div className="flex flex-wrap gap-3 mb-10">
+                <span className="px-4 py-1.5 rounded-full bg-brand-cream text-brand-teal text-xs font-medium">
+                  {service.duration}
+                </span>
+                <span className="px-4 py-1.5 rounded-full bg-brand-cream text-brand-dark/60 text-xs">
+                  {service.format}
+                </span>
+                {service.price && (
+                  <span className="px-4 py-1.5 rounded-full bg-brand-gold/10 text-brand-gold text-xs font-semibold">
+                    {formatPrice(service.price)}
+                  </span>
+                )}
+              </div>
+
+              {/* Timeline */}
+              <div className={`relative ${isAr ? "pr-8" : "pl-8"}`}>
+                {/* Vertical line */}
+                <div
+                  className={`absolute top-0 bottom-0 w-px bg-gradient-to-b ${accent.line} ${
+                    isAr ? "right-[11px]" : "left-[11px]"
+                  }`}
+                />
+
+                {items.map((item, i) => (
+                  <motion.div
+                    key={i}
+                    initial={{ opacity: 0, x: isAr ? 20 : -20 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ duration: 0.5, delay: i * 0.08 }}
+                    className="relative mb-8 last:mb-0"
+                  >
+                    {/* Dot */}
+                    <div
+                      className={`absolute top-1.5 w-[22px] h-[22px] rounded-full border-[3px] border-white ${accent.dot} shadow-sm ${
+                        isAr ? "-right-8 translate-x-1/2" : "-left-8 -translate-x-1/2"
+                      }`}
+                    />
+
+                    {/* Content card */}
+                    <div className={`${accent.bg} rounded-2xl p-5 ${isAr ? "mr-4" : "ml-4"}`}>
+                      <div className="flex items-start gap-3">
+                        <span className="text-brand-teal/30 font-display text-sm font-semibold mt-0.5 flex-shrink-0">
+                          {String(i + 1).padStart(2, "0")}
+                        </span>
+                        <p className="text-brand-dark/80 text-sm leading-relaxed">
+                          {isAr ? item.ar : item.en}
+                        </p>
+                      </div>
+                    </div>
+                  </motion.div>
+                ))}
+              </div>
+
+              {/* Includes section */}
+              {service.includes.length > 0 && (
+                <div className="mt-10 pt-8 border-t border-brand-cream">
+                  <p className="text-brand-teal text-xs tracking-[0.2em] uppercase font-medium mb-4">
+                    {isAr ? "ما يشمله" : "What's Included"}
+                  </p>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    {service.includes.map((inc, i) => (
+                      <div key={i} className="flex items-center gap-2">
+                        <div className={`w-1.5 h-1.5 rounded-full ${accent.dot} flex-shrink-0`} />
+                        <span className="text-brand-dark/60 text-sm">{inc}</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {/* Price note + CTA */}
+              <div className="mt-8 flex flex-wrap items-center gap-4">
+                <Link
+                  href={`/${lang}/booking`}
+                  className="inline-block px-8 py-3.5 bg-brand-teal text-brand-cream rounded-full text-xs tracking-[0.12em] uppercase font-medium hover:bg-brand-teal/90 hover:-translate-y-0.5 transition-all duration-300"
+                >
+                  {isAr ? "احجزي الآن" : "Book Now"}
+                </Link>
+                {service.priceNote && (
+                  <p className="text-brand-dark/40 text-xs italic">
+                    {service.priceNote}
+                  </p>
+                )}
+              </div>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </div>
+  );
+}
 
 // ─── Page Component ──────────────────────────────────────────────────────────
 
 export default function ServicesPage() {
   const lang = useLocale();
+  const [openServiceId, setOpenServiceId] = useState<string | null>(null);
+
+  const handleToggle = useCallback((id: string) => {
+    setOpenServiceId((prev) => (prev === id ? null : id));
+  }, []);
+
+  useEffect(() => {
+    const hash = window.location.hash.replace("#", "");
+    if (hash && services.some((s) => s.id === hash)) {
+      setOpenServiceId(hash);
+      setTimeout(() => {
+        document.getElementById(hash)?.scrollIntoView({ behavior: "smooth", block: "start" });
+      }, 300);
+    }
+  }, []);
 
   const pathwaySectionRef = useRef<HTMLElement>(null);
   const { scrollYProgress: pathwayProgress } = useScroll({
@@ -171,8 +350,8 @@ export default function ServicesPage() {
   const ctaLineRef = useRef<HTMLDivElement>(null);
   const ctaLineInView = useInView(ctaLineRef, { once: true, margin: "-40px" });
 
-  const featuredService = services.find((s) => s.id === "prewedding")!;
-  const gridServices = gridOrder.map((id) => services.find((s) => s.id === id)!);
+  const featuredService = services.find((s) => s.id === featuredServiceId)!;
+  const gridServices = remainingServiceOrder.map((id) => services.find((s) => s.id === id)!);
 
   const pathwaySteps = [
     {
@@ -181,8 +360,8 @@ export default function ServicesPage() {
       titleSecondary: lang === "ar" ? "Consult" : "استشيري",
       desc:
         lang === "ar"
-          ? "مكالمة مجانية لنفهم احتياجاتكِ ونرسم معًا الخطوة الأولى."
-          : "A free discovery call to understand your needs and map your first step together.",
+          ? "جلسة استشارية لنفهم احتياجاتكِ ونرسم معًا الخطوة الأولى."
+          : "A consultation session to understand your needs and map your first step together.",
       glowClass: "bg-brand-blush/10",
     },
     {
@@ -356,148 +535,246 @@ export default function ServicesPage() {
 
       {/* ── The Offerings — Services Grid ────────────────────────────────── */}
       <Section className="bg-brand-blush/20">
-        <div className="section-container py-32">
-          <p className="text-brand-gold text-xs tracking-[0.2em] uppercase mb-4">
-            {lang === "ar" ? "العروض" : "The Offerings"}
-          </p>
-          <h2
-            className="font-display font-light text-brand-teal mb-20"
-            style={{ fontSize: "clamp(2.5rem, 6vw, 5rem)" }}
-          >
-            {lang === "ar" ? "خدماتنا" : "Our Services"}
-          </h2>
-
-          {/* ── Featured Service — "The Window" (Pre-Wedding) ── */}
-          <motion.div
-            className="relative rounded-3xl overflow-hidden min-h-[400px] lg:min-h-[560px] mb-10"
-            style={{ boxShadow: "0 4px 40px rgba(3,90,96,0.08)" }}
-            initial={{ clipPath: "inset(100% 0% 0% 0%)" }}
-            whileInView={{ clipPath: "inset(0% 0% 0% 0%)" }}
-            viewport={{ once: true }}
-            transition={{ duration: 1.4, ease: [0.19, 1, 0.22, 1] }}
-          >
-            <ParallaxImage
-              src={serviceImages[featuredService.id]}
-              alt={featuredService.title}
-              className="absolute inset-0"
-              speed={5}
-            />
-
-            <div className="absolute inset-0 bg-gradient-to-t from-brand-teal/30 via-transparent to-transparent" />
-
-            <span
-              className="absolute top-4 left-6 font-arabic text-white/[0.12] pointer-events-none select-none leading-none"
-              style={{ fontSize: "clamp(8rem, 15vw, 14rem)" }}
-              aria-hidden="true"
+        <div className="section-container py-20">
+          <div className="text-center mb-14">
+            <p className="text-brand-gold text-xs tracking-[0.3em] uppercase mb-3">
+              {lang === "ar" ? "العروض" : "The Offerings"}
+            </p>
+            <h2
+              className="font-display font-light text-brand-teal"
+              style={{ fontSize: "clamp(2rem, 5vw, 3.5rem)" }}
             >
-              {featuredService.icon}
-            </span>
+              {lang === "ar" ? "خدماتنا" : "Our Services"}
+            </h2>
+            <div className="w-12 h-px bg-brand-gold/40 mx-auto mt-6" />
+          </div>
 
-            <div className="absolute bottom-12 right-12 w-64 h-64 bg-brand-blush/30 rounded-full blur-[80px] pointer-events-none" />
+          {/* ── Featured — Smart Memory (full-width horizontal card) ── */}
+          <motion.div
+            className="relative rounded-2xl overflow-hidden mb-6 group cursor-pointer"
+            style={{ boxShadow: "0 4px 30px rgba(3,90,96,0.06)" }}
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.8, ease: [0.25, 0.1, 0.25, 1] }}
+            onClick={() => {
+              setOpenServiceId(featuredService.id);
+              setTimeout(() => {
+                document.getElementById(featuredService.id)?.scrollIntoView({ behavior: "smooth", block: "start" });
+              }, 150);
+            }}
+          >
+            <div className="grid grid-cols-1 lg:grid-cols-2">
+              <div className="relative h-56 lg:h-72 overflow-hidden">
+                <ParallaxImage
+                  src={serviceImages[featuredService.id]}
+                  alt={featuredService.title}
+                  className="absolute inset-0"
+                  speed={3}
+                />
+                <div className="absolute inset-0 bg-gradient-to-r from-transparent to-white/20 lg:to-white/40" />
+                <div className="absolute inset-0 bg-brand-teal/[0.06]" />
+                <span
+                  className="absolute top-4 left-5 text-white/25 pointer-events-none select-none leading-none font-display"
+                  style={{ fontSize: "4rem" }}
+                  aria-hidden="true"
+                >
+                  {featuredService.icon}
+                </span>
+                <span className="absolute top-4 right-4 px-3 py-1 rounded-full bg-brand-gold text-brand-dark text-[10px] tracking-[0.12em] uppercase font-semibold">
+                  {lang === "ar" ? "الأكثر طلبًا" : "Most Popular"}
+                </span>
+              </div>
 
-            <div className="absolute bottom-6 left-6 right-6 lg:left-auto lg:right-8 lg:bottom-8 lg:w-[45%] bg-white/70 backdrop-blur-xl rounded-3xl p-8 lg:p-10">
-              <span className="text-brand-gold text-xs tracking-[0.15em] uppercase mb-3 block">
-                {featuredService.duration}
-              </span>
-              <h3
-                className="font-display text-brand-teal mb-1"
-                style={{ fontSize: "clamp(1.6rem, 2.5vw, 2.2rem)" }}
-              >
-                {lang === "ar" ? featuredService.titleAr : featuredService.title}
-              </h3>
-              <p
-                className="font-display text-brand-teal-light text-sm mb-4"
-                style={{ direction: lang === "ar" ? "ltr" : "rtl" }}
-              >
-                {lang === "ar" ? featuredService.title : featuredService.titleAr}
-              </p>
-              <p className="text-brand-dark/60 text-sm leading-relaxed mb-3">
-                {lang === "ar" ? featuredService.descriptionAr : featuredService.description}
-              </p>
-              <p className="text-brand-gold/60 text-xs italic tracking-wide mb-6">
-                {featuredService.format}
-              </p>
-              <Link
-                href={`/${lang}/booking`}
-                className="inline-block px-8 py-3.5 bg-brand-teal text-brand-cream rounded-full text-xs tracking-[0.12em] uppercase font-medium hover:bg-brand-teal/90 hover:-translate-y-0.5 transition-all duration-300"
-              >
-                {lang === "ar" ? "احجزي الآن" : "Book This"}
-              </Link>
+              <div className="bg-white/80 backdrop-blur-sm p-7 lg:p-9 flex flex-col justify-center">
+                <div className="flex items-center gap-3 mb-3">
+                  <span className="text-brand-gold text-[10px] tracking-[0.15em] uppercase font-medium">
+                    {featuredService.duration}
+                  </span>
+                  <span className="w-1 h-1 rounded-full bg-brand-gold/40" />
+                  <span className="text-brand-dark/40 text-[10px] italic">
+                    {featuredService.format}
+                  </span>
+                </div>
+                <h3 className="font-display text-brand-teal text-xl lg:text-2xl mb-1">
+                  {lang === "ar" ? featuredService.titleAr : featuredService.title}
+                </h3>
+                <p
+                  className="font-display text-brand-teal-light text-xs mb-3 opacity-60"
+                  style={{ direction: lang === "ar" ? "ltr" : "rtl" }}
+                >
+                  {lang === "ar" ? featuredService.title : featuredService.titleAr}
+                </p>
+                <p className="text-brand-dark/55 text-sm leading-relaxed mb-5 max-w-lg">
+                  {lang === "ar" ? featuredService.descriptionAr : featuredService.description}
+                </p>
+                <div className="flex items-center gap-4">
+                  <span className="text-brand-gold tracking-[0.08em] text-[10px] uppercase font-medium group-hover:text-brand-teal transition-colors duration-300">
+                    {lang === "ar" ? "اكتشفي المزيد ←" : "Learn More →"}
+                  </span>
+                </div>
+              </div>
             </div>
           </motion.div>
 
-          {/* ── Grid — Remaining Services (differentiated entrances) ── */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
-            {gridServices.map((service, i) => (
-              <motion.div
-                key={service.id}
-                initial={cardEntrances[i].initial}
-                whileInView={cardEntrances[i].whileInView}
-                transition={cardEntrances[i].transition}
-                viewport={{ once: true }}
-                whileHover={{ y: -4, transition: { duration: 0.3 } }}
-                className={`relative overflow-hidden bg-white/60 backdrop-blur-md rounded-3xl border-l-4 ${gridBorderColors[i]} group ${
-                  i % 2 === 1 ? "md:mt-12" : ""
-                }`}
-                style={{ boxShadow: "0 2px 20px rgba(3,90,96,0.05)" }}
-              >
-                <span
-                  className="absolute -top-2 right-4 font-arabic text-brand-blush/[0.07] group-hover:text-brand-blush/[0.14] transition-all duration-700 pointer-events-none select-none leading-none z-10"
-                  style={{ fontSize: "7rem" }}
-                  aria-hidden="true"
-                >
-                  {arabicNumerals[i]}
-                </span>
-
-                {/* Image with cinematic curtain lift */}
+          {/* ── Row of 3 ── */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 mb-5">
+            {gridServices.slice(0, 3).map((service, i) => {
+              const ServiceCard = (
                 <motion.div
-                  className="relative h-56 overflow-hidden"
-                  initial={{ clipPath: "inset(100% 0% 0% 0%)" }}
-                  whileInView={{ clipPath: "inset(0% 0% 0% 0%)" }}
-                  transition={{ duration: 1.4, ease: [0.19, 1, 0.22, 1] }}
+                  key={service.id}
+                  initial={{ opacity: 0, y: 24 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.6, delay: i * 0.07, ease: [0.25, 0.1, 0.25, 1] }}
                   viewport={{ once: true }}
+                  whileHover={{ y: -4, transition: { duration: 0.25 } }}
+                  onClick={() => {
+                    setOpenServiceId(service.id);
+                    setTimeout(() => {
+                      document.getElementById(service.id)?.scrollIntoView({ behavior: "smooth", block: "start" });
+                    }, 150);
+                  }}
+                  className="relative overflow-hidden bg-white/70 backdrop-blur-sm rounded-2xl group cursor-pointer"
+                  style={{ boxShadow: "0 2px 20px rgba(3,90,96,0.05)" }}
                 >
-                  <ParallaxImage
-                    src={serviceImages[service.id]}
-                    alt={service.title}
-                    className="absolute inset-0"
-                    speed={3}
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-brand-teal/15 to-transparent" />
-                  <div className="absolute inset-0 bg-brand-blush/25 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-                </motion.div>
-
-                <div className="p-10 relative">
-                  <h3 className="font-display text-xl text-brand-teal mb-1">
-                    {lang === "ar" ? service.titleAr : service.title}
-                  </h3>
-                  <p
-                    className="font-display text-brand-teal-light text-sm mb-4"
-                    style={{ direction: lang === "ar" ? "ltr" : "rtl" }}
-                  >
-                    {lang === "ar" ? service.title : service.titleAr}
-                  </p>
-                  <p className="text-brand-dark/60 text-sm leading-relaxed mb-3">
-                    {lang === "ar" ? service.descriptionAr : service.description}
-                  </p>
-                  <p className="text-brand-gold/60 text-xs italic tracking-wide mb-6">
-                    {service.format}
-                  </p>
-                  <div className="pt-4 border-t border-brand-cream flex items-center justify-between">
-                    <span className="text-xs px-3 py-1.5 rounded-full bg-brand-cream text-brand-teal">
-                      {service.duration}
-                    </span>
-                    <Link
-                      href={`/${lang}/booking`}
-                      className="text-brand-teal text-xs tracking-[0.1em] uppercase font-medium hover:text-brand-gold transition-colors duration-300"
+                  <div className="relative h-40 overflow-hidden">
+                    <ParallaxImage
+                      src={serviceImages[service.id]}
+                      alt={service.title}
+                      className="absolute inset-0"
+                      speed={2}
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-white/70 via-white/10 to-transparent" />
+                    <div className="absolute inset-0 bg-brand-teal/[0.03] group-hover:bg-brand-teal/10 transition-colors duration-500" />
+                    <span
+                      className="absolute top-3 left-4 font-display text-white/30 group-hover:text-white/50 transition-all duration-500 pointer-events-none select-none leading-none"
+                      style={{ fontSize: "2.5rem" }}
+                      aria-hidden="true"
                     >
-                      {lang === "ar" ? "احجزي" : "Book"}
-                    </Link>
+                      {service.icon}
+                    </span>
+                    <div className={`absolute bottom-0 left-0 w-full h-[3px] ${gridAccentColors[i]} opacity-70 group-hover:opacity-100 transition-opacity duration-500`} />
                   </div>
-                </div>
+                  <div className="p-5">
+                    <h3 className="font-display text-brand-teal text-base mb-0.5 group-hover:text-brand-teal/80 transition-colors duration-300">
+                      {lang === "ar" ? service.titleAr : service.title}
+                    </h3>
+                    <p className="font-display text-brand-teal-light text-[11px] mb-3 opacity-60" style={{ direction: lang === "ar" ? "ltr" : "rtl" }}>
+                      {lang === "ar" ? service.title : service.titleAr}
+                    </p>
+                    <p className="text-brand-dark/50 text-xs leading-relaxed mb-4 line-clamp-2">
+                      {lang === "ar" ? service.descriptionAr : service.description}
+                    </p>
+                    <div className="flex items-center justify-between text-[10px] pt-3 border-t border-brand-cream/80">
+                      <span className="px-2.5 py-1 rounded-full bg-brand-cream text-brand-teal font-medium">
+                        {service.duration}
+                      </span>
+                      <span className="text-brand-gold tracking-[0.08em] uppercase font-medium group-hover:text-brand-teal transition-colors duration-300">
+                        {lang === "ar" ? "اكتشفي المزيد ←" : "Learn More →"}
+                      </span>
+                    </div>
+                  </div>
+                </motion.div>
+              );
+              return ServiceCard;
+            })}
+          </div>
 
-                <div className="absolute bottom-0 left-1/4 right-1/4 h-px bg-brand-gold/40 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-              </motion.div>
+          {/* ── Row of 2 — centered ── */}
+          <div className="flex justify-center gap-5">
+            {gridServices.slice(3, 5).map((service, idx) => {
+              const i = idx + 3;
+              return (
+                <motion.div
+                  key={service.id}
+                  initial={{ opacity: 0, y: 24 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.6, delay: i * 0.07, ease: [0.25, 0.1, 0.25, 1] }}
+                  viewport={{ once: true }}
+                  whileHover={{ y: -4, transition: { duration: 0.25 } }}
+                  onClick={() => {
+                    setOpenServiceId(service.id);
+                    setTimeout(() => {
+                      document.getElementById(service.id)?.scrollIntoView({ behavior: "smooth", block: "start" });
+                    }, 150);
+                  }}
+                  className="relative overflow-hidden bg-white/70 backdrop-blur-sm rounded-2xl group cursor-pointer w-full sm:w-[calc(50%-0.625rem)] lg:w-[calc(33.333%-0.833rem)]"
+                  style={{ boxShadow: "0 2px 20px rgba(3,90,96,0.05)" }}
+                >
+                  <div className="relative h-40 overflow-hidden">
+                    <ParallaxImage
+                      src={serviceImages[service.id]}
+                      alt={service.title}
+                      className="absolute inset-0"
+                      speed={2}
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-white/70 via-white/10 to-transparent" />
+                    <div className="absolute inset-0 bg-brand-teal/[0.03] group-hover:bg-brand-teal/10 transition-colors duration-500" />
+                    <span
+                      className="absolute top-3 left-4 font-display text-white/30 group-hover:text-white/50 transition-all duration-500 pointer-events-none select-none leading-none"
+                      style={{ fontSize: "2.5rem" }}
+                      aria-hidden="true"
+                    >
+                      {service.icon}
+                    </span>
+                    <div className={`absolute bottom-0 left-0 w-full h-[3px] ${gridAccentColors[i]} opacity-70 group-hover:opacity-100 transition-opacity duration-500`} />
+                  </div>
+                  <div className="p-5">
+                    <h3 className="font-display text-brand-teal text-base mb-0.5 group-hover:text-brand-teal/80 transition-colors duration-300">
+                      {lang === "ar" ? service.titleAr : service.title}
+                    </h3>
+                    <p className="font-display text-brand-teal-light text-[11px] mb-3 opacity-60" style={{ direction: lang === "ar" ? "ltr" : "rtl" }}>
+                      {lang === "ar" ? service.title : service.titleAr}
+                    </p>
+                    <p className="text-brand-dark/50 text-xs leading-relaxed mb-4 line-clamp-2">
+                      {lang === "ar" ? service.descriptionAr : service.description}
+                    </p>
+                    <div className="flex items-center justify-between text-[10px] pt-3 border-t border-brand-cream/80">
+                      <span className="px-2.5 py-1 rounded-full bg-brand-cream text-brand-teal font-medium">
+                        {service.duration}
+                      </span>
+                      <span className="text-brand-gold tracking-[0.08em] uppercase font-medium group-hover:text-brand-teal transition-colors duration-300">
+                        {lang === "ar" ? "اكتشفي المزيد ←" : "Learn More →"}
+                      </span>
+                    </div>
+                  </div>
+                </motion.div>
+              );
+            })}
+          </div>
+        </div>
+      </Section>
+
+      {/* ── Service Detail Timelines ──────────────────────────────────────── */}
+      <Section className="bg-brand-cream/80">
+        <div className="section-container py-24">
+          <Reveal className="text-center mb-16">
+            <p className="text-brand-gold text-xs tracking-[0.2em] uppercase mb-4">
+              {lang === "ar" ? "رحلتكِ بالتفصيل" : "Your Journey in Detail"}
+            </p>
+            <h2
+              className="font-display font-light text-brand-teal mb-4"
+              style={{ fontSize: "clamp(2rem, 5vw, 3.5rem)" }}
+            >
+              {lang === "ar" ? "ماذا ستتعلمين" : "What You'll Experience"}
+            </h2>
+            <p className="text-brand-dark/50 text-sm max-w-md mx-auto leading-relaxed">
+              {lang === "ar"
+                ? "اكتشفي ما تتضمنه كل خدمة خطوة بخطوة"
+                : "Discover what each service includes, step by step"}
+            </p>
+            <div className="w-16 h-px bg-brand-gold/40 mx-auto mt-8" />
+          </Reveal>
+
+          <div className="max-w-3xl mx-auto space-y-2">
+            {services.map((service) => (
+              <ServiceTimeline
+                key={service.id}
+                service={service}
+                lang={lang}
+                isOpen={openServiceId === service.id}
+                onToggle={() => handleToggle(service.id)}
+              />
             ))}
           </div>
         </div>
@@ -817,8 +1094,8 @@ export default function ServicesPage() {
               className="text-sm text-brand-cream/40 max-w-sm mb-10 leading-relaxed"
             >
               {lang === "ar"
-                ? "مكالمتكِ الأولى مجانية — بلا التزام، مجرد حوار."
-                : "Your first call is free — no commitment, just conversation."}
+                ? "خطوتكِ الأولى نحو التغيير تبدأ من هنا."
+                : "Take the first step toward real, lasting change."}
             </motion.p>
 
             <motion.div variants={ctaItem} className="relative mb-12">
@@ -839,8 +1116,8 @@ export default function ServicesPage() {
                 className="relative inline-block px-10 py-5 bg-brand-gold text-brand-dark rounded-full text-xs tracking-[0.15em] uppercase font-semibold hover:bg-brand-gold/90 hover:-translate-y-0.5 transition-all duration-300"
               >
                 {lang === "ar"
-                  ? "احجزي مكالمة مجانية"
-                  : "Book a Discovery Call"}
+                  ? "احجزي موعدك الآن"
+                  : "Book Your Session"}
               </Link>
             </motion.div>
 

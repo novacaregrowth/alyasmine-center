@@ -181,9 +181,9 @@ h3 { font-size: var(--text-title); }
   line-height: 1.85;
 }
 
-/* Bump text-sm and text-xs slightly in Arabic for readability */
+/* Arabic: boost label/accent text for better visual hierarchy */
 [dir="rtl"] .text-sm  { font-size: 0.9375rem; }
-[dir="rtl"] .text-xs  { font-size: 0.8125rem; }
+[dir="rtl"] .text-xs  { font-size: 0.875rem; }
 [dir="rtl"] .text-lg  { font-size: 1.2rem; }
 
 .arabic {

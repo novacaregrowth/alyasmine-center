@@ -284,14 +284,14 @@ export default function BookingPage({ lang }: BookingPageProps) {
   const steps = [
     {
       num: isAr ? "١" : "1",
-      title: isAr ? "احجزي مكالمتك المجانية" : "Book Your Free Call",
+      title: isAr ? "احجزي موعدك" : "Book Your Session",
       body: isAr
-        ? "اختاري الوقت المناسب لكِ. بلا التزام، بلا ضغط."
-        : "She picks a time that works for her. No commitment, no pressure.",
+        ? "اختاري الوقت المناسب لكِ. بلا ضغط، وبشروطك."
+        : "She picks a time that works for her. At her own pace, on her own terms.",
     },
     {
       num: isAr ? "٢" : "2",
-      title: isAr ? "تعرّفي على علياء" : "Meet Aliyah",
+      title: isAr ? "تعرّفي على علياء" : "Meet Alia",
       body: isAr
         ? "محادثة دافئة وخاصة لمدة ٣٠ دقيقة. تستمع. تفهم. بلا أحكام."
         : "A warm, private 30-minute conversation. She listens. She understands. No judgment.",
@@ -307,28 +307,28 @@ export default function BookingPage({ lang }: BookingPageProps) {
 
   const faqs = [
     {
-      q: isAr ? "هل المكالمة الأولى مجانية حقًا؟" : "Is the first call really free?",
+      q: isAr ? "كيف أبدأ؟" : "How do I get started?",
       a: isAr
-        ? "نعم، مجانية تمامًا. لا حاجة لبطاقة دفع ولا التزام. إنها مجرد محادثة، لا أكثر."
-        : "Yes, completely. No card required, no commitment. It\u2019s a conversation, nothing more.",
+        ? "ابدأي بحجز استشارتك الأولى. هي جلسة تقييم مدتها ٩٠ دقيقة تستمع فيها علياء إلى وضعكِ وتبنيان معاً خطة عمل مناسبة — الخطوة الأساسية قبل أي رحلة علاجية."
+        : "Start by booking your initial consultation — a 90-minute session where Alia listens, understands your situation, and together you build a personalised action plan. It\u2019s the essential first step before beginning any therapeutic journey.",
     },
     {
       q: isAr ? "هل كل ما أشاركه سري؟" : "Is everything I share confidential?",
       a: isAr
         ? "بالتأكيد. خصوصيتك مقدسة. كل ما تشاركينه مع علياء يبقى بينكما."
-        : "Absolutely. Your privacy is sacred. Everything shared with Aliyah stays between you.",
+        : "Absolutely. Your privacy is sacred. Everything shared with Alia stays between you.",
     },
     {
       q: isAr ? "ماذا لو لم أكن متأكدة أنني مستعدة؟" : "What if I\u2019m not sure I\u2019m ready?",
       a: isAr
-        ? "هذا بالضبط سبب وجود المكالمة الأولى. لا تحتاجين أن تكوني مستعدة — فقط أن تحضري."
-        : "That\u2019s exactly why the first call exists. You don\u2019t need to be ready \u2014 you just need to show up.",
+        ? "لا تحتاجين أن تكوني مستعدة تماماً — فقط أن تحضري وأن تبدأي."
+        : "You don\u2019t need to be fully ready \u2014 you just need to show up and begin.",
     },
     {
       q: isAr ? "هل يمكنني الحجز بالعربية؟" : "Can I book in Arabic?",
       a: isAr
         ? "بالطبع. تعمل علياء بطلاقة بالعربية والإنجليزية. الجلسة لكِ، بلغتك."
-        : "Of course. Aliyah works fluently in both Arabic and English. The session is yours, in your language.",
+        : "Of course. Alia works fluently in both Arabic and English. The session is yours, in your language.",
     },
   ];
 
@@ -509,8 +509,8 @@ export default function BookingPage({ lang }: BookingPageProps) {
               style={isAr ? { direction: "rtl" } : undefined}
             >
               {isAr
-                ? "تستحقين أن تشعري بالدعم. الخطوة الأولى دائمًا هي الأصعب — ولا تكلّفكِ شيئًا. مكالمتك الأولى مجانية تمامًا."
-                : "You deserve to feel supported. The first step is always the hardest \u2014 and it costs nothing. Your first call is completely free."}
+                ? "تستحقين أن تشعري بالدعم. الخطوة الأولى دائمًا هي الأصعب — لكنها الأهم. ابدأي اليوم."
+                : "You deserve to feel supported. The first step is always the hardest \u2014 but it\u2019s the most important one. Begin today."}
             </p>
           </Reveal>
         </div>
