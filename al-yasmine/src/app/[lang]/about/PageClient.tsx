@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useRef } from "react";
+import Image from "next/image";
 import Link from "next/link";
 import { Reveal } from "@/components/ui/reveal";
 import { motion, useInView } from "framer-motion";
@@ -222,10 +223,12 @@ export default function AboutPage() {
                 animate={{ y: [0, -8, 0] }}
                 transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
               >
-                <img
+                <Image
                   src="/images/aliyah-hero-cropped.png"
                   alt="Aliyah Al Bahari"
-                  className="w-full h-full object-cover"
+                  fill
+                  className="object-cover"
+                  priority
                 />
               </motion.div>
             </div>
@@ -256,11 +259,53 @@ export default function AboutPage() {
           </div>
 
           <div className="relative border-l-2 border-brand-blush/30 pl-8 rtl:border-l-0 rtl:border-r-2 rtl:pl-0 rtl:pr-8">
-            <p className="text-brand-dark/60 text-sm leading-[1.8] mb-6">
-              {t("about.storyP1")}
+            <p
+              className={`text-brand-dark/60 text-sm leading-[1.8] mb-6 ${lang === 'ar' ? 'font-display' : ''}`}
+              style={lang === 'ar' ? { direction: 'rtl' } : undefined}
+            >
+              {lang === 'ar'
+                ? 'كثيرٌ من النساء يصلن إلى علياء وقد حملن ألمهن بصمت لسنوات — عبر الزواج، والأمومة، والخسارة، وثقل أن تكوني السند لكل من حولكِ. هي تعرف هذا الثقل. ليس فقط من باب التخصص، بل كامرأة عاشته.'
+                : 'Some women come to Aliyah having carried their pain quietly for years — through marriages, motherhood, loss, and the pressure of holding everyone else together. She knows that weight. Not just professionally, but as a woman who has lived it.'}
             </p>
-            <p className="text-brand-dark/60 text-sm leading-[1.8]">
-              {t("about.storyP2")}
+            <p
+              className={`text-brand-dark/60 text-sm leading-[1.8] mb-6 italic ${lang === 'ar' ? 'font-display' : ''}`}
+              style={lang === 'ar' ? { direction: 'rtl' } : undefined}
+            >
+              {lang === 'ar'
+                ? '[نص علياء الشخصي هنا — سبب اختيارها لهذا المجال. مثال: "بعد أن اجتازت هي نفسها مرحلة صعبة في صمت، أدركت أن الأدوات التي غيّرت حياتها تستحق أن تصل إلى كل امرأة تحتاجها."]'
+                : '[PLACEHOLDER — Aliyah\'s personal why goes here. e.g: "After navigating her own season of silent struggle, she realised that the tools that changed her life deserved to reach every woman who needed them."]'}
+            </p>
+            <p
+              className={`text-brand-dark/60 text-sm leading-[1.8] mb-6 ${lang === 'ar' ? 'font-display' : ''}`}
+              style={lang === 'ar' ? { direction: 'rtl' } : undefined}
+            >
+              {lang === 'ar'
+                ? 'على مدى أكثر من ٢٠ عامًا، تخصّصت علياء البحري في العلاج المعرفي السلوكي — ترافق النساء والفتيات في فكّ الأنماط التي تُبقيهن عالقات، واستبدالها بشيء يصمد فعلًا. هي أمٌّ لأربعة أبناء، مما يعني أنها تفهم التعقيد الخاص بعالم المرأة الداخلي: الذنب، والتوقعات، والحب الذي يُرهق أحيانًا.'
+                : 'For over 20 years, Aliyah Al Bahari has specialised in Cognitive Behavioural Therapy — working with women and girls to untangle the patterns that keep them stuck and replace them with something that actually holds. She is a mother of four, which means she understands the particular complexity of a woman\'s inner world: the guilt, the expectations, the love that sometimes exhausts.'}
+            </p>
+            <p
+              className={`text-brand-dark/60 text-sm leading-[1.8] mb-6 ${lang === 'ar' ? 'font-display' : ''}`}
+              style={lang === 'ar' ? { direction: 'rtl' } : undefined}
+            >
+              {lang === 'ar'
+                ? 'جلساتها دافئة، منظّمة، وخاصة تمامًا. لا مصطلحات معقّدة. لا أحكام. فقط مساحة يصبح فيها التغيير الحقيقي ممكنًا.'
+                : 'Her sessions are warm, structured, and deeply private. No jargon. No judgment. Just a space where real change becomes possible.'}
+            </p>
+            <p
+              className={`text-brand-dark/60 text-sm leading-[1.8] mb-6 ${lang === 'ar' ? 'font-display' : ''}`}
+              style={lang === 'ar' ? { direction: 'rtl' } : undefined}
+            >
+              {lang === 'ar'
+                ? 'معتمدة من البورد البريطاني، وحاصلة على دبلومات في العلاج المعرفي السلوكي، وعلاج الصدمات، وإرشاد الأطفال والمراهقين — مع أكثر من ١٠٠٠ ساعة استشارية و٢٠٠٠ ساعة تدريبية في دبي — أسّست مركز الياسمين لسببٍ واحد: لأن كل امرأة تستحق عقلًا في سلام أخيرًا.'
+                : 'Certified by the British Board, holding diplomas in CBT, trauma therapy, and child and adolescent counselling — with over 1,000 counselling hours and 2,000 training hours delivered across Dubai — she founded Al Yasmine Center for one reason: every woman deserves access to a mind that is finally at peace.'}
+            </p>
+            <p
+              className={`text-brand-dark/60 text-sm leading-[1.8] ${lang === 'ar' ? 'font-display' : ''}`}
+              style={lang === 'ar' ? { direction: 'rtl' } : undefined}
+            >
+              {lang === 'ar'
+                ? 'المكالمة الأولى مجانية. بلا التزام. فقط حديث.'
+                : 'Your first call is free. No commitment. Just a conversation.'}
             </p>
           </div>
         </div>

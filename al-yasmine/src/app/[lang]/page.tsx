@@ -30,7 +30,7 @@ function Stats() {
 
   return (
     <section
-      className="py-24"
+      className="pt-24 pb-12"
       style={{ background: "linear-gradient(to bottom, #FDF0E8 0%, #FDF0E8 60%, #FDCCBE20 100%)" }}
     >
       <p className="text-brand-teal text-xs tracking-[0.3em] uppercase font-medium text-center mb-12">
@@ -45,7 +45,7 @@ function Stats() {
             <motion.div variants={staggerChild} className="w-1/2 md:flex-1 text-center">
               <div className="relative group">
                 <div className="absolute inset-0 bg-brand-blush opacity-0 group-hover:opacity-20 blur-3xl transition-opacity duration-700 pointer-events-none" />
-                <p className="font-display text-5xl text-brand-teal font-light mb-1">{s.value}</p>
+                <p className="font-display text-5xl text-brand-teal font-medium mb-1">{s.value}</p>
                 <p className="text-brand-charcoal/50 text-xs tracking-widest uppercase">{s.label}</p>
               </div>
             </motion.div>
@@ -85,12 +85,12 @@ function WhyAliyah() {
   ];
 
   return (
-    <section ref={sectionRef} className="py-24" style={{ background: "linear-gradient(to bottom, #FDCCBE20 0%, #FDCCBE26 20%, #FDCCBE26 60%, #FDCCBE 100%)" }}>
+    <section ref={sectionRef} className="pt-12 pb-24" style={{ background: "linear-gradient(to bottom, #FDCCBE20 0%, #FDCCBE26 20%, #FDCCBE26 60%, #FDCCBE 100%)" }}>
       <p className="text-brand-teal text-xs tracking-[0.3em] uppercase font-medium text-center mb-4">
         {t("whyAliyah.eyebrow")}
       </p>
       <h2
-        className="font-display font-[200] text-brand-dark text-center mb-16"
+        className="font-display font-normal text-brand-dark text-center mb-16"
         style={{ fontSize: "clamp(2.5rem, 5vw, 4rem)" }}
       >
         {t("whyAliyah.heading")}
@@ -139,19 +139,19 @@ function Services() {
         <Reveal className="text-center mb-14">
           <p className="text-brand-gold text-xs tracking-[0.3em] uppercase font-medium mb-3">{t("services.eyebrow")}</p>
           <h2
-            className="font-display font-[200] text-brand-dark"
+            className="font-display font-medium text-brand-dark"
             style={{ fontSize: "clamp(2.5rem, 6vw, 5rem)" }}
           >
             {t("services.heading")}
           </h2>
         </Reveal>
 
-        <StaggerReveal className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+        <StaggerReveal className="flex flex-wrap justify-center gap-5">
           {services.map((s) => (
             <motion.div
               key={s.id}
               variants={staggerChild}
-              className="group p-7 rounded-3xl bg-white border-l-[3px] border-l-brand-blush shadow-sm hover:border-l-brand-teal hover:bg-brand-blush/10 hover:shadow-[0_0_30px_rgba(253,204,190,0.3)] transition-all duration-300 flex flex-col gap-4 rtl:border-l-0 rtl:border-r-[3px] rtl:border-r-brand-blush rtl:hover:border-r-brand-teal"
+              className="group p-7 rounded-3xl bg-white border-l-[3px] border-l-brand-blush shadow-sm hover:border-l-brand-teal hover:bg-brand-blush/10 hover:shadow-[0_0_30px_rgba(253,204,190,0.3)] transition-all duration-300 flex flex-col gap-4 rtl:border-l-0 rtl:border-r-[3px] rtl:border-r-brand-blush rtl:hover:border-r-brand-teal w-full sm:w-[calc(50%-0.625rem)] lg:w-[calc(25%-0.9375rem)]"
             >
               <div className="flex-1">
                 <h3 className="font-display text-xl text-brand-dark mb-1.5">{lang === "ar" ? s.titleAr : s.title}</h3>
@@ -159,7 +159,9 @@ function Services() {
               </div>
               <div className="flex items-center justify-between text-xs pt-4 border-t border-brand-cream">
                 <span className="text-brand-teal-light">{s.duration}</span>
-                <span className="font-semibold text-brand-teal">{formatPrice(s.price)}</span>
+                <span className={s.price ? "font-semibold text-brand-teal" : "text-brand-teal-light"}>
+                  {s.price ? formatPrice(s.price) : "Price on request"}
+                </span>
               </div>
             </motion.div>
           ))}
@@ -204,7 +206,7 @@ function Testimonials() {
             </p>
           </div>
           <h2
-            className="font-display font-[200] text-brand-teal"
+            className="font-display font-medium text-brand-teal"
             style={{ fontSize: "clamp(2.5rem, 6vw, 5rem)" }}
           >
             {t("testimonials.heading")}
@@ -269,7 +271,7 @@ function DarkStatement() {
           {t("darkStatement.eyebrow")}
         </p>
         <p
-          className="font-display font-[200] text-brand-cream leading-relaxed mb-6"
+          className="font-display font-normal text-brand-cream leading-relaxed mb-6"
           style={{ fontSize: "clamp(1.8rem, 4vw, 3.2rem)", direction: "rtl" }}
         >
           {t("darkStatement.quoteAr")}
@@ -295,7 +297,7 @@ function BookingCTA() {
     <section className="bg-brand-teal py-32">
       <Reveal className="section-container text-center max-w-lg mx-auto">
         <p className="text-brand-gold text-xs tracking-[0.3em] uppercase font-medium mb-4">{t("bookingCta.eyebrow")}</p>
-        <h2 className="font-display font-[200] text-4xl md:text-5xl text-brand-cream mb-4">
+        <h2 className="font-display font-medium text-4xl md:text-5xl text-brand-cream mb-4">
           {t("bookingCta.heading")}
         </h2>
         <p className="text-brand-cream/60 text-sm max-w-sm mx-auto mb-10 leading-relaxed">

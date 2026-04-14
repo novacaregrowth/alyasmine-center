@@ -166,7 +166,7 @@ export function HeroCanvas({ lang = "en" }: { lang?: Locale }) {
             transition={{ duration: 1, ease: [0.22, 1, 0.36, 1] }}
           >
             <h1
-              className="font-display font-[200] text-white mb-6 leading-[0.9] tracking-tight"
+              className="font-display font-medium text-white mb-6 leading-[0.9] tracking-tight"
               style={{ fontSize: "clamp(4rem, 10vw, 9rem)" }}
             >
               <span className="block">{t("hero.line1")}</span>
@@ -201,7 +201,7 @@ export function HeroCanvas({ lang = "en" }: { lang?: Locale }) {
           style={{ opacity: quoteOpacity, y: quoteY }}
         >
           <p
-            className="font-display font-[200] italic text-white leading-[1.5] max-w-3xl"
+            className="font-display font-[200] italic text-white leading-[1.5] max-w-2xl"
             style={{ fontSize: "clamp(1.5rem, 3.5vw, 3rem)" }}
           >
             {t("hero.quote")}
