@@ -156,7 +156,7 @@ export default function AboutPage() {
                 direction: lang === "ar" ? "rtl" : "ltr",
               }}
             >
-              {lang === "ar" ? "علياء البحري" : "Aliyah Al Bahari"}
+              {lang === "ar" ? "علياء البحري" : "Alia AlBahri"}
             </motion.h1>
 
             <motion.p
@@ -167,7 +167,7 @@ export default function AboutPage() {
                 direction: lang === "ar" ? "ltr" : "rtl",
               }}
             >
-              {lang === "ar" ? "Aliyah Al Bahari" : "علياء البحري"}
+              {lang === "ar" ? "Alia AlBahri" : "علياء البحري"}
             </motion.p>
 
             <motion.div
@@ -225,7 +225,7 @@ export default function AboutPage() {
               >
                 <Image
                   src="/images/aliyah-hero-cropped.png"
-                  alt="Aliyah Al Bahari"
+                  alt="Alia AlBahri"
                   fill
                   className="object-cover"
                   priority
@@ -265,7 +265,7 @@ export default function AboutPage() {
             >
               {lang === 'ar'
                 ? 'كثيرٌ من النساء يصلن إلى علياء وقد حملن ألمهن بصمت لسنوات — عبر الزواج، والأمومة، والخسارة، وثقل أن تكوني السند لكل من حولكِ. هي تعرف هذا الثقل. ليس فقط من باب التخصص، بل كامرأة عاشته.'
-                : 'Some women come to Aliyah having carried their pain quietly for years — through marriages, motherhood, loss, and the pressure of holding everyone else together. She knows that weight. Not just professionally, but as a woman who has lived it.'}
+                : 'Some women come to Alia having carried their pain quietly for years — through marriages, motherhood, loss, and the pressure of holding everyone else together. She knows that weight. Not just professionally, but as a woman who has lived it.'}
             </p>
             <p
               className={`text-brand-dark/60 text-sm leading-[1.8] mb-6 italic ${lang === 'ar' ? 'font-display' : ''}`}
@@ -273,7 +273,7 @@ export default function AboutPage() {
             >
               {lang === 'ar'
                 ? '[نص علياء الشخصي هنا — سبب اختيارها لهذا المجال. مثال: "بعد أن اجتازت هي نفسها مرحلة صعبة في صمت، أدركت أن الأدوات التي غيّرت حياتها تستحق أن تصل إلى كل امرأة تحتاجها."]'
-                : '[PLACEHOLDER — Aliyah\'s personal why goes here. e.g: "After navigating her own season of silent struggle, she realised that the tools that changed her life deserved to reach every woman who needed them."]'}
+                : 'Alia\'s personal story will be shared here once provided.'}
             </p>
             <p
               className={`text-brand-dark/60 text-sm leading-[1.8] mb-6 ${lang === 'ar' ? 'font-display' : ''}`}
@@ -281,7 +281,7 @@ export default function AboutPage() {
             >
               {lang === 'ar'
                 ? 'على مدى أكثر من ٢٠ عامًا، تخصّصت علياء البحري في العلاج المعرفي السلوكي — ترافق النساء والفتيات في فكّ الأنماط التي تُبقيهن عالقات، واستبدالها بشيء يصمد فعلًا. هي أمٌّ لأربعة أبناء، مما يعني أنها تفهم التعقيد الخاص بعالم المرأة الداخلي: الذنب، والتوقعات، والحب الذي يُرهق أحيانًا.'
-                : 'For over 20 years, Aliyah Al Bahari has specialised in Cognitive Behavioural Therapy — working with women and girls to untangle the patterns that keep them stuck and replace them with something that actually holds. She is a mother of four, which means she understands the particular complexity of a woman\'s inner world: the guilt, the expectations, the love that sometimes exhausts.'}
+                : 'For over 20 years, Alia AlBahri has specialised in Cognitive Behavioural Therapy — working with women and girls to untangle the patterns that keep them stuck and replace them with something that actually holds. She is a mother of four, which means she understands the particular complexity of a woman\'s inner world: the guilt, the expectations, the love that sometimes exhausts.'}
             </p>
             <p
               className={`text-brand-dark/60 text-sm leading-[1.8] mb-6 ${lang === 'ar' ? 'font-display' : ''}`}
@@ -304,8 +304,8 @@ export default function AboutPage() {
               style={lang === 'ar' ? { direction: 'rtl' } : undefined}
             >
               {lang === 'ar'
-                ? 'المكالمة الأولى مجانية. بلا التزام. فقط حديث.'
-                : 'Your first call is free. No commitment. Just a conversation.'}
+                ? 'الخطوة الأولى نحو التغيير تبدأ بحجز موعدك.'
+                : 'The first step toward lasting change starts with booking your session.'}
             </p>
           </div>
         </div>
@@ -379,7 +379,7 @@ export default function AboutPage() {
           </p>
 
           <p className="text-brand-gold/70 text-sm tracking-[0.15em]">
-            {lang === "ar" ? "— علياء البحري" : "— Aliyah Al Bahari"}
+            {lang === "ar" ? "— علياء البحري" : "— Alia AlBahri"}
           </p>
         </Reveal>
       </section>
@@ -560,8 +560,8 @@ export default function AboutPage() {
               className="text-sm text-brand-cream/40 max-w-sm mb-10 leading-relaxed"
             >
               {lang === "ar"
-                ? "مكالمتك الأولى مجانية — بلا التزام، مجرد حوار."
-                : "Your first call is free — no commitment, just conversation."}
+                ? "خطوتكِ الأولى نحو التغيير تبدأ من هنا."
+                : "Take the first step toward real, lasting change."}
             </motion.p>
 
             <motion.div variants={ctaItem} className="relative mb-12">

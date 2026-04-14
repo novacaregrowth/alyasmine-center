@@ -12,10 +12,10 @@
     "line2": "Understood.",
     "line3": "Healed.",
     "subtitle": "I'm here to help you regain your balance.",
-    "cta": "Book a Free Call",
+    "cta": "Book a Consultation",
     "scroll": "Scroll",
     "quote": "\"I am here to help you regain your balance. Listen to your inner voice instead of the voice of fear, anxiety, and tension.\"",
-    "quoteAttribution": "Aliyah Al Bahari"
+    "quoteAttribution": "Alia AlBahri"
   },
   "stats": {
     "label": "By the Numbers",
@@ -25,7 +25,7 @@
     "averageRating": "Average Rating"
   },
   "whyAliyah": {
-    "eyebrow": "Why Aliyah",
+    "eyebrow": "Why Alia",
     "heading": "What Makes Her Different",
     "card1Title": "Connected to the Source",
     "card1Body": "Holds an unbroken chain of knowledge transmission traced back to the Prophet Muhammad ﷺ — her guidance carries spiritual weight and authenticity that is rare.",
@@ -54,13 +54,13 @@
   "bookingCta": {
     "eyebrow": "Ready to Begin?",
     "heading": "Book Your First Session",
-    "body": "Your first discovery call is completely free. This is your first step.",
-    "cta": "Book a Free Call"
+    "body": "Take the first step toward lasting change. Your journey starts here.",
+    "cta": "Book Your Session"
   },
   "about": {
     "heroEyebrow": "المستشارة النفسية",
     "heroName": "علياء البحري",
-    "heroNameEn": "Aliyah Al Bahari",
+    "heroNameEn": "Alia AlBahri",
     "heroBio": "A psychological counselor and CBT specialist dedicated exclusively to women and teenage girls. Certified at the Prophet's Mosque in Madinah, and a descendant of the Prophet Muhammad ﷺ — her work is rooted in deep spiritual trust, clinical precision, and unwavering compassion.",
     "heroBadge1": "CBT Specialist",
     "heroBadge2": "Prophet's Mosque Certified",
@@ -69,11 +69,11 @@
     "heroQuoteAttribution": "— علياء البحري",
     "storyEyebrow": "The Founder",
     "storyHeading": "Her Story",
-    "storyP1": "For over 20 years, Aliyah Al Bahari has worked in the field of psychological counseling and Cognitive Behavioral Therapy — not as a career choice, but as a calling. She founded Al Yasmine Center with a single belief: that every woman deserves access to grounded, evidence-based support that honors both her mind and her spirit.",
-    "storyP2": "Based in Dubai and working across the Arab world, Aliyah combines clinical precision with deep human understanding. Her approach is practical, warm, and rooted in the latest CBT methodologies — designed to help women build lasting psychological balance, not just temporary relief.",
+    "storyP1": "For over 20 years, Alia AlBahri has worked in the field of psychological counseling and Cognitive Behavioral Therapy — not as a career choice, but as a calling. She founded Al Yasmine Center with a single belief: that every woman deserves access to grounded, evidence-based support that honors both her mind and her spirit.",
+    "storyP2": "Based in Dubai and working across the Arab world, Alia combines clinical precision with deep human understanding. Her approach is practical, warm, and rooted in the latest CBT methodologies — designed to help women build lasting psychological balance, not just temporary relief.",
     "silsilaEyebrow": "سند متصل",
     "silsilaHeading": "An Unbroken Chain",
-    "silsilaBody": "Aliyah holds an unbroken chain of Islamic knowledge transmission traced back to the Prophet Muhammad ﷺ. This spiritual foundation is not separate from her clinical work — it is woven into it. Her clients find in her a rare combination: a certified psychologist who understands the soul as deeply as she understands the mind.",
+    "silsilaBody": "Alia holds an unbroken chain of Islamic knowledge transmission traced back to the Prophet Muhammad ﷺ. This spiritual foundation is not separate from her clinical work — it is woven into it. Her clients find in her a rare combination: a certified psychologist who understands the soul as deeply as she understands the mind.",
     "cbtEyebrow": "The Method",
     "cbtHeading": "What is CBT?",
     "cbtCard1Title": "Your Thoughts Shape Your Reality",
@@ -93,7 +93,7 @@
     "cred4Title": "3000+ Hours of Impact",
     "cred4Desc": "More than 1,000 consulting hours and 2,000 training hours delivered across leading centers in Dubai, including in collaboration with the Dubai Community Development Authority.",
     "ctaHeading": "Ready to work together?",
-    "ctaCta": "Book a Discovery Call"
+    "ctaCta": "Book Your Appointment"
   },
   "footer": {
     "siteName": "مركز الياسمين",

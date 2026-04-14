@@ -96,15 +96,15 @@ export default function ProofPage() {
             {[
               {
                 number: "01",
-                title: "From Burnout to Business Owner",
-                tags: ["1-on-1 Coaching", "8 Weeks"],
-                body: "Hessa came to us exhausted and directionless. Through our Intensive Program, she rediscovered her purpose and launched her own business within 3 months of graduating.",
+                title: "[PLACEHOLDER — Case Study Title]",
+                tags: ["[PLACEHOLDER]", "[PLACEHOLDER]"],
+                body: "[PLACEHOLDER — Case study description from a real client experience.]",
               },
               {
                 number: "02",
-                title: "Rebuilding Confidence After Setback",
-                tags: ["Bloom Program", "1 Month"],
-                body: "After a difficult career transition, Mariam worked with Aliyah to rebuild her self-belief and land a leadership role just 6 weeks later.",
+                title: "[PLACEHOLDER — Case Study Title]",
+                tags: ["[PLACEHOLDER]", "[PLACEHOLDER]"],
+                body: "[PLACEHOLDER — Case study description from a real client experience.]",
               },
             ].map((cs) => (
               <motion.div
@@ -146,7 +146,7 @@ export default function ProofPage() {
             href={`/${lang}/booking`}
             className="inline-block px-8 py-4 bg-brand-gold text-brand-dark rounded-full text-sm font-semibold hover:bg-brand-gold/90 transition-all hover:scale-105"
           >
-            Book a Discovery Call
+            Book Your Session
           </Link>
         </Reveal>
       </section>

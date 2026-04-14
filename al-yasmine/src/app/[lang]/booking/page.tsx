@@ -5,7 +5,7 @@ import type { Locale } from "@/lib/i18n";
 export const metadata: Metadata = {
   title: "Book a Session",
   description:
-    "Book a discovery call or coaching session with Aliyah Al Bahari at Al Yasmine Center.",
+    "Book a session with Alia AlBahri at Al Yasmine Center.",
 };
 
 export default async function Page({
