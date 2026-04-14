@@ -477,6 +477,16 @@ export default function ServicesPage() {
                   >
                     {lang === "ar" ? service.title : service.titleAr}
                   </p>
+                  {"sensoryLine" in service && (
+                    <p
+                      className={`font-display text-brand-gold/70 text-xs italic tracking-wide mb-3${lang === "ar" ? " font-display" : ""}`}
+                      style={lang === "ar" ? { direction: "rtl" } : undefined}
+                    >
+                      {lang === "ar"
+                        ? (service as typeof service & { sensoryLineAr: string }).sensoryLineAr
+                        : (service as typeof service & { sensoryLine: string }).sensoryLine}
+                    </p>
+                  )}
                   <p className="text-brand-dark/60 text-sm leading-relaxed mb-3">
                     {lang === "ar" ? service.descriptionAr : service.description}
                   </p>

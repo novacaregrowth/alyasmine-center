@@ -123,22 +123,22 @@ export const services = [
     icon:        "◇",
   },
   {
-    id:          "red-eye",
-    title:       "Red Eye Mechanism & Communication Program",
-    // TODO: verify Arabic title with client — confirm emoji usage is intentional for public site
-    titleAr:     "آلية العين الحمراء + لغات التواصل والتأثير",
-    // TODO: awaiting plain-language description from client — what is the Red Eye Mechanism?
-    description: "A comprehensive recorded program combining the Red Eye Mechanism with communication and influence training, plus a bonus course on family stability.",
-    descriptionAr: "برنامج مسجّل شامل يجمع بين آلية العين الحمراء وتدريب التواصل والتأثير، مع دورة مجانية في أسس الاستقرار الأسري.",
+    id:            "red-eye",
+    title:         "Red Eye Mechanism & Communication Program",
+    titleAr:       "آلية العين الحمراء + لغات التواصل والتأثير",
+    sensoryLine:   "When the love is still there — but the connection isn't",
+    sensoryLineAr: "حين يبقى الحب — لكن يغيب التواصل",
+    description:   "A proprietary psychological framework for navigating marriage challenges. Covers emotional neglect, rebuilding connection after discovered infidelity, understanding emotional cooling after years of marriage, reigniting the attraction phase, applying Gottman's conflict theory, understanding the emotional separation ('exit') phase of the marital cycle, and reviving true love through evidence-based psychological methods. Part of the Languages of Communication and Influence program.",
+    descriptionAr: "إطار نفسي متخصص للتعامل مع تحديات الحياة الزوجية. يشمل: التعامل مع اللامبالاة والنقد المستمر، إعادة بناء العلاقة بعد اكتشاف علاقات غير مشروعة، فهم أسباب فتور المشاعر بعد سنوات الزواج، إعادة إشعال مرحلة الانجذاب، تطبيق نظرية غوتمان في مواجهة الخلافات، فهم مراحل الانفصال العاطفي في الدورة الزواجية، وإحياء مشاعر الحب الحقيقي بأساليب نفسية مؤثرة. ضمن برنامج لغات التواصل والتأثير.",
     includes: [
       "6 core recorded sessions",
       "Bonus course: Fundamentals of Family Stability",
       "8 sessions total including bonus",
     ],
-    format:      "Recorded course — links sent after payment",
-    duration:    "Access for 1 month",
-    price:       1200,
-    priceNote:   null,
+    format:      "Contact us for format details",
+    duration:    "Contact us for duration details",
+    price:       null,
+    priceNote:   "Contact us for pricing details.",
     icon:        "◇",
   },
   {

@@ -17,17 +17,18 @@ export const metadata: Metadata = {
     url:         "https://alyasminecenter.com",
     images: [
       {
-        url:    "https://images.unsplash.com/photo-1573497620053-ea5300f94f21?w=1200&q=80",
+        url:    '/images/og-image.png',
         width:  1200,
         height: 630,
-        alt:    "Al Yasmine Center — Coaching & Personal Development",
+        alt:    'Al Yasmine Center — Grow. Transform. Bloom.',
       },
     ],
   },
   twitter: {
-    card:        "summary_large_image",
+    card:        'summary_large_image',
     title:       "Al Yasmine Center",
     description: "Transformative coaching & CBT-based personal development",
+    images:      ['/images/og-image.png'],
   },
   icons: {
     icon: "/icon.png",
