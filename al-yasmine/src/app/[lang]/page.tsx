@@ -67,17 +67,17 @@ function WhyAliyah() {
 
   const cards = [
     {
-      numeral: "١",
+      numeral: lang === "ar" ? "١" : "1",
       title: t("whyAliyah.card1Title"),
       body: t("whyAliyah.card1Body"),
     },
     {
-      numeral: "٢",
+      numeral: lang === "ar" ? "٢" : "2",
       title: t("whyAliyah.card2Title"),
       body: t("whyAliyah.card2Body"),
     },
     {
-      numeral: "٣",
+      numeral: lang === "ar" ? "٣" : "3",
       title: t("whyAliyah.card3Title"),
       body: t("whyAliyah.card3Body"),
     },
@@ -150,7 +150,7 @@ function Services() {
             <motion.div
               key={s.id}
               variants={staggerChild}
-              className="group p-7 rounded-3xl bg-white border-l-[3px] border-l-brand-blush shadow-sm hover:bg-brand-teal hover:border-l-brand-gold hover:shadow-xl transition-all duration-500 cursor-pointer flex flex-col gap-4 rtl:border-l-0 rtl:border-r-[3px] rtl:border-r-brand-blush rtl:hover:border-r-brand-gold w-full sm:w-[calc(50%-0.625rem)] lg:w-[calc(25%-0.9375rem)]"
+              className="group p-7 rounded-3xl bg-white border-s-[3px] border-s-brand-blush shadow-sm hover:bg-brand-teal hover:border-s-brand-gold hover:shadow-xl transition-all duration-500 cursor-pointer flex flex-col gap-4 w-full sm:w-[calc(50%-0.625rem)] lg:w-[calc(25%-0.9375rem)]"
             >
               <span className="text-2xl text-brand-gold group-hover:text-brand-cream transition-colors duration-500 block">{s.icon}</span>
               <div className="flex-1">
@@ -158,17 +158,21 @@ function Services() {
                 <p className="text-xs text-brand-dark/55 group-hover:text-brand-cream/70 transition-colors duration-500 leading-relaxed">{lang === "ar" ? s.descriptionAr : s.description}</p>
               </div>
               <div className="flex items-center justify-between text-xs pt-4 border-t border-brand-cream group-hover:border-brand-cream/20 transition-colors duration-500">
-                <span className="text-brand-teal-light group-hover:text-brand-cream/60 transition-colors duration-500">{s.duration}</span>
+                <span className="text-brand-teal-light group-hover:text-brand-cream/60 transition-colors duration-500">
+                  {lang === "ar" ? s.durationAr : s.duration}
+                </span>
                 <span className={`${s.price ? "font-semibold text-brand-teal" : "text-brand-teal-light"} group-hover:text-brand-gold transition-colors duration-500`}>
-                  {s.price ? formatPrice(s.price) : "[PLACEHOLDER]"}
+                  {s.price ? formatPrice(s.price) : lang === "ar" ? "تواصلي معنا" : "Contact us"}
                 </span>
               </div>
               <Link
                 href={`/${lang}/services#${s.id}`}
                 className="mt-3 inline-flex items-center gap-1.5 text-xs font-medium text-brand-teal group-hover:text-brand-gold transition-colors duration-500 tracking-wide"
               >
-                {lang === "ar" ? "اكتشفي المزيد" : "Learn More"}
-                <span className="text-[10px] rtl:rotate-180">→</span>
+                {t("servicesPage.learnMore")}
+                <span className="inline-block text-[10px] ms-0.5 rtl:-scale-x-100" aria-hidden>
+                  →
+                </span>
               </Link>
             </motion.div>
           ))}
@@ -204,19 +208,19 @@ const textTestimonials = {
   ],
   ar: [
     {
-      quote: "[PLACEHOLDER — شهادة عميلة ١]",
-      author: "[PLACEHOLDER]",
-      role: "[PLACEHOLDER]",
+      quote: "[نص شهادة عميلة — سيُستبدل عند التوفر]",
+      author: "[الاسم]",
+      role: "[التعريف]",
     },
     {
-      quote: "[PLACEHOLDER — شهادة عميلة ٢]",
-      author: "[PLACEHOLDER]",
-      role: "[PLACEHOLDER]",
+      quote: "[نص شهادة عميلة — سيُستبدل عند التوفر]",
+      author: "[الاسم]",
+      role: "[التعريف]",
     },
     {
-      quote: "[PLACEHOLDER — شهادة عميلة ٣]",
-      author: "[PLACEHOLDER]",
-      role: "[PLACEHOLDER]",
+      quote: "[نص شهادة عميلة — سيُستبدل عند التوفر]",
+      author: "[الاسم]",
+      role: "[التعريف]",
     },
   ],
 };
@@ -230,15 +234,9 @@ function Testimonials() {
     <section className="bg-brand-blush py-24">
       <div className="section-container">
         <Reveal className="text-center mb-16">
-          <div className="flex items-center justify-center gap-4 mb-4">
-            <p className="text-brand-teal text-xs tracking-[0.3em] uppercase font-medium">
-              {t("testimonials.eyebrowEn")}
-            </p>
-            <span className="text-brand-teal/30">|</span>
-            <p className="text-brand-teal text-xs tracking-[0.3em] font-medium arabic">
-              {t("testimonials.eyebrowAr")}
-            </p>
-          </div>
+          <p className="text-brand-teal text-xs tracking-[0.3em] uppercase font-medium mb-4">
+            {t("testimonials.eyebrow")}
+          </p>
           <h2
             className="font-display font-medium text-brand-teal"
             style={{ fontSize: "clamp(2.5rem, 6vw, 5rem)" }}
@@ -323,16 +321,11 @@ function DarkStatement() {
           {t("darkStatement.eyebrow")}
         </p>
         <p
-          className="font-display font-normal text-brand-cream leading-relaxed mb-6"
-          style={{ fontSize: "clamp(1.8rem, 4vw, 3.2rem)", direction: "rtl" }}
+          className="font-display font-normal text-brand-cream leading-relaxed mb-12"
+          style={{ fontSize: "clamp(1.8rem, 4vw, 3.2rem)" }}
+          dir={lang === "ar" ? "rtl" : "ltr"}
         >
-          {t("darkStatement.quoteAr")}
-        </p>
-        <p
-          className="font-display font-[200] italic text-brand-cream/50 mb-12"
-          style={{ fontSize: "clamp(1rem, 2.5vw, 1.6rem)" }}
-        >
-          {t("darkStatement.quoteEn")}
+          {t("darkStatement.quote")}
         </p>
         <div className="w-12 h-px bg-brand-gold mx-auto mb-6" />
         <p className="text-brand-blush/70 text-sm tracking-widest">{t("darkStatement.attribution")}</p>

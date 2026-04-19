@@ -98,11 +98,12 @@ export default function AboutPage() {
     { title: t("about.cbtCard3Title"), body: t("about.cbtCard3Body") },
   ];
 
+  const credentialNums = lang === "ar" ? ["١", "٢", "٣", "٤"] : ["1", "2", "3", "4"];
   const credentialCards = [
-    { num: "١", title: t("about.cred1Title"), desc: t("about.cred1Desc") },
-    { num: "٢", title: t("about.cred2Title"), desc: t("about.cred2Desc") },
-    { num: "٣", title: t("about.cred3Title"), desc: t("about.cred3Desc") },
-    { num: "٤", title: t("about.cred4Title"), desc: t("about.cred4Desc") },
+    { num: credentialNums[0], title: t("about.cred1Title"), desc: t("about.cred1Desc") },
+    { num: credentialNums[1], title: t("about.cred2Title"), desc: t("about.cred2Desc") },
+    { num: credentialNums[2], title: t("about.cred3Title"), desc: t("about.cred3Desc") },
+    { num: credentialNums[3], title: t("about.cred4Title"), desc: t("about.cred4Desc") },
   ];
 
   return (
@@ -126,15 +127,15 @@ export default function AboutPage() {
         />
 
         <span
-          className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 font-arabic text-brand-teal/[0.04] pointer-events-none select-none whitespace-nowrap"
+          className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 font-display text-brand-teal/[0.04] pointer-events-none select-none whitespace-nowrap"
           style={{ fontSize: "clamp(12rem, 28vw, 26rem)" }}
           aria-hidden="true"
         >
-          علياء البحري
+          {lang === "ar" ? "علياء البحري" : "Alia AlBahri"}
         </span>
 
         <div className="relative z-10 flex flex-col lg:flex-row items-center w-full gap-12 lg:gap-0 py-24">
-          <div className="absolute left-0 top-1/2 -translate-y-1/2 w-px h-40 bg-gradient-to-b from-transparent via-brand-gold to-transparent hidden lg:block" />
+          <div className="absolute start-0 top-1/2 -translate-y-1/2 w-px h-40 bg-gradient-to-b from-transparent via-brand-gold to-transparent hidden lg:block" />
 
           {/* Left column — typography */}
           <motion.div
@@ -158,17 +159,6 @@ export default function AboutPage() {
             >
               {lang === "ar" ? "علياء البحري" : "Alia AlBahri"}
             </motion.h1>
-
-            <motion.p
-              variants={heroItem}
-              className={lang === "ar" ? "font-display text-sm text-brand-teal/25 mt-2" : "font-arabic text-brand-teal/20 tracking-[0.05em] mt-2"}
-              style={{
-                fontSize: lang === "ar" ? undefined : "clamp(1rem, 2vw, 1.4rem)",
-                direction: lang === "ar" ? "ltr" : "rtl",
-              }}
-            >
-              {lang === "ar" ? "Alia AlBahri" : "علياء البحري"}
-            </motion.p>
 
             <motion.div
               variants={heroItem}
@@ -240,14 +230,14 @@ export default function AboutPage() {
       <Section className="bg-brand-cream">
         <div className="relative section-container grid grid-cols-1 lg:grid-cols-2 gap-16 items-start py-32">
           <span
-            className="absolute -top-8 left-4 font-arabic text-brand-blush/[0.07] pointer-events-none select-none leading-none"
+            className="absolute -top-8 start-4 font-display text-brand-blush/[0.07] pointer-events-none select-none leading-none"
             style={{ fontSize: "clamp(10rem, 22vw, 18rem)" }}
             aria-hidden="true"
           >
-            ١
+            {lang === "ar" ? "١" : "1"}
           </span>
 
-          <div className="relative border-l-2 border-solid border-brand-blush pl-8 rtl:border-l-0 rtl:border-r-2 rtl:pl-0 rtl:pr-8">
+          <div className="relative border-s-2 border-solid border-brand-blush ps-8">
             <p className="text-brand-gold text-xs tracking-[0.2em] uppercase mb-4">{t("about.storyEyebrow")}</p>
             <h2
               className="font-display text-brand-teal"
@@ -258,7 +248,7 @@ export default function AboutPage() {
             <div className="w-12 h-px bg-brand-gold mt-6" />
           </div>
 
-          <div className="relative border-l-2 border-brand-blush/30 pl-8 rtl:border-l-0 rtl:border-r-2 rtl:pl-0 rtl:pr-8">
+          <div className="relative border-s-2 border-brand-blush/30 ps-8">
             <p
               className={`text-brand-dark/60 text-sm leading-[1.8] mb-6 ${lang === 'ar' ? 'font-display' : ''}`}
               style={lang === 'ar' ? { direction: 'rtl' } : undefined}
@@ -417,16 +407,16 @@ export default function AboutPage() {
                 transition={{ duration: 0.3 }}
                 className={`relative overflow-hidden ${
                   ["", "md:mt-8", "md:mt-4"][i]
-                } bg-white/40 backdrop-blur-md rounded-tl-[60px] rounded-br-[60px] rounded-tr-2xl rounded-bl-2xl border-l-4 ${
-                  ["border-l-[#ECA200]", "border-l-[#FDCCBE]", "border-l-[#7FB0B4]"][i]
+                } bg-white/40 backdrop-blur-md rounded-ss-[60px] rounded-ee-[60px] rounded-se-2xl rounded-es-2xl border-s-4 ${
+                  ["border-s-[#ECA200]", "border-s-[#FDCCBE]", "border-s-[#7FB0B4]"][i]
                 } p-8 shadow-md hover:shadow-xl transition-shadow duration-700`}
               >
                 <span
-                  className="absolute -top-4 right-4 font-arabic text-brand-blush/[0.08] pointer-events-none select-none leading-none"
+                  className="absolute -top-4 end-4 font-display text-brand-blush/[0.08] pointer-events-none select-none leading-none"
                   style={{ fontSize: "7rem" }}
                   aria-hidden="true"
                 >
-                  {["١", "٢", "٣"][i]}
+                  {(lang === "ar" ? ["١", "٢", "٣"] : ["1", "2", "3"])[i]}
                 </span>
                 <h3 className="relative font-display text-lg text-brand-teal mb-3">{card.title}</h3>
                 <p className="relative text-brand-dark/60 text-sm leading-relaxed">{card.body}</p>
@@ -525,17 +515,11 @@ export default function AboutPage() {
           >
             <motion.p
               variants={ctaItem}
-              className="font-arabic text-brand-cream tracking-[0.05em] mb-2"
-              style={{ fontSize: "clamp(1.8rem, 4vw, 3rem)", direction: "rtl" }}
+              className="font-display text-brand-cream tracking-[0.05em] mb-8"
+              style={{ fontSize: "clamp(1.8rem, 4vw, 3rem)" }}
+              dir={lang === "ar" ? "rtl" : "ltr"}
             >
-              رحلتك تبدأ هنا
-            </motion.p>
-
-            <motion.p
-              variants={ctaItem}
-              className="font-display text-sm text-brand-cream/40 mb-8"
-            >
-              Your journey begins here
+              {t("about.ctaLead")}
             </motion.p>
 
             <motion.div
@@ -580,10 +564,10 @@ export default function AboutPage() {
 
             <motion.p
               variants={ctaItem}
-              className="font-arabic text-xs text-brand-gold/30 tracking-wide"
-              style={{ direction: "rtl" }}
+              className="font-display text-xs text-brand-gold/30 tracking-wide"
+              dir={lang === "ar" ? "rtl" : "ltr"}
             >
-              أنا هنا من أجلك
+              {t("about.ctaClosing")}
             </motion.p>
           </motion.div>
         </div>

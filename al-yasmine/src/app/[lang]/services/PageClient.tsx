@@ -2,12 +2,13 @@
 
 import React, { useRef, useState, useEffect, useCallback } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { Reveal } from "@/components/ui/reveal";
 import { MashrabiyaCanvas } from "@/components/ui/mashrabiya-canvas";
 import { motion, useInView, useScroll, useTransform, AnimatePresence } from "framer-motion";
 import { useParams } from "next/navigation";
-import { ChevronDown } from "lucide-react";
-import type { Locale } from "@/lib/i18n";
+import { ChevronDown, ChevronRight } from "lucide-react";
+import { getTranslator, type Locale } from "@/lib/i18n";
 import { services } from "@/lib/config";
 import { formatPrice } from "@/lib/utils";
 
@@ -110,13 +111,66 @@ function ParallaxImage({
   return (
     <div ref={ref} className={`relative overflow-hidden ${className || ""}`}>
       <motion.div
-        className="absolute inset-0"
-        style={{ y, top: "-10%", bottom: "-10%" }}
+        className="absolute inset-0 h-[120%] -top-[10%]"
+        style={{ y }}
       >
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img src={src} alt={alt} className="w-full h-full object-cover" />
+        <Image
+          src={src}
+          alt={alt}
+          fill
+          className="object-cover"
+          sizes="(max-width: 1024px) 100vw, 50vw"
+        />
       </motion.div>
     </div>
+  );
+}
+
+// ─── Jasmine SVG Mark — used as a connector node + sticky-rail ornament ────
+
+function JasmineMark({
+  className,
+  size = 28,
+  petalFill = "#FDF0EC",
+  stroke = "#ECA200",
+  strokeOpacity = 0.6,
+  centerFill = "#ECA200",
+}: {
+  className?: string;
+  size?: number;
+  petalFill?: string;
+  stroke?: string;
+  strokeOpacity?: number;
+  centerFill?: string;
+}) {
+  return (
+    <svg
+      className={className}
+      width={size}
+      height={size}
+      viewBox="0 0 100 100"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+      aria-hidden="true"
+    >
+      <g transform="translate(50 50)">
+        {[0, 72, 144, 216, 288].map((rot) => (
+          <ellipse
+            key={rot}
+            cx="0"
+            cy="-20"
+            rx="9"
+            ry="16"
+            transform={`rotate(${rot})`}
+            fill={petalFill}
+            stroke={stroke}
+            strokeOpacity={strokeOpacity}
+            strokeWidth="1"
+          />
+        ))}
+        <circle cx="0" cy="0" r="5" fill={centerFill} fillOpacity={0.85} />
+      </g>
+    </svg>
   );
 }
 
@@ -131,15 +185,39 @@ const serviceImages: Record<string, string> = {
   "smart-memory": "https://images.unsplash.com/photo-1456324504439-367cee3b3c32?w=800&q=80",
 };
 
-const featuredServiceId = "smart-memory";
-const remainingServiceOrder = ["consultation", "cbt-sessions", "prewedding", "adolescent", "red-eye"] as const;
-const gridAccentColors = [
-  "bg-brand-gold",
-  "bg-brand-blush",
-  "bg-brand-teal",
-  "bg-brand-teal-light",
-  "bg-brand-gold",
-];
+// Display order — featured service first, then remaining services in editorial flow
+const offeringsOrder = [
+  "smart-memory",
+  "consultation",
+  "cbt-sessions",
+  "prewedding",
+  "adolescent",
+  "red-eye",
+] as const;
+
+// Per-service accent palette for the editorial offerings section
+type OfferingAccent = {
+  ring: string;       // border / ring color
+  text: string;       // accent text color
+  bg: string;         // soft tint background
+  rule: string;       // hex for inline gradients/svg
+  badge: string;      // badge color class
+};
+
+const offeringAccents: Record<string, OfferingAccent> = {
+  "smart-memory": { ring: "ring-brand-gold/30",       text: "text-brand-gold",       bg: "bg-brand-gold/[0.05]",       rule: "#ECA200", badge: "bg-brand-gold text-brand-dark" },
+  consultation:   { ring: "ring-brand-teal/25",       text: "text-brand-teal",       bg: "bg-brand-teal/[0.04]",       rule: "#035A60", badge: "bg-brand-teal text-brand-cream" },
+  "cbt-sessions": { ring: "ring-brand-teal-light/35", text: "text-brand-teal-light", bg: "bg-brand-teal-light/[0.07]", rule: "#7FB0B4", badge: "bg-brand-teal-light text-brand-dark" },
+  prewedding:     { ring: "ring-brand-blush/40",      text: "text-brand-dark/70",    bg: "bg-brand-blush/[0.18]",      rule: "#F2C4B5", badge: "bg-brand-blush text-brand-dark" },
+  adolescent:     { ring: "ring-brand-teal/20",       text: "text-brand-teal",       bg: "bg-brand-teal/[0.05]",       rule: "#035A60", badge: "bg-brand-teal text-brand-cream" },
+  "red-eye":      { ring: "ring-brand-gold/25",       text: "text-brand-gold",       bg: "bg-brand-gold/[0.06]",       rule: "#ECA200", badge: "bg-brand-gold text-brand-dark" },
+};
+
+// Convert a 1-based index into Arabic-Indic numerals (٠١, ٠٢, …)
+const toArabicNumeral = (n: number): string => {
+  const map: Record<string, string> = { "0": "٠", "1": "١", "2": "٢", "3": "٣", "4": "٤", "5": "٥", "6": "٦", "7": "٧", "8": "٨", "9": "٩" };
+  return String(n).padStart(2, "0").split("").map((d) => map[d] ?? d).join("");
+};
 
 // ─── Timeline accent colors per service ─────────────────────────────────────
 
@@ -152,6 +230,256 @@ const timelineAccents: Record<string, { dot: string; line: string; bg: string }>
   "smart-memory": { dot: "bg-brand-teal",       line: "from-brand-teal/40 via-brand-teal to-brand-teal/40", bg: "bg-brand-teal/[0.06]" },
 };
 
+// ─── Offering Entry — Editorial service spread ──────────────────────────────
+
+function OfferingEntry({
+  service,
+  index,
+  isLast,
+  isFeatured,
+  lang,
+  t,
+  onOpen,
+}: {
+  service: (typeof services)[number];
+  index: number;
+  isLast: boolean;
+  isFeatured: boolean;
+  lang: Locale;
+  t: (key: string) => string;
+  onOpen: () => void;
+}) {
+  const isAr = lang === "ar";
+  const accent = offeringAccents[service.id] ?? offeringAccents.consultation;
+  // Alternate image side; featured (index 0) always gets right-image for visual anchor
+  const imageOnEnd = index % 2 === 0;
+  const numeral = isAr ? toArabicNumeral(index + 1) : String(index + 1).padStart(2, "0");
+
+  const entryRef = useRef<HTMLDivElement>(null);
+  const inView = useInView(entryRef, { once: true, margin: "-15% 0px" });
+
+  return (
+    <div ref={entryRef} className="relative">
+      {/* Connector — gold thread that draws between entries (the sanad motif) */}
+      {!isLast && (
+        <div
+          className="absolute top-full left-1/2 -translate-x-1/2 z-[2] flex flex-col items-center pointer-events-none select-none"
+          aria-hidden="true"
+        >
+          <motion.div
+            className="w-px origin-top"
+            style={{ background: `linear-gradient(to bottom, ${accent.rule}, transparent)` }}
+            initial={{ scaleY: 0, height: 0 }}
+            animate={inView ? { scaleY: 1, height: 96 } : { scaleY: 0, height: 0 }}
+            transition={{ duration: 1.1, ease: [0.19, 1, 0.22, 1], delay: 0.5 }}
+          />
+          <motion.div
+            initial={{ scale: 0, opacity: 0 }}
+            animate={inView ? { scale: 1, opacity: 1 } : { scale: 0, opacity: 0 }}
+            transition={{ duration: 0.7, ease: [0.19, 1, 0.22, 1], delay: 1.1 }}
+          >
+            <JasmineMark size={20} stroke={accent.rule} strokeOpacity={0.5} centerFill={accent.rule} />
+          </motion.div>
+          <motion.div
+            className="w-px origin-top"
+            style={{ background: `linear-gradient(to bottom, ${accent.rule}, transparent)` }}
+            initial={{ scaleY: 0, height: 0 }}
+            animate={inView ? { scaleY: 1, height: 56 } : { scaleY: 0, height: 0 }}
+            transition={{ duration: 0.9, ease: [0.19, 1, 0.22, 1], delay: 1.3 }}
+          />
+        </div>
+      )}
+
+      <motion.article
+        onClick={onOpen}
+        className="group relative cursor-pointer pb-28"
+        initial={{ opacity: 0, y: 36 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true, margin: "-12% 0px" }}
+        transition={{ duration: 0.95, ease: [0.25, 0.1, 0.25, 1] }}
+      >
+        {/* Massive editorial numeral watermark — visual anchor */}
+        <div
+          className={`pointer-events-none absolute -top-6 select-none font-display font-light leading-none ${
+            imageOnEnd ? "start-0" : "end-0"
+          }`}
+          style={{
+            fontSize: "clamp(7rem, 14vw, 13rem)",
+            color: accent.rule,
+            opacity: 0.07,
+          }}
+          aria-hidden="true"
+        >
+          {numeral}
+        </div>
+
+        <div
+          className={`relative grid grid-cols-1 lg:grid-cols-12 gap-x-10 gap-y-8 items-center ${
+            imageOnEnd ? "" : "lg:[&>*:first-child]:order-2"
+          }`}
+          dir={isAr ? "rtl" : "ltr"}
+        >
+          {/* Image column — clip-path reveal, parallax, painterly overlays */}
+          <motion.div
+            className={`relative lg:col-span-7 ${imageOnEnd ? "lg:col-start-6" : "lg:col-start-1"}`}
+            initial={{ clipPath: "inset(100% 0% 0% 0%)" }}
+            whileInView={{ clipPath: "inset(0% 0% 0% 0%)" }}
+            viewport={{ once: true, margin: "-12% 0px" }}
+            transition={{ duration: 1.2, ease: [0.19, 1, 0.22, 1] }}
+          >
+            <div
+              className={`relative aspect-[16/10] lg:aspect-[16/11] overflow-hidden rounded-[28px] ring-1 ${accent.ring} shadow-[0_24px_60px_-30px_rgba(3,90,96,0.35)]`}
+            >
+              <ParallaxImage
+                src={serviceImages[service.id]}
+                alt={isAr ? service.titleAr : service.title}
+                className="absolute inset-0"
+                speed={isFeatured ? 4 : 2.5}
+              />
+
+              {/* Painterly tint */}
+              <div
+                className="absolute inset-0 mix-blend-multiply"
+                style={{
+                  background: `linear-gradient(135deg, ${accent.rule}22 0%, transparent 45%, rgba(3,90,96,0.18) 100%)`,
+                }}
+              />
+
+              {/* Soft cream wash from the corner where copy sits */}
+              <div
+                className={`absolute inset-0 ${
+                  imageOnEnd
+                    ? "bg-gradient-to-r rtl:bg-gradient-to-l from-brand-cream/80 via-brand-cream/15 to-transparent"
+                    : "bg-gradient-to-l rtl:bg-gradient-to-r from-brand-cream/80 via-brand-cream/15 to-transparent"
+                } lg:opacity-0`}
+              />
+
+              {/* Top-edge index chip */}
+              <div className={`absolute top-5 ${imageOnEnd ? "end-5" : "start-5"} flex items-center gap-2`}>
+                <span className="px-3 py-1 rounded-full bg-white/85 backdrop-blur-sm text-brand-teal text-[10px] tracking-[0.2em] uppercase font-medium shadow-sm">
+                  {t("servicesPage.offeringsEyebrow")} · {numeral}
+                </span>
+                {isFeatured && (
+                  <span className={`px-3 py-1 rounded-full ${accent.badge} text-[10px] tracking-[0.15em] uppercase font-semibold shadow-md`}>
+                    {t("servicesPage.mostPopular")}
+                  </span>
+                )}
+              </div>
+
+              {/* Service icon — soft top-corner bloom, expands on hover */}
+              <span
+                className={`absolute bottom-5 ${imageOnEnd ? "start-6" : "end-6"} font-display text-white/55 leading-none pointer-events-none select-none transition-transform duration-700 group-hover:scale-110`}
+                style={{ fontSize: "3.25rem", textShadow: "0 4px 20px rgba(0,0,0,0.18)" }}
+                aria-hidden="true"
+              >
+                {service.icon}
+              </span>
+
+              {/* Floating jasmine ornament — only on featured for restraint */}
+              {isFeatured && (
+                <motion.div
+                  className={`absolute -top-3 ${imageOnEnd ? "start-6" : "end-6"} pointer-events-none`}
+                  animate={{ y: [0, -6, 0], rotate: [0, 4, 0] }}
+                  transition={{ duration: 9, repeat: Infinity, ease: "easeInOut" }}
+                  aria-hidden="true"
+                >
+                  <JasmineMark size={42} petalFill="#FFFFFF" stroke="#ECA200" strokeOpacity={0.7} />
+                </motion.div>
+              )}
+            </div>
+          </motion.div>
+
+          {/* Copy column — overlapping lift on desktop for editorial layered look */}
+          <div
+            className={`relative lg:col-span-6 ${
+              imageOnEnd
+                ? "lg:col-start-1 lg:row-start-1 lg:-mr-10 rtl:lg:-mr-0 rtl:lg:-ml-10"
+                : "lg:col-start-7 lg:row-start-1 lg:-ml-10 rtl:lg:-ml-0 rtl:lg:-mr-10"
+            } z-[3]`}
+          >
+            <motion.div
+              initial={{ opacity: 0, y: 24 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: "-12% 0px" }}
+              transition={{ duration: 0.9, ease: [0.25, 0.1, 0.25, 1], delay: 0.25 }}
+              className="relative bg-white/90 backdrop-blur-md rounded-[24px] p-7 lg:p-9 shadow-[0_18px_60px_-25px_rgba(3,90,96,0.35)] ring-1 ring-brand-teal/8"
+            >
+              {/* Eyebrow row: gold rule + service icon */}
+              <div className="flex items-center gap-3 mb-5">
+                <motion.div
+                  className="h-px w-10"
+                  style={{ background: accent.rule }}
+                  initial={{ scaleX: 0 }}
+                  whileInView={{ scaleX: 1 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.7, ease: [0.19, 1, 0.22, 1], delay: 0.4 }}
+                />
+                <span className={`text-[10px] tracking-[0.25em] uppercase font-medium ${accent.text}`}>
+                  {numeral} · {isFeatured ? t("servicesPage.mostPopular") : t("servicesPage.offeringsEyebrow")}
+                </span>
+              </div>
+
+              {/* Title */}
+              <h3
+                className={`font-display font-light text-brand-teal mb-4 text-balance leading-[1.15] ${
+                  isFeatured ? "text-3xl lg:text-[2.4rem]" : "text-2xl lg:text-[1.85rem]"
+                }`}
+              >
+                {isAr ? service.titleAr : service.title}
+              </h3>
+
+              {/* Description */}
+              <p className="text-brand-dark/65 text-[0.95rem] lg:text-base leading-relaxed mb-6 text-pretty">
+                {isAr ? service.descriptionAr : service.description}
+              </p>
+
+              {/* Meta row — chips */}
+              <div className="flex flex-wrap items-center gap-2 mb-6">
+                <span className={`px-3 py-1.5 rounded-full ${accent.bg} ${accent.text} text-[11px] font-medium tracking-wide`}>
+                  {isAr ? service.durationAr : service.duration}
+                </span>
+                <span className="px-3 py-1.5 rounded-full bg-brand-cream text-brand-dark/55 text-[11px]">
+                  {isAr ? service.formatAr : service.format}
+                </span>
+                {service.price && (
+                  <span className="ms-auto px-3 py-1.5 rounded-full bg-brand-gold/10 text-brand-gold text-[11px] font-semibold tracking-wide">
+                    {formatPrice(service.price)}
+                  </span>
+                )}
+              </div>
+
+              {/* Footer row — divider + CTA */}
+              <div className="flex items-center justify-between gap-4 pt-5 border-t border-brand-cream">
+                <span className="text-brand-dark/40 text-[10px] tracking-[0.2em] uppercase">
+                  {t("servicesPage.learnMore")}
+                </span>
+                <span
+                  className={`inline-flex items-center justify-center w-11 h-11 rounded-full ${accent.bg} ring-1 ${accent.ring} transition-transform duration-500 group-hover:scale-110`}
+                >
+                  <ChevronRight
+                    className={`w-4 h-4 ${accent.text} rtl:rotate-180 transition-transform duration-500 group-hover:translate-x-0.5 rtl:group-hover:-translate-x-0.5`}
+                    aria-hidden
+                  />
+                </span>
+              </div>
+
+              {/* Decorative corner jasmine — opposite to image for balance */}
+              <div
+                className={`pointer-events-none absolute -bottom-4 ${
+                  imageOnEnd ? "end-5" : "start-5"
+                } opacity-50`}
+                aria-hidden="true"
+              >
+                <JasmineMark size={26} stroke={accent.rule} strokeOpacity={0.5} centerFill={accent.rule} />
+              </div>
+            </motion.div>
+          </div>
+        </div>
+      </motion.article>
+    </div>
+  );
+}
+
 // ─── Service Timeline Component ─────────────────────────────────────────────
 
 function ServiceTimeline({
@@ -159,32 +487,40 @@ function ServiceTimeline({
   lang,
   isOpen,
   onToggle,
+  t,
 }: {
-  service: typeof services[number];
+  service: (typeof services)[number];
   lang: Locale;
   isOpen: boolean;
   onToggle: () => void;
+  t: (key: string) => string;
 }) {
   const accent = timelineAccents[service.id] || timelineAccents.consultation;
   const isAr = lang === "ar";
   const items = service.timeline;
+  const includesList = isAr ? service.includesAr : service.includes;
+  const durationLabel = isAr ? service.durationAr : service.duration;
+  const formatLabel = isAr ? service.formatAr : service.format;
+  const note = isAr ? service.priceNoteAr : service.priceNote;
 
   return (
     <div id={service.id} className="scroll-mt-24">
-      {/* Header — clickable to expand/collapse */}
       <motion.button
+        type="button"
         onClick={onToggle}
-        className="w-full text-left group"
-        whileHover={{ x: isAr ? -4 : 4 }}
-        transition={{ duration: 0.2 }}
+        className="w-full text-start group transition-[opacity,transform] duration-300 hover:opacity-95"
       >
         <div
-          className={`flex items-center gap-5 py-8 px-6 lg:px-10 rounded-3xl transition-colors duration-300 ${
-            isOpen ? "bg-white/70 backdrop-blur-sm shadow-sm" : "hover:bg-white/40"
+          className={`flex items-center gap-5 py-8 px-6 lg:px-10 rounded-3xl transition-all duration-300 ${
+            isOpen
+              ? "bg-white/85 backdrop-blur-sm shadow-md border border-brand-teal/5"
+              : "hover:bg-white/50 hover:shadow-sm border border-transparent"
           }`}
           dir={isAr ? "rtl" : "ltr"}
         >
-          <span className="text-3xl flex-shrink-0">{service.icon}</span>
+          <span className="text-3xl shrink-0 transition-transform duration-300 group-hover:scale-105">
+            {service.icon}
+          </span>
           <div className="flex-1 min-w-0">
             <h3 className="font-display text-brand-teal text-xl lg:text-2xl mb-1 truncate">
               {isAr ? service.titleAr : service.title}
@@ -193,7 +529,7 @@ function ServiceTimeline({
               {isAr ? service.descriptionAr : service.description}
             </p>
           </div>
-          <div className="flex items-center gap-4 flex-shrink-0">
+          <div className="flex items-center gap-4 shrink-0">
             {service.price && (
               <span className="hidden sm:block text-brand-teal font-semibold text-sm">
                 {formatPrice(service.price)}
@@ -202,7 +538,7 @@ function ServiceTimeline({
             <motion.div
               animate={{ rotate: isOpen ? 180 : 0 }}
               transition={{ duration: 0.3 }}
-              className="w-8 h-8 rounded-full border border-brand-teal/20 flex items-center justify-center"
+              className="w-8 h-8 rounded-full border border-brand-teal/20 flex items-center justify-center bg-white/50"
             >
               <ChevronDown className="w-4 h-4 text-brand-teal/60" />
             </motion.div>
@@ -210,7 +546,6 @@ function ServiceTimeline({
         </div>
       </motion.button>
 
-      {/* Expandable timeline content */}
       <AnimatePresence initial={false}>
         {isOpen && (
           <motion.div
@@ -221,13 +556,12 @@ function ServiceTimeline({
             className="overflow-hidden"
           >
             <div className="pt-4 pb-12 px-6 lg:px-10" dir={isAr ? "rtl" : "ltr"}>
-              {/* Info pills */}
               <div className="flex flex-wrap gap-3 mb-10">
                 <span className="px-4 py-1.5 rounded-full bg-brand-cream text-brand-teal text-xs font-medium">
-                  {service.duration}
+                  {durationLabel}
                 </span>
                 <span className="px-4 py-1.5 rounded-full bg-brand-cream text-brand-dark/60 text-xs">
-                  {service.format}
+                  {formatLabel}
                 </span>
                 {service.price && (
                   <span className="px-4 py-1.5 rounded-full bg-brand-gold/10 text-brand-gold text-xs font-semibold">
@@ -236,34 +570,26 @@ function ServiceTimeline({
                 )}
               </div>
 
-              {/* Timeline */}
-              <div className={`relative ${isAr ? "pr-8" : "pl-8"}`}>
-                {/* Vertical line */}
+              <div className="relative ps-10">
                 <div
-                  className={`absolute top-0 bottom-0 w-px bg-gradient-to-b ${accent.line} ${
-                    isAr ? "right-[11px]" : "left-[11px]"
-                  }`}
+                  className={`absolute top-0 bottom-0 w-px start-3 bg-gradient-to-b ${accent.line}`}
                 />
 
                 {items.map((item, i) => (
                   <motion.div
                     key={i}
-                    initial={{ opacity: 0, x: isAr ? 20 : -20 }}
-                    animate={{ opacity: 1, x: 0 }}
+                    initial={{ opacity: 0, y: 16 }}
+                    animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.5, delay: i * 0.08 }}
                     className="relative mb-8 last:mb-0"
                   >
-                    {/* Dot */}
                     <div
-                      className={`absolute top-1.5 w-[22px] h-[22px] rounded-full border-[3px] border-white ${accent.dot} shadow-sm ${
-                        isAr ? "-right-8 translate-x-1/2" : "-left-8 -translate-x-1/2"
-                      }`}
+                      className={`absolute top-1.5 w-[22px] h-[22px] rounded-full border-[3px] border-white ${accent.dot} shadow-sm start-3 -translate-x-1/2 rtl:translate-x-1/2`}
                     />
 
-                    {/* Content card */}
-                    <div className={`${accent.bg} rounded-2xl p-5 ${isAr ? "mr-4" : "ml-4"}`}>
+                    <div className={`${accent.bg} rounded-2xl p-5 ms-4`}>
                       <div className="flex items-start gap-3">
-                        <span className="text-brand-teal/30 font-display text-sm font-semibold mt-0.5 flex-shrink-0">
+                        <span className="text-brand-teal/30 font-display text-sm font-semibold mt-0.5 shrink-0">
                           {String(i + 1).padStart(2, "0")}
                         </span>
                         <p className="text-brand-dark/80 text-sm leading-relaxed">
@@ -275,16 +601,15 @@ function ServiceTimeline({
                 ))}
               </div>
 
-              {/* Includes section */}
-              {service.includes.length > 0 && (
+              {includesList.length > 0 && (
                 <div className="mt-10 pt-8 border-t border-brand-cream">
                   <p className="text-brand-teal text-xs tracking-[0.2em] uppercase font-medium mb-4">
-                    {isAr ? "ما يشمله" : "What's Included"}
+                    {t("servicesPage.whatsIncluded")}
                   </p>
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                    {service.includes.map((inc, i) => (
+                    {includesList.map((inc, i) => (
                       <div key={i} className="flex items-center gap-2">
-                        <div className={`w-1.5 h-1.5 rounded-full ${accent.dot} flex-shrink-0`} />
+                        <div className={`w-1.5 h-1.5 rounded-full ${accent.dot} shrink-0`} />
                         <span className="text-brand-dark/60 text-sm">{inc}</span>
                       </div>
                     ))}
@@ -292,17 +617,16 @@ function ServiceTimeline({
                 </div>
               )}
 
-              {/* Price note + CTA */}
               <div className="mt-8 flex flex-wrap items-center gap-4">
                 <Link
                   href={`/${lang}/booking`}
-                  className="inline-block px-8 py-3.5 bg-brand-teal text-brand-cream rounded-full text-xs tracking-[0.12em] uppercase font-medium hover:bg-brand-teal/90 hover:-translate-y-0.5 transition-all duration-300"
+                  className="inline-block px-8 py-3.5 bg-brand-teal text-brand-cream rounded-full text-xs tracking-[0.12em] uppercase font-medium hover:bg-brand-teal/90 transition-opacity duration-300 hover:opacity-95"
                 >
-                  {isAr ? "احجزي الآن" : "Book Now"}
+                  {t("servicesPage.bookNow")}
                 </Link>
-                {service.priceNote && (
-                  <p className="text-brand-dark/40 text-xs italic">
-                    {service.priceNote}
+                {note && (
+                  <p className="text-brand-dark/40 text-xs italic max-w-md leading-relaxed">
+                    {note}
                   </p>
                 )}
               </div>
@@ -318,6 +642,7 @@ function ServiceTimeline({
 
 export default function ServicesPage() {
   const lang = useLocale();
+  const t = getTranslator(lang);
   const [openServiceId, setOpenServiceId] = useState<string | null>(null);
 
   const handleToggle = useCallback((id: string) => {
@@ -350,38 +675,35 @@ export default function ServicesPage() {
   const ctaLineRef = useRef<HTMLDivElement>(null);
   const ctaLineInView = useInView(ctaLineRef, { once: true, margin: "-40px" });
 
-  const featuredService = services.find((s) => s.id === featuredServiceId)!;
-  const gridServices = remainingServiceOrder.map((id) => services.find((s) => s.id === id)!);
+  // Editorial offerings sequence — featured first, then remaining services
+  const orderedServices = offeringsOrder
+    .map((id) => services.find((s) => s.id === id))
+    .filter((s): s is (typeof services)[number] => Boolean(s));
+
+  const openServiceById = useCallback((id: string) => {
+    setOpenServiceId(id);
+    setTimeout(() => {
+      document.getElementById(id)?.scrollIntoView({ behavior: "smooth", block: "start" });
+    }, 150);
+  }, []);
 
   const pathwaySteps = [
     {
-      num: "١",
-      title: lang === "ar" ? "استشيري" : "Consult",
-      titleSecondary: lang === "ar" ? "Consult" : "استشيري",
-      desc:
-        lang === "ar"
-          ? "جلسة استشارية لنفهم احتياجاتكِ ونرسم معًا الخطوة الأولى."
-          : "A consultation session to understand your needs and map your first step together.",
+      num: lang === "ar" ? "١" : "1",
+      title: t("servicesPage.pathwayStep1Title"),
+      desc: t("servicesPage.pathwayStep1Body"),
       glowClass: "bg-brand-blush/10",
     },
     {
-      num: "٢",
-      title: lang === "ar" ? "تواصلي" : "Connect",
-      titleSecondary: lang === "ar" ? "Connect" : "تواصلي",
-      desc:
-        lang === "ar"
-          ? "ابدأي جلساتكِ في مساحة آمنة مبنية على الثقة والاحترام."
-          : "Begin your sessions in a safe space built on trust, respect, and clinical care.",
+      num: lang === "ar" ? "٢" : "2",
+      title: t("servicesPage.pathwayStep2Title"),
+      desc: t("servicesPage.pathwayStep2Body"),
       glowClass: "bg-brand-cream/[0.06]",
     },
     {
-      num: "٣",
-      title: lang === "ar" ? "ازدهري" : "Cultivate",
-      titleSecondary: lang === "ar" ? "Cultivate" : "ازدهري",
-      desc:
-        lang === "ar"
-          ? "اكتسبي أدوات تدوم — توازن نفسي، وضوح ذهني، وقوة داخلية."
-          : "Build lasting tools — psychological balance, mental clarity, and inner strength.",
+      num: lang === "ar" ? "٣" : "3",
+      title: t("servicesPage.pathwayStep3Title"),
+      desc: t("servicesPage.pathwayStep3Body"),
       glowClass: "bg-brand-gold/[0.06]",
     },
   ];
@@ -389,7 +711,7 @@ export default function ServicesPage() {
   return (
     <div>
 
-      {/* ── Hero — The Opening (الافتتاح) ──────────────────────────────── */}
+      {/* ── Hero (keep layout + mashrabiya — copy is locale-only) ─────── */}
       <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
         {/* Animated mashrabiya background */}
         <MashrabiyaCanvas className="absolute inset-0 z-0" />
@@ -416,37 +738,23 @@ export default function ServicesPage() {
               viewport={{ once: true }}
               className="text-brand-gold tracking-[0.3em] text-xs uppercase mb-10"
             >
-              {lang === "ar" ? "مسارات الشفاء" : "Pathways of Healing"}
+              {t("servicesPage.heroEyebrow")}
             </motion.p>
 
-            {/* Arabic headline — cinematic curtain reveal */}
             <motion.h1
               className="font-display font-[200] text-brand-teal leading-[0.9]"
               style={{
-                fontSize: "clamp(3.5rem, 9vw, 8rem)",
-                direction: "rtl",
+                fontSize: "clamp(2.5rem, 6vw, 5.5rem)",
+                direction: lang === "ar" ? "rtl" : "ltr",
               }}
               initial={{ clipPath: "inset(100% 0% 0% 0%)" }}
               whileInView={{ clipPath: "inset(0% 0% 0% 0%)" }}
               transition={{ duration: 1.4, ease: [0.19, 1, 0.22, 1] }}
               viewport={{ once: true }}
             >
-              هُنا يبدأ شفاؤكِ
+              {t("servicesPage.heroTitle")}
             </motion.h1>
 
-            {/* English headline — delayed curtain reveal */}
-            <motion.h2
-              className="font-display font-[200] text-brand-teal leading-[0.9] mt-3"
-              style={{ fontSize: "clamp(2.5rem, 6vw, 5.5rem)" }}
-              initial={{ clipPath: "inset(100% 0% 0% 0%)" }}
-              whileInView={{ clipPath: "inset(0% 0% 0% 0%)" }}
-              transition={{ duration: 1.4, ease: [0.19, 1, 0.22, 1], delay: 0.3 }}
-              viewport={{ once: true }}
-            >
-              Here, Your Healing Begins
-            </motion.h2>
-
-            {/* Shimmer thread */}
             <motion.div
               className="w-20 h-px my-10 animate-shimmer"
               style={{
@@ -456,41 +764,22 @@ export default function ServicesPage() {
               }}
               initial={{ opacity: 0 }}
               whileInView={{ opacity: 1 }}
-              transition={{ duration: 0.8, delay: 0.6, ease: [0.25, 0.1, 0.25, 1] }}
+              transition={{ duration: 0.8, delay: 0.45, ease: [0.25, 0.1, 0.25, 1] }}
               viewport={{ once: true }}
             />
 
-            {/* Cross-script echo */}
-            <motion.p
-              className={
-                lang === "ar"
-                  ? "font-display text-sm text-brand-teal/20 mb-10"
-                  : "font-display text-sm text-brand-teal/20 mb-10"
-              }
-              style={{ direction: lang === "ar" ? "ltr" : "rtl" }}
-              initial={{ opacity: 0, y: 16 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, delay: 0.7, ease: [0.25, 0.1, 0.25, 1] }}
-              viewport={{ once: true }}
-            >
-              {lang === "ar" ? "Here, Your Healing Begins" : "هُنا يبدأ شفاؤكِ"}
-            </motion.p>
-
-            {/* Pills — staggered with frosted glass */}
             <motion.div
               className="flex flex-wrap justify-center gap-3"
               variants={{
                 hidden: {},
-                visible: { transition: { staggerChildren: 0.12, delayChildren: 0.8 } },
+                visible: { transition: { staggerChildren: 0.12, delayChildren: 0.55 } },
               }}
               initial="hidden"
               whileInView="visible"
               viewport={{ once: true }}
             >
-              {(lang === "ar"
-                ? ["٥ مسارات", "للنساء فقط", "منهج CBT"]
-                : ["5 Pathways", "Women Only", "CBT-Based"]
-              ).map((label) => (
+              {[t("servicesPage.pill1"), t("servicesPage.pill2"), t("servicesPage.pill3")].map(
+                (label) => (
                 <motion.span
                   key={label}
                   variants={{
@@ -501,19 +790,19 @@ export default function ServicesPage() {
                       transition: { duration: 0.8, ease: [0.25, 0.1, 0.25, 1] },
                     },
                   }}
-                  className="border border-brand-teal/20 text-brand-teal/70 text-xs px-4 py-2 rounded-full backdrop-blur-sm bg-brand-cream/70"
+                  className="border border-brand-teal/20 text-brand-teal/70 text-xs px-4 py-2 rounded-full backdrop-blur-sm bg-brand-cream/70 transition-shadow duration-300 hover:shadow-md"
                 >
                   {label}
                 </motion.span>
               ))}
             </motion.div>
 
-            {/* Body */}
-            <Reveal direction="up" delay={1.0} className="mt-8">
-              <p className="text-brand-dark/50 text-sm leading-relaxed max-w-md mx-auto">
-                {lang === "ar"
-                  ? "كل خدمة هي مسار — صُمّمت لتلاقيكِ أينما كنتِ وتمشي معكِ نحو ما تريدين أن تكوني."
-                  : "Each service is a pathway — designed to meet you where you are and walk with you toward where you want to be."}
+            <Reveal direction="up" delay={0.85} className="mt-8">
+              <p
+                className="text-brand-dark/50 text-sm leading-relaxed max-w-md mx-auto text-pretty"
+                dir={lang === "ar" ? "rtl" : "ltr"}
+              >
+                {t("servicesPage.heroBody")}
               </p>
             </Reveal>
           </div>
@@ -533,240 +822,137 @@ export default function ServicesPage() {
       {/* ── Gradient Bridge — Cream → Blush ─────────────────────────────── */}
       <div className="h-32 bg-gradient-to-b from-brand-cream to-[#FDCCBE33] pointer-events-none" />
 
-      {/* ── The Offerings — Services Grid ────────────────────────────────── */}
-      <Section className="bg-brand-blush/20">
-        <div className="section-container py-20">
-          <div className="text-center mb-14">
-            <p className="text-brand-gold text-xs tracking-[0.3em] uppercase mb-3">
-              {lang === "ar" ? "العروض" : "The Offerings"}
-            </p>
-            <h2
-              className="font-display font-light text-brand-teal"
-              style={{ fontSize: "clamp(2rem, 5vw, 3.5rem)" }}
-            >
-              {lang === "ar" ? "خدماتنا" : "Our Services"}
-            </h2>
-            <div className="w-12 h-px bg-brand-gold/40 mx-auto mt-6" />
-          </div>
+      {/* ── The Atelier — Editorial Service Spreads ─────────────────────── */}
+      <Section className="relative overflow-hidden bg-gradient-to-b from-brand-cream via-[#FBF6EB] to-brand-blush/30">
+        {/* Layer 1 — faint Islamic octagram lattice */}
+        <svg
+          className="pointer-events-none absolute inset-0 w-full h-full text-brand-teal opacity-[0.07]"
+          aria-hidden="true"
+        >
+          <defs>
+            <pattern id="offerings-octagram" patternUnits="userSpaceOnUse" width="120" height="120">
+              <g fill="none" stroke="currentColor" strokeWidth="0.6">
+                <rect x="24" y="24" width="72" height="72" />
+                <rect x="24" y="24" width="72" height="72" transform="rotate(45 60 60)" />
+                <circle cx="60" cy="60" r="2" fill="currentColor" />
+              </g>
+            </pattern>
+          </defs>
+          <rect width="100%" height="100%" fill="url(#offerings-octagram)" />
+        </svg>
 
-          {/* ── Featured — Smart Memory (full-width horizontal card) ── */}
+        {/* Layer 2 — soft floating ambient orbs (breathing) */}
+        <motion.div
+          className="pointer-events-none absolute top-[10%] -start-24 w-[420px] h-[420px] rounded-full bg-brand-blush/30 blur-3xl"
+          animate={{ scale: [1, 1.12, 1], opacity: [0.35, 0.5, 0.35] }}
+          transition={{ duration: 11, repeat: Infinity, ease: "easeInOut" }}
+          aria-hidden="true"
+        />
+        <motion.div
+          className="pointer-events-none absolute bottom-[12%] -end-32 w-[360px] h-[360px] rounded-full bg-brand-gold/15 blur-3xl"
+          animate={{ scale: [1.05, 1, 1.05], opacity: [0.3, 0.45, 0.3] }}
+          transition={{ duration: 13, repeat: Infinity, ease: "easeInOut" }}
+          aria-hidden="true"
+        />
+
+        <div className="section-container relative py-24 md:py-32 lg:py-36">
+          {/* Section header — centered, refined */}
           <motion.div
-            className="relative rounded-2xl overflow-hidden mb-6 group cursor-pointer"
-            style={{ boxShadow: "0 4px 30px rgba(3,90,96,0.06)" }}
-            initial={{ opacity: 0, y: 30 }}
+            className="text-center max-w-2xl mx-auto mb-20 md:mb-28"
+            initial={{ opacity: 0, y: 24 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            transition={{ duration: 0.8, ease: [0.25, 0.1, 0.25, 1] }}
-            onClick={() => {
-              setOpenServiceId(featuredService.id);
-              setTimeout(() => {
-                document.getElementById(featuredService.id)?.scrollIntoView({ behavior: "smooth", block: "start" });
-              }, 150);
-            }}
+            transition={{ duration: 1, ease: [0.25, 0.1, 0.25, 1] }}
           >
-            <div className="grid grid-cols-1 lg:grid-cols-2">
-              <div className="relative h-56 lg:h-72 overflow-hidden">
-                <ParallaxImage
-                  src={serviceImages[featuredService.id]}
-                  alt={featuredService.title}
-                  className="absolute inset-0"
-                  speed={3}
-                />
-                <div className="absolute inset-0 bg-gradient-to-r from-transparent to-white/20 lg:to-white/40" />
-                <div className="absolute inset-0 bg-brand-teal/[0.06]" />
-                <span
-                  className="absolute top-4 left-5 text-white/25 pointer-events-none select-none leading-none font-display"
-                  style={{ fontSize: "4rem" }}
-                  aria-hidden="true"
-                >
-                  {featuredService.icon}
-                </span>
-                <span className="absolute top-4 right-4 px-3 py-1 rounded-full bg-brand-gold text-brand-dark text-[10px] tracking-[0.12em] uppercase font-semibold">
-                  {lang === "ar" ? "الأكثر طلبًا" : "Most Popular"}
-                </span>
-              </div>
-
-              <div className="bg-white/80 backdrop-blur-sm p-7 lg:p-9 flex flex-col justify-center">
-                <div className="flex items-center gap-3 mb-3">
-                  <span className="text-brand-gold text-[10px] tracking-[0.15em] uppercase font-medium">
-                    {featuredService.duration}
-                  </span>
-                  <span className="w-1 h-1 rounded-full bg-brand-gold/40" />
-                  <span className="text-brand-dark/40 text-[10px] italic">
-                    {featuredService.format}
-                  </span>
-                </div>
-                <h3 className="font-display text-brand-teal text-xl lg:text-2xl mb-1">
-                  {lang === "ar" ? featuredService.titleAr : featuredService.title}
-                </h3>
-                <p
-                  className="font-display text-brand-teal-light text-xs mb-3 opacity-60"
-                  style={{ direction: lang === "ar" ? "ltr" : "rtl" }}
-                >
-                  {lang === "ar" ? featuredService.title : featuredService.titleAr}
-                </p>
-                <p className="text-brand-dark/55 text-sm leading-relaxed mb-5 max-w-lg">
-                  {lang === "ar" ? featuredService.descriptionAr : featuredService.description}
-                </p>
-                <div className="flex items-center gap-4">
-                  <span className="text-brand-gold tracking-[0.08em] text-[10px] uppercase font-medium group-hover:text-brand-teal transition-colors duration-300">
-                    {lang === "ar" ? "اكتشفي المزيد ←" : "Learn More →"}
-                  </span>
-                </div>
-              </div>
+            <div className="flex items-center justify-center gap-3 mb-6">
+              <motion.div
+                className="h-px w-10 bg-brand-gold"
+                initial={{ scaleX: 0 }}
+                whileInView={{ scaleX: 1 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.8, ease: [0.19, 1, 0.22, 1] }}
+              />
+              <p className="text-brand-gold text-[11px] tracking-[0.3em] uppercase font-medium">
+                {t("servicesPage.offeringsEyebrow")}
+              </p>
+              <motion.div
+                className="h-px w-10 bg-brand-gold"
+                initial={{ scaleX: 0 }}
+                whileInView={{ scaleX: 1 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.8, ease: [0.19, 1, 0.22, 1], delay: 0.1 }}
+              />
+            </div>
+            <h2
+              className="font-display font-light text-brand-teal text-balance leading-[1.1]"
+              style={{ fontSize: "clamp(2.25rem, 5.5vw, 4rem)" }}
+            >
+              {t("servicesPage.offeringsHeading")}
+            </h2>
+            <div className="mt-8 flex justify-center">
+              <JasmineMark size={32} />
             </div>
           </motion.div>
 
-          {/* ── Row of 3 ── */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 mb-5">
-            {gridServices.slice(0, 3).map((service, i) => {
-              const ServiceCard = (
-                <motion.div
-                  key={service.id}
-                  initial={{ opacity: 0, y: 24 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.6, delay: i * 0.07, ease: [0.25, 0.1, 0.25, 1] }}
-                  viewport={{ once: true }}
-                  whileHover={{ y: -4, transition: { duration: 0.25 } }}
-                  onClick={() => {
-                    setOpenServiceId(service.id);
-                    setTimeout(() => {
-                      document.getElementById(service.id)?.scrollIntoView({ behavior: "smooth", block: "start" });
-                    }, 150);
-                  }}
-                  className="relative overflow-hidden bg-white/70 backdrop-blur-sm rounded-2xl group cursor-pointer"
-                  style={{ boxShadow: "0 2px 20px rgba(3,90,96,0.05)" }}
-                >
-                  <div className="relative h-40 overflow-hidden">
-                    <ParallaxImage
-                      src={serviceImages[service.id]}
-                      alt={service.title}
-                      className="absolute inset-0"
-                      speed={2}
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-white/70 via-white/10 to-transparent" />
-                    <div className="absolute inset-0 bg-brand-teal/[0.03] group-hover:bg-brand-teal/10 transition-colors duration-500" />
-                    <span
-                      className="absolute top-3 left-4 font-display text-white/30 group-hover:text-white/50 transition-all duration-500 pointer-events-none select-none leading-none"
-                      style={{ fontSize: "2.5rem" }}
-                      aria-hidden="true"
-                    >
-                      {service.icon}
-                    </span>
-                    <div className={`absolute bottom-0 left-0 w-full h-[3px] ${gridAccentColors[i]} opacity-70 group-hover:opacity-100 transition-opacity duration-500`} />
-                  </div>
-                  <div className="p-5">
-                    <h3 className="font-display text-brand-teal text-base mb-0.5 group-hover:text-brand-teal/80 transition-colors duration-300">
-                      {lang === "ar" ? service.titleAr : service.title}
-                    </h3>
-                    <p className="font-display text-brand-teal-light text-[11px] mb-3 opacity-60" style={{ direction: lang === "ar" ? "ltr" : "rtl" }}>
-                      {lang === "ar" ? service.title : service.titleAr}
-                    </p>
-                    <p className="text-brand-dark/50 text-xs leading-relaxed mb-4 line-clamp-2">
-                      {lang === "ar" ? service.descriptionAr : service.description}
-                    </p>
-                    <div className="flex items-center justify-between text-[10px] pt-3 border-t border-brand-cream/80">
-                      <span className="px-2.5 py-1 rounded-full bg-brand-cream text-brand-teal font-medium">
-                        {service.duration}
-                      </span>
-                      <span className="text-brand-gold tracking-[0.08em] uppercase font-medium group-hover:text-brand-teal transition-colors duration-300">
-                        {lang === "ar" ? "اكتشفي المزيد ←" : "Learn More →"}
-                      </span>
-                    </div>
-                  </div>
-                </motion.div>
-              );
-              return ServiceCard;
-            })}
+          {/* Editorial spreads — alternating, woven by gold thread */}
+          <div className="relative max-w-6xl mx-auto">
+            {orderedServices.map((service, i) => (
+              <OfferingEntry
+                key={service.id}
+                service={service}
+                index={i}
+                isLast={i === orderedServices.length - 1}
+                isFeatured={i === 0}
+                lang={lang}
+                t={t}
+                onOpen={() => openServiceById(service.id)}
+              />
+            ))}
           </div>
 
-          {/* ── Row of 2 — centered ── */}
-          <div className="flex justify-center gap-5">
-            {gridServices.slice(3, 5).map((service, idx) => {
-              const i = idx + 3;
-              return (
-                <motion.div
-                  key={service.id}
-                  initial={{ opacity: 0, y: 24 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.6, delay: i * 0.07, ease: [0.25, 0.1, 0.25, 1] }}
-                  viewport={{ once: true }}
-                  whileHover={{ y: -4, transition: { duration: 0.25 } }}
-                  onClick={() => {
-                    setOpenServiceId(service.id);
-                    setTimeout(() => {
-                      document.getElementById(service.id)?.scrollIntoView({ behavior: "smooth", block: "start" });
-                    }, 150);
-                  }}
-                  className="relative overflow-hidden bg-white/70 backdrop-blur-sm rounded-2xl group cursor-pointer w-full sm:w-[calc(50%-0.625rem)] lg:w-[calc(33.333%-0.833rem)]"
-                  style={{ boxShadow: "0 2px 20px rgba(3,90,96,0.05)" }}
-                >
-                  <div className="relative h-40 overflow-hidden">
-                    <ParallaxImage
-                      src={serviceImages[service.id]}
-                      alt={service.title}
-                      className="absolute inset-0"
-                      speed={2}
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-white/70 via-white/10 to-transparent" />
-                    <div className="absolute inset-0 bg-brand-teal/[0.03] group-hover:bg-brand-teal/10 transition-colors duration-500" />
-                    <span
-                      className="absolute top-3 left-4 font-display text-white/30 group-hover:text-white/50 transition-all duration-500 pointer-events-none select-none leading-none"
-                      style={{ fontSize: "2.5rem" }}
-                      aria-hidden="true"
-                    >
-                      {service.icon}
-                    </span>
-                    <div className={`absolute bottom-0 left-0 w-full h-[3px] ${gridAccentColors[i]} opacity-70 group-hover:opacity-100 transition-opacity duration-500`} />
-                  </div>
-                  <div className="p-5">
-                    <h3 className="font-display text-brand-teal text-base mb-0.5 group-hover:text-brand-teal/80 transition-colors duration-300">
-                      {lang === "ar" ? service.titleAr : service.title}
-                    </h3>
-                    <p className="font-display text-brand-teal-light text-[11px] mb-3 opacity-60" style={{ direction: lang === "ar" ? "ltr" : "rtl" }}>
-                      {lang === "ar" ? service.title : service.titleAr}
-                    </p>
-                    <p className="text-brand-dark/50 text-xs leading-relaxed mb-4 line-clamp-2">
-                      {lang === "ar" ? service.descriptionAr : service.description}
-                    </p>
-                    <div className="flex items-center justify-between text-[10px] pt-3 border-t border-brand-cream/80">
-                      <span className="px-2.5 py-1 rounded-full bg-brand-cream text-brand-teal font-medium">
-                        {service.duration}
-                      </span>
-                      <span className="text-brand-gold tracking-[0.08em] uppercase font-medium group-hover:text-brand-teal transition-colors duration-300">
-                        {lang === "ar" ? "اكتشفي المزيد ←" : "Learn More →"}
-                      </span>
-                    </div>
-                  </div>
-                </motion.div>
-              );
-            })}
-          </div>
+          {/* Closing flourish */}
+          <motion.div
+            className="flex flex-col items-center mt-20"
+            initial={{ opacity: 0, y: 16 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.9, ease: [0.25, 0.1, 0.25, 1] }}
+          >
+            <div className="w-px h-12 bg-gradient-to-b from-brand-gold/60 to-transparent mb-4" />
+            <p className="text-brand-teal/60 text-[11px] tracking-[0.3em] uppercase font-medium">
+              {t("servicesPage.journeyDetailEyebrow")}
+            </p>
+            <ChevronDown className="w-3.5 h-3.5 text-brand-teal/40 mt-3" aria-hidden />
+          </motion.div>
         </div>
       </Section>
 
-      {/* ── Service Detail Timelines ──────────────────────────────────────── */}
-      <Section className="bg-brand-cream/80">
-        <div className="section-container py-24">
-          <Reveal className="text-center mb-16">
+      <Section className="relative bg-brand-cream/90 overflow-hidden">
+        <div
+          className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-brand-blush/50 to-transparent"
+          aria-hidden
+        />
+        <div className="section-container py-28 md:py-32">
+          <Reveal className="text-center mb-16 md:mb-20">
             <p className="text-brand-gold text-xs tracking-[0.2em] uppercase mb-4">
-              {lang === "ar" ? "رحلتكِ بالتفصيل" : "Your Journey in Detail"}
+              {t("servicesPage.journeyDetailEyebrow")}
             </p>
             <h2
-              className="font-display font-light text-brand-teal mb-4"
+              className="font-display font-light text-brand-teal mb-4 text-balance"
               style={{ fontSize: "clamp(2rem, 5vw, 3.5rem)" }}
             >
-              {lang === "ar" ? "ماذا ستتعلمين" : "What You'll Experience"}
+              {t("servicesPage.journeyDetailHeading")}
             </h2>
-            <p className="text-brand-dark/50 text-sm max-w-md mx-auto leading-relaxed">
-              {lang === "ar"
-                ? "اكتشفي ما تتضمنه كل خدمة خطوة بخطوة"
-                : "Discover what each service includes, step by step"}
+            <p
+              className="text-brand-dark/50 text-sm max-w-md mx-auto leading-relaxed text-pretty"
+              dir={lang === "ar" ? "rtl" : "ltr"}
+            >
+              {t("servicesPage.journeyDetailBody")}
             </p>
             <div className="w-16 h-px bg-brand-gold/40 mx-auto mt-8" />
           </Reveal>
 
-          <div className="max-w-3xl mx-auto space-y-2">
+          <div className="max-w-3xl mx-auto space-y-3">
             {services.map((service) => (
               <ServiceTimeline
                 key={service.id}
@@ -774,6 +960,7 @@ export default function ServicesPage() {
                 lang={lang}
                 isOpen={openServiceId === service.id}
                 onToggle={() => handleToggle(service.id)}
+                t={t}
               />
             ))}
           </div>
@@ -793,11 +980,11 @@ export default function ServicesPage() {
         />
 
         <span
-          className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 font-arabic text-brand-teal/[0.06] pointer-events-none select-none whitespace-nowrap"
+          className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 font-display text-brand-teal/[0.06] pointer-events-none select-none whitespace-nowrap"
           style={{ fontSize: "clamp(6rem, 14vw, 12rem)" }}
           aria-hidden="true"
         >
-          شفاء
+          {t("servicesPage.exhaleWatermark")}
         </span>
 
         <Reveal
@@ -805,16 +992,13 @@ export default function ServicesPage() {
           direction="up"
         >
           <p
-            className="font-arabic text-brand-teal leading-snug mb-4"
+            className="font-display text-brand-teal leading-snug"
             style={{
               fontSize: "clamp(1.6rem, 3.5vw, 2.5rem)",
-              direction: "rtl",
             }}
+            dir={lang === "ar" ? "rtl" : "ltr"}
           >
-            الخطوة الأولى هي الأصعب — والأجمل
-          </p>
-          <p className="font-display text-brand-dark/40 text-sm">
-            The first step is the hardest — and the most beautiful.
+            {t("servicesPage.exhaleTitle")}
           </p>
           <div className="w-12 h-px bg-brand-gold mx-auto mt-8" />
         </Reveal>
@@ -875,15 +1059,14 @@ export default function ServicesPage() {
           direction="up"
         >
           <p className="text-brand-gold text-sm tracking-[0.3em] mb-8">
-            {lang === "ar" ? "رحلتكِ" : "Your Journey"}
+            {t("servicesPage.pathwayEyebrow")}
           </p>
           <h2
-            className="font-display font-[200] text-brand-cream mb-10"
+            className="font-display font-[200] text-brand-cream mb-10 text-balance"
             style={{ fontSize: "clamp(2.5rem, 5vw, 5rem)" }}
+            dir={lang === "ar" ? "rtl" : "ltr"}
           >
-            {lang === "ar"
-              ? "ثلاث خطوات نحو التفتّح"
-              : "Three Steps to Bloom"}
+            {t("servicesPage.pathwayHeading")}
           </h2>
 
           <div ref={pathwayLineRef} className="flex justify-center">
@@ -893,7 +1076,7 @@ export default function ServicesPage() {
                 backgroundImage:
                   "linear-gradient(90deg, transparent 0%, #ECA200 50%, transparent 100%)",
                 backgroundSize: "200% auto",
-                transformOrigin: "left center",
+                transformOrigin: "center center",
               }}
               initial={{ scaleX: 0 }}
               animate={pathwayLineInView ? { scaleX: 1 } : { scaleX: 0 }}
@@ -902,12 +1085,10 @@ export default function ServicesPage() {
           </div>
         </Reveal>
 
-        {/* Timeline */}
         <div className="relative z-10 px-6 pb-32 max-w-4xl mx-auto">
-          <div className="relative pl-12 lg:pl-0">
-            {/* Scroll-driven vertical gold line */}
+          <div className="relative ps-12 lg:ps-0">
             <motion.div
-              className="absolute left-8 lg:left-1/2 top-0 w-px h-full origin-top"
+              className="absolute start-8 top-0 w-px h-full origin-top lg:start-1/2 lg:-translate-x-1/2"
               style={{
                 scaleY: lineScale,
                 backgroundImage:
@@ -925,23 +1106,19 @@ export default function ServicesPage() {
                 const isLeft = i % 2 === 0;
                 return (
                   <motion.div
-                    key={step.num}
+                    key={step.title}
                     variants={pathwayStep}
                     className="relative mb-24 last:mb-0"
                   >
-                    {/* Node circle */}
-                    <div className="absolute left-8 -translate-x-1/2 lg:left-1/2 lg:-translate-x-1/2 top-0 w-14 h-14 rounded-full border-2 border-brand-gold/30 bg-brand-teal flex items-center justify-center z-10">
-                      <span className="font-arabic text-3xl text-brand-cream">
-                        {step.num}
-                      </span>
+                    <div className="absolute start-8 top-0 -translate-x-1/2 w-14 h-14 rounded-full border-2 border-brand-gold/30 bg-brand-teal flex items-center justify-center z-10 shadow-md lg:start-1/2 lg:-translate-x-1/2">
+                      <span className="font-display text-2xl text-brand-cream">{step.num}</span>
                     </div>
 
-                    {/* Content */}
                     <div
                       className={`relative pt-1 ${
                         isLeft
-                          ? "lg:w-[42%] lg:mr-auto lg:text-right lg:pr-20"
-                          : "lg:w-[42%] lg:ml-auto lg:text-left lg:pl-20"
+                          ? "lg:w-[42%] lg:me-auto lg:text-end lg:pe-20"
+                          : "lg:w-[42%] lg:ms-auto lg:text-start lg:ps-20"
                       }`}
                     >
                       <div
@@ -949,22 +1126,18 @@ export default function ServicesPage() {
                       />
 
                       <h3
-                        className="font-display text-brand-cream mb-1 relative"
+                        className="font-display text-brand-cream mb-3 relative"
                         style={{
                           fontSize: "clamp(1.5rem, 3vw, 2rem)",
                         }}
+                        dir={lang === "ar" ? "rtl" : "ltr"}
                       >
                         {step.title}
                       </h3>
                       <p
-                        className="font-display text-sm text-brand-cream/30 mb-4 relative"
-                        style={{
-                          direction: lang === "ar" ? "ltr" : "rtl",
-                        }}
+                        className="text-brand-cream/60 text-sm leading-relaxed max-w-sm relative lg:max-w-none text-pretty"
+                        dir={lang === "ar" ? "rtl" : "ltr"}
                       >
-                        {step.titleSecondary}
-                      </p>
-                      <p className="text-brand-cream/60 text-sm leading-relaxed max-w-sm relative lg:max-w-none">
                         {step.desc}
                       </p>
                     </div>
@@ -1055,20 +1228,13 @@ export default function ServicesPage() {
           >
             <motion.p
               variants={ctaItem}
-              className="font-arabic text-brand-cream tracking-[0.05em] mb-4"
+              className="font-display text-brand-cream/90 tracking-[0.05em] mb-10"
               style={{
                 fontSize: "clamp(1.8rem, 4vw, 3rem)",
-                direction: "rtl",
               }}
+              dir={lang === "ar" ? "rtl" : "ltr"}
             >
-              بتلتكِ الأولى تبدأ هنا
-            </motion.p>
-
-            <motion.p
-              variants={ctaItem}
-              className="font-display text-sm text-brand-cream/40 mb-10"
-            >
-              Your first bloom begins here
+              {t("servicesPage.ctaBloomLine")}
             </motion.p>
 
             <motion.div
@@ -1083,19 +1249,19 @@ export default function ServicesPage() {
 
             <motion.h2
               variants={ctaItem}
-              className="font-display font-light text-brand-cream mb-6"
+              className="font-display font-light text-brand-cream mb-6 text-balance"
               style={{ fontSize: "clamp(2.2rem, 5vw, 3.8rem)" }}
+              dir={lang === "ar" ? "rtl" : "ltr"}
             >
-              {lang === "ar" ? "مستعدة للبداية؟" : "Ready to Begin?"}
+              {t("servicesPage.ctaReadyHeading")}
             </motion.h2>
 
             <motion.p
               variants={ctaItem}
-              className="text-sm text-brand-cream/40 max-w-sm mb-10 leading-relaxed"
+              className="text-sm text-brand-cream/40 max-w-sm mb-10 leading-relaxed text-pretty"
+              dir={lang === "ar" ? "rtl" : "ltr"}
             >
-              {lang === "ar"
-                ? "خطوتكِ الأولى نحو التغيير تبدأ من هنا."
-                : "Take the first step toward real, lasting change."}
+              {t("servicesPage.ctaReadyBody")}
             </motion.p>
 
             <motion.div variants={ctaItem} className="relative mb-12">
@@ -1113,20 +1279,18 @@ export default function ServicesPage() {
               />
               <Link
                 href={`/${lang}/booking`}
-                className="relative inline-block px-10 py-5 bg-brand-gold text-brand-dark rounded-full text-xs tracking-[0.15em] uppercase font-semibold hover:bg-brand-gold/90 hover:-translate-y-0.5 transition-all duration-300"
+                className="relative inline-block px-10 py-5 bg-brand-gold text-brand-dark rounded-full text-xs tracking-[0.15em] uppercase font-semibold hover:bg-brand-gold/90 transition-opacity duration-300 hover:opacity-95"
               >
-                {lang === "ar"
-                  ? "احجزي موعدك الآن"
-                  : "Book Your Session"}
+                {t("servicesPage.ctaBook")}
               </Link>
             </motion.div>
 
             <motion.p
               variants={ctaItem}
-              className="font-arabic text-xs text-brand-gold/30 tracking-wide"
-              style={{ direction: "rtl" }}
+              className="font-display text-xs text-brand-gold/30 tracking-wide"
+              dir={lang === "ar" ? "rtl" : "ltr"}
             >
-              أنا هنا من أجلكِ
+              {t("servicesPage.ctaFooterLine")}
             </motion.p>
           </motion.div>
         </div>

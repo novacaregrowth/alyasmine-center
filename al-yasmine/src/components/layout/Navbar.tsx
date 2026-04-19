@@ -28,7 +28,15 @@ function getActiveName(pathname: string, navItems: ReturnType<typeof getNavItems
   return match?.name ?? navItems[0].name;
 }
 
-function LanguageSwitcher({ lang, heroMode }: { lang: Locale; heroMode: boolean }) {
+function LanguageSwitcher({
+  lang,
+  heroMode,
+  t,
+}: {
+  lang: Locale;
+  heroMode: boolean;
+  t: (key: string) => string;
+}) {
   const pathname = usePathname();
   const router = useRouter();
 
@@ -44,6 +52,7 @@ function LanguageSwitcher({ lang, heroMode }: { lang: Locale; heroMode: boolean 
       heroMode ? "bg-white/10" : "bg-brand-cream/80 border border-brand-cream"
     )}>
       <button
+        type="button"
         onClick={() => switchTo("en")}
         className={cn(
           "px-3 py-1.5 rounded-full transition-colors duration-200",
@@ -54,9 +63,10 @@ function LanguageSwitcher({ lang, heroMode }: { lang: Locale; heroMode: boolean 
               : "text-brand-dark/50 hover:text-brand-dark"
         )}
       >
-        EN
+        {t("nav.switchToEnglish")}
       </button>
       <button
+        type="button"
         onClick={() => switchTo("ar")}
         className={cn(
           "px-3 py-1.5 rounded-full transition-colors duration-200",
@@ -67,7 +77,7 @@ function LanguageSwitcher({ lang, heroMode }: { lang: Locale; heroMode: boolean 
               : "text-brand-dark/50 hover:text-brand-dark"
         )}
       >
-        عر
+        {t("nav.switchToArabic")}
       </button>
     </div>
   );
@@ -163,7 +173,7 @@ export function Navbar({ lang = "en" as Locale }: { lang?: Locale }) {
         </div>
 
         <div className="flex items-center gap-3">
-          <LanguageSwitcher lang={lang} heroMode={heroMode} />
+          <LanguageSwitcher lang={lang} heroMode={heroMode} t={t} />
           <Link href={`/${lang}/booking`}
             className="px-5 py-2.5 rounded-full bg-brand-gold text-brand-dark text-sm font-medium hover:bg-brand-gold/90 transition-all hover:scale-105 shadow-md shadow-brand-gold/20">
             {t("nav.bookNow")}
@@ -190,7 +200,7 @@ export function Navbar({ lang = "en" as Locale }: { lang?: Locale }) {
           />
         </Link>
         <div className="flex items-center gap-2">
-          <LanguageSwitcher lang={lang} heroMode={heroModeMobile} />
+          <LanguageSwitcher lang={lang} heroMode={heroModeMobile} t={t} />
           <button onClick={() => setMobileOpen(!mobileOpen)}
             className="p-2 rounded-lg transition-colors" aria-label="Toggle menu" aria-expanded={mobileOpen}>
             {mobileOpen
