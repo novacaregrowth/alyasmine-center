@@ -24,12 +24,14 @@ export interface PricingPlan {
 }
 
 export interface Testimonial {
-  id: number;
+  id: string;
   name: string;
-  role: string;
+  nameAr: string;
   quote: string;
+  quoteAr: string;
   rating: number;
   image?: string | null;
+  featured: boolean;
 }
 
 export interface NavLink {

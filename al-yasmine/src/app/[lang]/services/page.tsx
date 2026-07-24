@@ -3,8 +3,8 @@ import ServicesPage from "./PageClient";
 import type { Locale } from "@/lib/i18n";
 
 const titles: Record<Locale, string> = {
-  en: "Services — Al Yasmine Center",
-  ar: "الخدمات — مركز الياسمين",
+  en: "Services | Al Yasmine Center",
+  ar: "الخدمات | مركز الياسمين",
 };
 
 const descriptions: Record<Locale, string> = {

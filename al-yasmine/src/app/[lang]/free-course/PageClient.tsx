@@ -20,16 +20,16 @@ export default function FreeCoursePage() {
   const dir = isAr ? "rtl" : "ltr";
 
   const modules = [
-    { number: isAr ? "٠١" : "01", titleKey: "module1Title", durationKey: "module1Duration", bodyKey: "module1Body" },
-    { number: isAr ? "٠٢" : "02", titleKey: "module2Title", durationKey: "module2Duration", bodyKey: "module2Body" },
-    { number: isAr ? "٠٣" : "03", titleKey: "module3Title", durationKey: "module3Duration", bodyKey: "module3Body" },
-    { number: isAr ? "٠٤" : "04", titleKey: "module4Title", durationKey: "module4Duration", bodyKey: "module4Body" },
+    { number: isAr ? "01" : "01", titleKey: "module1Title", durationKey: "module1Duration", bodyKey: "module1Body" },
+    { number: isAr ? "02" : "02", titleKey: "module2Title", durationKey: "module2Duration", bodyKey: "module2Body" },
+    { number: isAr ? "03" : "03", titleKey: "module3Title", durationKey: "module3Duration", bodyKey: "module3Body" },
+    { number: isAr ? "04" : "04", titleKey: "module4Title", durationKey: "module4Duration", bodyKey: "module4Body" },
   ];
 
   const steps = [
-    { icon: "◇", step: isAr ? "٠١" : "01", titleKey: "step1Title", bodyKey: "step1Body" },
-    { icon: "✦", step: isAr ? "٠٢" : "02", titleKey: "step2Title", bodyKey: "step2Body" },
-    { icon: "❋", step: isAr ? "٠٣" : "03", titleKey: "step3Title", bodyKey: "step3Body" },
+    { icon: "◇", step: isAr ? "01" : "01", titleKey: "step1Title", bodyKey: "step1Body" },
+    { icon: "✦", step: isAr ? "02" : "02", titleKey: "step2Title", bodyKey: "step2Body" },
+    { icon: "❋", step: isAr ? "03" : "03", titleKey: "step3Title", bodyKey: "step3Body" },
   ];
 
   const pills = [
@@ -47,8 +47,8 @@ export default function FreeCoursePage() {
         <div className="absolute inset-0 pointer-events-none" style={{ background: "radial-gradient(ellipse 60% 60% at 80% 50%, rgba(236,162,0,0.13) 0%, transparent 60%)" }} />
         <div className="section-container relative z-10 max-w-3xl pt-16 pb-12">
           <Reveal>
-            <span className="text-brand-gold text-[10px] tracking-[0.3em] uppercase font-medium mb-4 block">{t("freeCoursePage.heroEyebrow")} ✦</span>
-            <h1 className="font-display font-light text-brand-cream mb-3 text-5xl md:text-6xl">{t("freeCoursePage.heroHeading")}</h1>
+            <span className="text-brand-gold text-[14px] tracking-[0.3em] uppercase font-medium mb-4 block">{t("freeCoursePage.heroEyebrow")} ✦</span>
+            <h1 className="font-display font-extrabold text-brand-cream mb-3 text-5xl md:text-6xl">{t("freeCoursePage.heroHeading")}</h1>
             <div className="w-14 h-px bg-brand-gold my-6" />
             <p className="text-brand-cream/60 text-base leading-relaxed max-w-xl mb-8">
               {t("freeCoursePage.heroBody")}
@@ -67,8 +67,8 @@ export default function FreeCoursePage() {
       <section className="bg-white pt-6 pb-8">
         <div className="section-container max-w-3xl mx-auto py-16">
           <Reveal className="text-center mb-14">
-            <p className="text-brand-gold text-[10px] tracking-[0.25em] uppercase font-medium mb-3">{t("freeCoursePage.modulesEyebrow")}</p>
-            <h2 className="font-display font-light text-brand-dark mb-2">{t("freeCoursePage.modulesHeading")}</h2>
+            <p className="text-brand-gold text-[14px] tracking-[0.25em] uppercase font-medium mb-3">{t("freeCoursePage.modulesEyebrow")}</p>
+            <h2 className="font-display font-extrabold text-brand-dark mb-2">{t("freeCoursePage.modulesHeading")}</h2>
             <div className="brand-divider" />
             <p className="text-brand-dark/45 text-sm mt-4 max-w-md mx-auto">
               {t("freeCoursePage.modulesBody")}
@@ -83,8 +83,8 @@ export default function FreeCoursePage() {
               >
                 <span className="font-display text-5xl font-light text-brand-teal/12 leading-none shrink-0 w-12 group-hover:text-brand-teal/22 transition-colors">{mod.number}</span>
                 <div className="flex-1">
-                  <div className="flex items-start justify-between gap-4 mb-2">
-                    <h3 className="font-display text-xl text-brand-dark">{t(`freeCoursePage.${mod.titleKey}`)}</h3>
+                  <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-2 sm:gap-4 mb-2">
+                    <h3 className="font-display font-extrabold text-xl text-brand-dark">{t(`freeCoursePage.${mod.titleKey}`)}</h3>
                     <span className="text-xs text-brand-teal-light bg-brand-cream px-3 py-1 rounded-full shrink-0">{t(`freeCoursePage.${mod.durationKey}`)}</span>
                   </div>
                   <p className="text-sm text-brand-dark/55 leading-relaxed">{t(`freeCoursePage.${mod.bodyKey}`)}</p>
@@ -100,8 +100,8 @@ export default function FreeCoursePage() {
       <section className="bg-brand-cream pt-6 pb-8">
         <div className="section-container max-w-2xl mx-auto py-16">
           <Reveal className="text-center mb-12">
-            <p className="text-brand-gold text-[10px] tracking-[0.25em] uppercase font-medium mb-3">{t("freeCoursePage.howEyebrow")}</p>
-            <h2 className="font-display font-light text-brand-dark mb-2">{t("freeCoursePage.howHeading")}</h2>
+            <p className="text-brand-gold text-[14px] tracking-[0.25em] uppercase font-medium mb-3">{t("freeCoursePage.howEyebrow")}</p>
+            <h2 className="font-display font-extrabold text-brand-dark mb-2">{t("freeCoursePage.howHeading")}</h2>
             <div className="brand-divider" />
           </Reveal>
 
@@ -125,7 +125,7 @@ export default function FreeCoursePage() {
       {/* CTA */}
       <section className="bg-brand-teal text-brand-cream pt-6 pb-20">
         <Reveal className="section-container text-center max-w-lg mx-auto py-10">
-          <h2 className="font-display font-light text-3xl mb-3">{t("freeCoursePage.ctaHeading")}</h2>
+          <h2 className="font-display font-extrabold text-3xl mb-3">{t("freeCoursePage.ctaHeading")}</h2>
           <p className="text-brand-cream/55 mb-8 text-sm leading-relaxed">
             {t("freeCoursePage.ctaBody")}
           </p>

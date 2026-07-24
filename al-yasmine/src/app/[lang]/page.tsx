@@ -5,7 +5,7 @@ import Link from "next/link";
 import { motion, useScroll, useTransform } from "framer-motion";
 import { HeroCanvas } from "@/components/ui/hero-canvas";
 import { Reveal, StaggerReveal, staggerChild } from "@/components/ui/reveal";
-import { services } from "@/lib/config";
+import { orderedServices } from "@/lib/config";
 import { formatPrice } from "@/lib/utils";
 import { CinematicWrapper } from "@/components/layout/CinematicWrapper";
 import { getTranslator, type Locale } from "@/lib/i18n";
@@ -23,8 +23,8 @@ function Stats() {
   const stats = [
     { value: "2000+", label: t("stats.clientsTransformed") },
     { value: "98%",  label: t("stats.satisfactionRate")   },
-    { value: "10+",  label: t("stats.yearsOfImpact")     },
     { value: "4.9",  label: t("stats.averageRating")      },
+    { value: "20+",  label: t("stats.yearsOfImpact")     },
   ];
 
   return (
@@ -32,7 +32,7 @@ function Stats() {
       className="pt-24 pb-12"
       style={{ background: "linear-gradient(to bottom, #FDF0E8 0%, #FDF0E8 60%, #FDCCBE20 100%)" }}
     >
-      <p className="text-brand-teal text-xs tracking-[0.3em] uppercase font-medium text-center mb-12">
+      <p className="text-brand-teal text-base tracking-[0.3em] uppercase font-extrabold text-center mb-12">
         {t("stats.label")}
       </p>
       <StaggerReveal className="section-container flex flex-wrap justify-center items-center gap-y-10">
@@ -67,29 +67,39 @@ function WhyAliyah() {
 
   const cards = [
     {
-      numeral: lang === "ar" ? "١" : "1",
+      numeral: lang === "ar" ? "1" : "1",
       title: t("whyAliyah.card1Title"),
       body: t("whyAliyah.card1Body"),
     },
     {
-      numeral: lang === "ar" ? "٢" : "2",
+      numeral: lang === "ar" ? "2" : "2",
       title: t("whyAliyah.card2Title"),
       body: t("whyAliyah.card2Body"),
     },
     {
-      numeral: lang === "ar" ? "٣" : "3",
+      numeral: lang === "ar" ? "3" : "3",
       title: t("whyAliyah.card3Title"),
       body: t("whyAliyah.card3Body"),
+    },
+    {
+      numeral: lang === "ar" ? "4" : "4",
+      title: t("whyAliyah.card4Title"),
+      body: t("whyAliyah.card4Body"),
+    },
+    {
+      numeral: lang === "ar" ? "5" : "5",
+      title: t("whyAliyah.card5Title"),
+      body: t("whyAliyah.card5Body"),
     },
   ];
 
   return (
     <section ref={sectionRef} className="pt-12 pb-24" style={{ background: "linear-gradient(to bottom, #FDCCBE20 0%, #FDCCBE26 20%, #FDCCBE26 60%, #FDCCBE 100%)" }}>
-      <p className="text-brand-teal text-xs tracking-[0.3em] uppercase font-medium text-center mb-4">
+      <p className="text-brand-teal text-base tracking-[0.3em] uppercase font-medium text-center mb-4">
         {t("whyAliyah.eyebrow")}
       </p>
       <h2
-        className="font-display font-normal text-brand-dark text-center mb-16"
+        className="font-display font-extrabold text-brand-dark text-center mb-16"
         style={{ fontSize: "clamp(2.5rem, 5vw, 4rem)" }}
       >
         {t("whyAliyah.heading")}
@@ -109,15 +119,15 @@ function WhyAliyah() {
         </svg>
       </div>
 
-      <StaggerReveal className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-5xl mx-auto px-6">
+      <StaggerReveal className="flex flex-wrap justify-center gap-8 max-w-5xl mx-auto px-6">
         {cards.map((c) => (
           <motion.div
             key={c.numeral}
             variants={staggerChild}
-            className="bg-white/70 backdrop-blur-sm rounded-3xl p-8 text-center shadow-sm border border-brand-blush/30"
+            className="bg-white/70 backdrop-blur-sm rounded-3xl p-8 text-center shadow-sm border border-brand-blush/30 w-full sm:w-[calc(50%-1rem)] lg:w-[calc(33.333%-1.334rem)]"
           >
             <p className="font-display text-4xl text-brand-blush mb-4">{c.numeral}</p>
-            <h3 className="font-display font-[200] text-brand-teal text-xl mb-3">{c.title}</h3>
+            <h3 className="font-display font-extrabold text-brand-teal text-xl mb-3">{c.title}</h3>
             <p className="text-brand-charcoal/60 text-sm leading-relaxed">{c.body}</p>
           </motion.div>
         ))}
@@ -136,9 +146,9 @@ function Services() {
     <section className="py-24" style={{ background: "linear-gradient(to bottom, #F6F2E9 0%, #F6F2E9 80%, #FDCCBE 100%)" }}>
       <div className="section-container">
         <Reveal className="text-center mb-14">
-          <p className="text-brand-gold text-xs tracking-[0.3em] uppercase font-medium mb-3">{t("services.eyebrow")}</p>
+          <p className="text-brand-gold text-base tracking-[0.3em] uppercase font-medium mb-3">{t("services.eyebrow")}</p>
           <h2
-            className="font-display font-medium text-brand-dark"
+            className="font-display font-extrabold text-brand-dark"
             style={{ fontSize: "clamp(2.5rem, 6vw, 5rem)" }}
           >
             {t("services.heading")}
@@ -146,7 +156,7 @@ function Services() {
         </Reveal>
 
         <StaggerReveal className="flex flex-wrap justify-center gap-5">
-          {services.map((s) => (
+          {orderedServices.map((s) => (
             <motion.div
               key={s.id}
               variants={staggerChild}
@@ -154,7 +164,7 @@ function Services() {
             >
               <span className="text-2xl text-brand-gold group-hover:text-brand-cream transition-colors duration-500 block">{s.icon}</span>
               <div className="flex-1">
-                <h3 className="font-display text-xl text-brand-dark group-hover:text-brand-cream transition-colors duration-500 mb-1.5">{lang === "ar" ? s.titleAr : s.title}</h3>
+                <h3 className="font-display font-extrabold text-xl text-brand-dark group-hover:text-brand-cream transition-colors duration-500 mb-1.5">{lang === "ar" ? s.titleAr : s.title}</h3>
                 <p className="text-xs text-brand-dark/55 group-hover:text-brand-cream/70 transition-colors duration-500 leading-relaxed">{lang === "ar" ? s.descriptionAr : s.description}</p>
               </div>
               <div className="flex items-center justify-between text-xs pt-4 border-t border-brand-cream group-hover:border-brand-cream/20 transition-colors duration-500">
@@ -178,122 +188,20 @@ function Services() {
           ))}
         </StaggerReveal>
 
-        <Reveal delay={0.3} className="text-center mt-10">
-          <Link href={`/${lang}/services`} className="text-xs text-brand-teal font-medium hover:underline underline-offset-4 tracking-wide">
-            {t("services.exploreAll")} &rarr;
-          </Link>
-        </Reveal>
-      </div>
-    </section>
-  );
-}
-
-const textTestimonials = {
-  en: [
-    {
-      quote: "[PLACEHOLDER — Client testimonial 1]",
-      author: "[PLACEHOLDER]",
-      role: "[PLACEHOLDER]",
-    },
-    {
-      quote: "[PLACEHOLDER — Client testimonial 2]",
-      author: "[PLACEHOLDER]",
-      role: "[PLACEHOLDER]",
-    },
-    {
-      quote: "[PLACEHOLDER — Client testimonial 3]",
-      author: "[PLACEHOLDER]",
-      role: "[PLACEHOLDER]",
-    },
-  ],
-  ar: [
-    {
-      quote: "[نص شهادة عميلة — سيُستبدل عند التوفر]",
-      author: "[الاسم]",
-      role: "[التعريف]",
-    },
-    {
-      quote: "[نص شهادة عميلة — سيُستبدل عند التوفر]",
-      author: "[الاسم]",
-      role: "[التعريف]",
-    },
-    {
-      quote: "[نص شهادة عميلة — سيُستبدل عند التوفر]",
-      author: "[الاسم]",
-      role: "[التعريف]",
-    },
-  ],
-};
-
-function Testimonials() {
-  const lang = useLocale();
-  const t = getTranslator(lang);
-  const items = lang === "ar" ? textTestimonials.ar : textTestimonials.en;
-
-  return (
-    <section className="bg-brand-blush py-24">
-      <div className="section-container">
-        <Reveal className="text-center mb-16">
-          <p className="text-brand-teal text-xs tracking-[0.3em] uppercase font-medium mb-4">
-            {t("testimonials.eyebrow")}
-          </p>
-          <h2
-            className="font-display font-medium text-brand-teal"
-            style={{ fontSize: "clamp(2.5rem, 6vw, 5rem)" }}
-          >
-            {t("testimonials.heading")}
-          </h2>
-          <div className="w-16 h-px bg-brand-teal/30 mx-auto mt-6" />
-        </Reveal>
-
-        <StaggerReveal className="grid grid-cols-1 md:grid-cols-3 gap-8">
-          {items.map((item, i) => (
-            <motion.div
-              key={i}
-              variants={staggerChild}
-              className="relative bg-white/60 backdrop-blur-sm rounded-3xl p-8 border border-brand-blush shadow-sm flex flex-col"
-            >
-              <div
-                className="font-display text-brand-teal/20 leading-none select-none mb-4"
-                style={{ fontSize: "5rem", lineHeight: 1 }}
-                aria-hidden="true"
-              >
-                "
-              </div>
-              <p
-                className="text-brand-dark/75 leading-relaxed flex-1 mb-6"
-                style={{ fontSize: "0.9375rem" }}
-                dir={lang === "ar" ? "rtl" : "ltr"}
-              >
-                {item.quote}
-              </p>
-              <div className="border-t border-brand-blush/60 pt-5 flex items-center gap-3">
-                <div className="w-8 h-8 rounded-full bg-brand-teal/10 flex items-center justify-center flex-shrink-0">
-                  <span className="text-brand-teal font-display font-semibold text-sm">
-                    {item.author.charAt(0)}
-                  </span>
-                </div>
-                <div>
-                  <p className="font-display font-semibold text-brand-teal text-sm">{item.author}</p>
-                  <p className="text-brand-dark/40 text-xs mt-0.5">{item.role}</p>
-                </div>
-              </div>
-            </motion.div>
-          ))}
-        </StaggerReveal>
-
         <Reveal delay={0.3} className="text-center mt-12">
           <Link
-            href={`/${lang}/proof`}
-            className="inline-block px-6 py-2.5 border border-brand-teal/40 text-brand-teal rounded-full text-xs font-medium hover:bg-brand-teal hover:text-brand-cream hover:border-brand-teal transition-all duration-300"
+            href={`/${lang}/services`}
+            className="inline-flex items-center gap-2 px-8 py-4 rounded-full bg-brand-teal text-brand-cream text-base font-semibold hover:bg-brand-teal/90 transition-all hover:scale-105 shadow-md"
           >
-            {t("testimonials.seeAll")}
+            {t("services.exploreAll")}
+            <span aria-hidden="true">&rarr;</span>
           </Link>
         </Reveal>
       </div>
     </section>
   );
 }
+
 
 function DarkStatement() {
   const lang = useLocale();
@@ -317,7 +225,7 @@ function DarkStatement() {
         style={{ opacity: quoteOpacity, scale: quoteScale }}
         className="relative z-10 max-w-3xl mx-auto px-6 text-center"
       >
-        <p className="text-brand-gold text-xs tracking-[0.4em] uppercase font-light mb-12">
+        <p className="text-brand-gold text-base tracking-[0.4em] uppercase font-bold mb-12">
           {t("darkStatement.eyebrow")}
         </p>
         <p
@@ -339,10 +247,10 @@ function BookingCTA() {
   const t = getTranslator(lang);
 
   return (
-    <section className="bg-brand-teal py-32">
+    <section className="bg-brand-teal pt-16 md:pt-24 lg:pt-32 pb-20 md:pb-24 lg:pb-32">
       <Reveal className="section-container text-center max-w-lg mx-auto">
-        <p className="text-brand-gold text-xs tracking-[0.3em] uppercase font-medium mb-4">{t("bookingCta.eyebrow")}</p>
-        <h2 className="font-display font-medium text-4xl md:text-5xl text-brand-cream mb-4">
+        <p className="text-brand-gold text-base tracking-[0.3em] uppercase font-medium mb-4">{t("bookingCta.eyebrow")}</p>
+        <h2 className="font-display font-extrabold text-4xl md:text-5xl text-brand-cream mb-4">
           {t("bookingCta.heading")}
         </h2>
         <p className="text-brand-cream/60 text-sm max-w-sm mx-auto mb-10 leading-relaxed">
@@ -374,12 +282,11 @@ export default function HomePage() {
       <HeroCanvas lang={lang} />
       <Stats />
       <WhyAliyah />
-      <div className="h-16 bg-gradient-to-b from-[#FDCCBE] to-[#035A60] pointer-events-none" />
-      <DarkStatement />
-      <div className="h-16 bg-gradient-to-b from-[#035A60] to-[#F6F2E9] pointer-events-none" />
-      <Services />
-      <Testimonials />
       <div className="h-32 bg-gradient-to-b from-[#FDCCBE] to-[#035A60] pointer-events-none" />
+      <DarkStatement />
+      <div className="h-32 bg-gradient-to-b from-[#035A60] to-[#F6F2E9] pointer-events-none" />
+      <Services />
+      <div className="h-48 bg-gradient-to-b from-brand-blush via-brand-blush/30 to-brand-teal pointer-events-none" />
       <BookingCTA />
     </CinematicWrapper>
   );

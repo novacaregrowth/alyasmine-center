@@ -4,7 +4,7 @@ import React, { useRef } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { Reveal } from "@/components/ui/reveal";
-import { motion, useInView } from "framer-motion";
+import { motion, useInView, useReducedMotion } from "framer-motion";
 import { getTranslator, type Locale } from "@/lib/i18n";
 import { useParams } from "next/navigation";
 
@@ -91,6 +91,7 @@ export default function AboutPage() {
   const ctaLineInView = useInView(ctaLineRef, { once: true, margin: "-40px" });
   const heroRef = useRef<HTMLDivElement>(null);
   const heroInView = useInView(heroRef, { once: true });
+  const prefersReducedMotion = useReducedMotion();
 
   const cbtCards = [
     { title: t("about.cbtCard1Title"), body: t("about.cbtCard1Body") },
@@ -98,13 +99,28 @@ export default function AboutPage() {
     { title: t("about.cbtCard3Title"), body: t("about.cbtCard3Body") },
   ];
 
-  const credentialNums = lang === "ar" ? ["١", "٢", "٣", "٤"] : ["1", "2", "3", "4"];
-  const credentialCards = [
-    { num: credentialNums[0], title: t("about.cred1Title"), desc: t("about.cred1Desc") },
-    { num: credentialNums[1], title: t("about.cred2Title"), desc: t("about.cred2Desc") },
-    { num: credentialNums[2], title: t("about.cred3Title"), desc: t("about.cred3Desc") },
-    { num: credentialNums[3], title: t("about.cred4Title"), desc: t("about.cred4Desc") },
-  ];
+  const credentialItems =
+    lang === "ar"
+      ? [
+          "ماجستير في الإرشاد النفسي.",
+          "متخصصة في العلاج المعرفي السلوكي CBT.",
+          "حاصلة على السند المتصل إلى النبي ﷺ في حفظ القرآن الكريم كاملاً تعلماً وتعليماً.",
+          "مدربة معتمدة من المجلس البريطاني وهيئة المعرفة والتنمية البشرية بدبي.",
+          "أكثر من 20 عاماً من الخبرة في الإرشاد والعلاج النفسي.",
+          "أكثر من 3000 ساعة من الاستشارات والتدريب النفسي.",
+          "خبيرة في تصميم البرامج العلاجية والتدريبية القائمة على العلاج المعرفي السلوكي.",
+          "خبيرة في الصحة النفسية المؤسسية وتطوير برامج التدخل النفسي.",
+        ]
+      : [
+          "Master's in Psychological Counseling.",
+          "Specialist in Cognitive Behavioural Therapy (CBT).",
+          "Holds an unbroken chain (sanad) to the Prophet ﷺ for the complete memorisation of the Noble Qur'an, in learning and teaching.",
+          "Certified trainer accredited by the British Board and the Knowledge and Human Development Authority (KHDA), Dubai.",
+          "Over 20 years of experience in psychological counselling and therapy.",
+          "Over 3,000 hours of psychological consultations and training.",
+          "Expert in designing CBT-based therapeutic and training programs.",
+          "Expert in organisational mental health and developing psychological intervention programs.",
+        ];
 
   return (
     <div>
@@ -134,7 +150,7 @@ export default function AboutPage() {
           {lang === "ar" ? "علياء البحري" : "Alia AlBahri"}
         </span>
 
-        <div className="relative z-10 flex flex-col lg:flex-row items-center w-full gap-12 lg:gap-0 py-24">
+        <div className="relative z-10 flex flex-col lg:flex-row items-center w-full gap-12 lg:gap-0 pt-32 pb-16 lg:pt-40 lg:pb-20">
           <div className="absolute start-0 top-1/2 -translate-y-1/2 w-px h-40 bg-gradient-to-b from-transparent via-brand-gold to-transparent hidden lg:block" />
 
           {/* Left column — typography */}
@@ -145,15 +161,17 @@ export default function AboutPage() {
             animate={heroInView ? "visible" : "hidden"}
             variants={heroStagger}
           >
-            <motion.p variants={heroItem} className="text-brand-gold tracking-[0.3em] text-xs uppercase mb-8">
-              {lang === "ar" ? "المستشارة النفسية" : "Psychological Counselor"}
+            <motion.p variants={heroItem} className="text-brand-gold tracking-[0.3em] text-base uppercase mb-8">
+              {lang === "ar"
+                ? "الاستشارية النفسية ومؤسسة مركز الياسمين"
+                : "Psychological Counselor & Founder of Al Yasmine Center"}
             </motion.p>
 
             <motion.h1
               variants={heroItem}
-              className="font-display font-[200] text-brand-teal leading-[0.9]"
+              className="font-display font-extrabold text-brand-teal leading-[0.9]"
               style={{
-                fontSize: lang === "ar" ? "clamp(5rem, 12vw, 11rem)" : "clamp(4rem, 9vw, 9rem)",
+                fontSize: lang === "ar" ? "clamp(3.5rem, 12vw, 11rem)" : "clamp(4rem, 9vw, 9rem)",
                 direction: lang === "ar" ? "rtl" : "ltr",
               }}
             >
@@ -171,8 +189,8 @@ export default function AboutPage() {
 
             <motion.div variants={heroItem} className="flex flex-wrap gap-3">
               {(lang === "ar"
-                ? ["مختصة CBT", "+٢٠ سنة", "+٢٠٠٠ امرأة"]
-                : ["CBT Specialist", "20+ Years", "2000+ Women"]
+                ? ["العلاج المعرفي السلوكي CBT", "+20 عامًا خبرة", "+2000 قصة تغيير"]
+                : ["CBT", "20+ Years", "2000+ Transformations"]
               ).map((label) => (
                 <span
                   key={label}
@@ -185,20 +203,20 @@ export default function AboutPage() {
 
             <motion.p variants={heroItem} className="text-brand-dark/50 text-sm leading-relaxed max-w-sm mt-8">
               {lang === "ar"
-                ? "تجمع بين الدقة السريرية والعمق الروحي — لكل امرأة مستعدة للشفاء."
-                : "Bridging clinical precision with spiritual grounding — for women ready to heal."}
+                ? "أؤمن أن كل امرأة تستحق أن تفهم نفسها وتعيش بطمأنينة وسلام مع ذاتها."
+                : "I believe every woman deserves to understand herself and live in peace and serenity with who she is."}
             </motion.p>
           </motion.div>
 
           {/* Right column — portrait card */}
           <motion.div
-            className="w-full lg:w-[40%] flex justify-center"
+            className="w-full lg:w-[40%] flex justify-center lg:justify-start"
             initial={{ opacity: 0, x: 40, scale: 0.97 }}
             whileInView={{ opacity: 1, x: 0, scale: 1 }}
             viewport={{ once: true }}
             transition={{ duration: 1, delay: 0.6, ease: [0.25, 0.1, 0.25, 1] }}
           >
-            <div className="relative">
+            <div className="relative lg:-translate-x-8">
               <div className="absolute -z-10 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[28rem] h-[28rem] bg-brand-blush/40 blur-[100px] rounded-full" />
               <div className="absolute -z-10 top-[30%] left-[30%] -translate-x-1/2 -translate-y-1/2 w-56 h-56 bg-brand-gold/[0.08] blur-[70px] rounded-full" />
               <svg
@@ -210,8 +228,8 @@ export default function AboutPage() {
               </svg>
               <motion.div
                 className="relative w-56 h-80 md:w-72 md:h-96 rounded-t-[200px] rounded-b-3xl overflow-hidden border border-brand-gold/20 shadow-2xl shadow-brand-blush/20"
-                animate={{ y: [0, -8, 0] }}
-                transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
+                animate={prefersReducedMotion ? undefined : { y: [0, -8, 0] }}
+                transition={prefersReducedMotion ? undefined : { duration: 6, repeat: Infinity, ease: "easeInOut" }}
               >
                 <Image
                   src="/images/aliyah-hero-cropped.png"
@@ -219,6 +237,7 @@ export default function AboutPage() {
                   fill
                   className="object-cover"
                   priority
+                  sizes="(max-width: 768px) 224px, 288px"
                 />
               </motion.div>
             </div>
@@ -228,19 +247,19 @@ export default function AboutPage() {
 
       {/* ── 1. HER STORY ── */}
       <Section className="bg-brand-cream">
-        <div className="relative section-container grid grid-cols-1 lg:grid-cols-2 gap-16 items-start py-32">
+        <div className="relative section-container grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-16 items-start py-20">
           <span
             className="absolute -top-8 start-4 font-display text-brand-blush/[0.07] pointer-events-none select-none leading-none"
             style={{ fontSize: "clamp(10rem, 22vw, 18rem)" }}
             aria-hidden="true"
           >
-            {lang === "ar" ? "١" : "1"}
+            {lang === "ar" ? "1" : "1"}
           </span>
 
           <div className="relative border-s-2 border-solid border-brand-blush ps-8">
-            <p className="text-brand-gold text-xs tracking-[0.2em] uppercase mb-4">{t("about.storyEyebrow")}</p>
+            <p className="text-brand-gold text-base tracking-[0.2em] uppercase mb-4">{t("about.storyEyebrow")}</p>
             <h2
-              className="font-display text-brand-teal"
+              className="font-display font-extrabold text-brand-teal"
               style={{ fontSize: "clamp(2.5rem, 6vw, 4.5rem)" }}
             >
               {t("about.storyHeading")}
@@ -254,62 +273,98 @@ export default function AboutPage() {
               style={lang === 'ar' ? { direction: 'rtl' } : undefined}
             >
               {lang === 'ar'
-                ? 'كثيرٌ من النساء يصلن إلى علياء وقد حملن ألمهن بصمت لسنوات — عبر الزواج، والأمومة، والخسارة، وثقل أن تكوني السند لكل من حولكِ. هي تعرف هذا الثقل. ليس فقط من باب التخصص، بل كامرأة عاشته.'
-                : 'Some women come to Alia having carried their pain quietly for years — through marriages, motherhood, loss, and the pressure of holding everyone else together. She knows that weight. Not just professionally, but as a woman who has lived it.'}
-            </p>
-            <p
-              className={`text-brand-dark/60 text-sm leading-[1.8] mb-6 italic ${lang === 'ar' ? 'font-display' : ''}`}
-              style={lang === 'ar' ? { direction: 'rtl' } : undefined}
-            >
-              {lang === 'ar'
-                ? '[نص علياء الشخصي هنا — سبب اختيارها لهذا المجال. مثال: "بعد أن اجتازت هي نفسها مرحلة صعبة في صمت، أدركت أن الأدوات التي غيّرت حياتها تستحق أن تصل إلى كل امرأة تحتاجها."]'
-                : 'Alia\'s personal story will be shared here once provided.'}
+                ? 'تؤمن علياء البحري أن كل امرأة تستحق أن تعيش بطمأنينة وسلام مع ذاتها، وأن التغيير الحقيقي يبدأ عندما تفهم نفسها بعمق وتمنحها ما تستحقه من اهتمام ورعاية.'
+                : 'Alia AlBahri believes that every woman deserves to live in serenity and peace with herself, and that real change begins when she understands herself deeply and gives herself the care and attention she deserves.'}
             </p>
             <p
               className={`text-brand-dark/60 text-sm leading-[1.8] mb-6 ${lang === 'ar' ? 'font-display' : ''}`}
               style={lang === 'ar' ? { direction: 'rtl' } : undefined}
             >
               {lang === 'ar'
-                ? 'على مدى أكثر من ٢٠ عامًا، تخصّصت علياء البحري في العلاج المعرفي السلوكي — ترافق النساء والفتيات في فكّ الأنماط التي تُبقيهن عالقات، واستبدالها بشيء يصمد فعلًا. هي أمٌّ لأربعة أبناء، مما يعني أنها تفهم التعقيد الخاص بعالم المرأة الداخلي: الذنب، والتوقعات، والحب الذي يُرهق أحيانًا.'
-                : 'For over 20 years, Alia AlBahri has specialised in Cognitive Behavioural Therapy — working with women and girls to untangle the patterns that keep them stuck and replace them with something that actually holds. She is a mother of four, which means she understands the particular complexity of a woman\'s inner world: the guilt, the expectations, the love that sometimes exhausts.'}
+                ? 'منذ أكثر من عشرين عامًا، رافقت آلاف النساء في رحلتهن نحو التحرر من القلق والخوف والتفكير الزائد واستعادة الثقة والاتزان النفسي.'
+                : 'For more than twenty years, she has accompanied thousands of women on their journey toward freedom from anxiety, fear, and overthinking, and toward restoring their confidence and psychological balance.'}
             </p>
             <p
               className={`text-brand-dark/60 text-sm leading-[1.8] mb-6 ${lang === 'ar' ? 'font-display' : ''}`}
               style={lang === 'ar' ? { direction: 'rtl' } : undefined}
             >
               {lang === 'ar'
-                ? 'جلساتها دافئة، منظّمة، وخاصة تمامًا. لا مصطلحات معقّدة. لا أحكام. فقط مساحة يصبح فيها التغيير الحقيقي ممكنًا.'
-                : 'Her sessions are warm, structured, and deeply private. No jargon. No judgment. Just a space where real change becomes possible.'}
-            </p>
-            <p
-              className={`text-brand-dark/60 text-sm leading-[1.8] mb-6 ${lang === 'ar' ? 'font-display' : ''}`}
-              style={lang === 'ar' ? { direction: 'rtl' } : undefined}
-            >
-              {lang === 'ar'
-                ? 'معتمدة من البورد البريطاني، وحاصلة على دبلومات في العلاج المعرفي السلوكي، وعلاج الصدمات، وإرشاد الأطفال والمراهقين — مع أكثر من ١٠٠٠ ساعة استشارية و٢٠٠٠ ساعة تدريبية في دبي — أسّست مركز الياسمين لسببٍ واحد: لأن كل امرأة تستحق عقلًا في سلام أخيرًا.'
-                : 'Certified by the British Board, holding diplomas in CBT, trauma therapy, and child and adolescent counselling — with over 1,000 counselling hours and 2,000 training hours delivered across Dubai — she founded Al Yasmine Center for one reason: every woman deserves access to a mind that is finally at peace.'}
+                ? 'تخصصت في العلاج المعرفي السلوكي CBT، وأسست مركز الياسمين ليكون مساحة آمنة تجمع بين العلم والخبرة والإنسانية، حيث يتحول الفهم إلى تغيير، والتغيير إلى أسلوب حياة.'
+                : 'She specialised in Cognitive Behavioural Therapy (CBT) and founded Al Yasmine Center as a safe space that brings together knowledge, experience, and humanity, where understanding turns into change, and change becomes a way of life.'}
             </p>
             <p
               className={`text-brand-dark/60 text-sm leading-[1.8] ${lang === 'ar' ? 'font-display' : ''}`}
               style={lang === 'ar' ? { direction: 'rtl' } : undefined}
             >
               {lang === 'ar'
-                ? 'الخطوة الأولى نحو التغيير تبدأ بحجز موعدك.'
-                : 'The first step toward lasting change starts with booking your session.'}
+                ? 'جلساتها العلاجية منظمة ومبنية على أسس علمية تمنحك الأدوات التي تحتاجينها لتعيشي حياة أكثر اتزانًا ووعيًا وسلامًا نفسيًا، لأن هدفها ليس أن تشعري بالتحسن مؤقتًا، بل أن تمتلكي المهارات التي تبقى معك مدى الحياة.'
+                : 'Her therapy sessions are structured and grounded in scientific foundations, giving you the tools you need to live a life of greater balance, awareness, and inner peace, because her goal is not for you to feel better temporarily, but for you to own skills that stay with you for life.'}
             </p>
           </div>
         </div>
       </Section>
 
-      {/* ── 2. GRADIENT BRIDGE — Cream → Teal ── */}
-      <div className="h-32 bg-gradient-to-b from-brand-cream to-brand-teal pointer-events-none relative">
+      {/* ── GRADIENT BRIDGE — Cream → Blush ── */}
+      <div className="h-48 bg-gradient-to-b from-brand-cream to-[#FDCCBE33] pointer-events-none relative">
         <div
           className="absolute inset-0 opacity-[0.04] pointer-events-none"
           style={{ backgroundImage: "url('/noise.png')", backgroundRepeat: "repeat" }}
         />
       </div>
 
-      {/* ── 3. THE SILSILA ── */}
+      {/* ── WHAT IS CBT ── */}
+      <Section className="bg-brand-blush/20">
+        <div className="section-container py-20">
+          <p className="text-brand-gold text-base tracking-[0.2em] uppercase mb-4">{t("about.cbtEyebrow")}</p>
+          <h2
+            className="font-display font-extrabold text-brand-teal mb-16"
+            style={{ fontSize: "clamp(2.5rem, 5vw, 4rem)" }}
+          >
+            {t("about.cbtHeading")}
+          </h2>
+          <motion.div
+            className="grid grid-cols-1 md:grid-cols-3 gap-6 items-start"
+            variants={staggerContainer}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, margin: "-80px" }}
+          >
+            {cbtCards.map((card, i) => (
+              <motion.div
+                key={card.title}
+                variants={staggerItem}
+                whileHover={{ y: -8 }}
+                transition={{ duration: 0.3 }}
+                className={`relative overflow-hidden ${
+                  ["", "md:mt-8", "md:mt-4"][i]
+                } bg-white/40 backdrop-blur-md rounded-ss-[60px] rounded-ee-[60px] rounded-se-2xl rounded-es-2xl border-s-4 ${
+                  ["border-s-[#ECA200]", "border-s-[#FDCCBE]", "border-s-[#7FB0B4]"][i]
+                } p-8 shadow-md hover:shadow-xl transition-shadow duration-700`}
+              >
+                <span
+                  className="absolute -top-4 end-4 font-display text-brand-blush/[0.08] pointer-events-none select-none leading-none"
+                  style={{ fontSize: "7rem" }}
+                  aria-hidden="true"
+                >
+                  {(lang === "ar" ? ["1", "2", "3"] : ["1", "2", "3"])[i]}
+                </span>
+                <h3 className="relative font-display font-extrabold text-lg text-brand-teal mb-3">{card.title}</h3>
+                <p className="relative text-brand-dark/60 text-sm leading-relaxed">{card.body}</p>
+              </motion.div>
+            ))}
+          </motion.div>
+        </div>
+      </Section>
+
+      {/* ── GRADIENT BRIDGE — Blush → Teal ── */}
+      <div className="h-48 bg-gradient-to-b from-[#FDCCBE33] to-brand-teal pointer-events-none relative">
+        <div
+          className="absolute inset-0 opacity-[0.04] pointer-events-none"
+          style={{ backgroundImage: "url('/noise.png')", backgroundRepeat: "repeat" }}
+        />
+      </div>
+
+      {/* ── THE SILSILA ── */}
       <section className="bg-brand-teal relative w-full min-h-[70vh] flex items-center justify-center text-center overflow-hidden">
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(253,204,190,0.08)_0%,transparent_70%)] pointer-events-none" />
 
@@ -342,10 +397,10 @@ export default function AboutPage() {
           transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
         />
 
-        <Reveal className="relative z-10 px-6 py-32 max-w-3xl mx-auto" direction="up">
-          <p className="text-brand-gold text-sm tracking-[0.3em] mb-8">{t("about.silsilaEyebrow")}</p>
+        <Reveal className="relative z-10 px-6 py-20 max-w-3xl mx-auto" direction="up">
+          <p className="text-brand-gold text-[19px] tracking-[0.3em] mb-8">{t("about.silsilaEyebrow")}</p>
           <h2
-            className="font-display font-[200] text-brand-cream mb-10"
+            className="font-display font-extrabold text-brand-cream mb-10"
             style={{ fontSize: "clamp(3rem, 6vw, 6rem)" }}
           >
             {t("about.silsilaHeading")}
@@ -353,106 +408,64 @@ export default function AboutPage() {
 
           <div ref={silsilaLineRef} className="flex justify-center mb-10">
             <motion.div
-              className="h-px animate-shimmer"
+              className="h-px w-32 animate-shimmer"
               style={{
                 backgroundImage: "linear-gradient(90deg, transparent 0%, #ECA200 50%, transparent 100%)",
                 backgroundSize: "200% auto",
+                transformOrigin: lang === "ar" ? "right center" : "left center",
               }}
-              initial={{ width: 0 }}
-              animate={silsilaLineInView ? { width: "8rem" } : { width: 0 }}
+              initial={{ scaleX: 0 }}
+              animate={{ scaleX: silsilaLineInView ? 1 : 0 }}
               transition={{ duration: 1.2, ease: "easeOut" }}
             />
           </div>
 
-          <p className="text-brand-cream/70 max-w-2xl mx-auto leading-relaxed text-[15px] mb-10">
+          <p className="text-brand-cream/70 max-w-2xl mx-auto leading-relaxed text-[15px] mb-6">
             {t("about.silsilaBody")}
           </p>
 
+          <p className="text-brand-cream/60 max-w-2xl mx-auto leading-relaxed text-[15px] mb-10">
+            {t("about.silsilaBody2")}
+          </p>
+
           <p className="text-brand-gold/70 text-sm tracking-[0.15em]">
-            {lang === "ar" ? "— علياء البحري" : "— Alia AlBahri"}
+            {lang === "ar" ? "علياء البحري" : "Alia AlBahri"}
           </p>
         </Reveal>
       </section>
 
-      {/* ── 4. GRADIENT BRIDGE — Teal → Blush ── */}
-      <div className="h-32 bg-gradient-to-b from-brand-teal to-[#FDCCBE33] pointer-events-none relative">
+      {/* ── GRADIENT BRIDGE — Teal → Cream ── */}
+      <div className="h-48 bg-gradient-to-b from-brand-teal to-brand-cream pointer-events-none relative">
         <div
           className="absolute inset-0 opacity-[0.04] pointer-events-none"
           style={{ backgroundImage: "url('/noise.png')", backgroundRepeat: "repeat" }}
         />
       </div>
 
-      {/* ── 5. WHAT IS CBT ── */}
-      <Section className="bg-brand-blush/20">
-        <div className="section-container py-32">
-          <p className="text-brand-gold text-xs tracking-[0.2em] uppercase mb-4">{t("about.cbtEyebrow")}</p>
-          <h2
-            className="font-display font-light text-brand-teal mb-16"
-            style={{ fontSize: "clamp(2.5rem, 5vw, 4rem)" }}
-          >
-            {t("about.cbtHeading")}
-          </h2>
-          <motion.div
-            className="grid grid-cols-1 md:grid-cols-3 gap-6 items-start"
-            variants={staggerContainer}
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true, margin: "-80px" }}
-          >
-            {cbtCards.map((card, i) => (
-              <motion.div
-                key={card.title}
-                variants={staggerItem}
-                whileHover={{ y: -8 }}
-                transition={{ duration: 0.3 }}
-                className={`relative overflow-hidden ${
-                  ["", "md:mt-8", "md:mt-4"][i]
-                } bg-white/40 backdrop-blur-md rounded-ss-[60px] rounded-ee-[60px] rounded-se-2xl rounded-es-2xl border-s-4 ${
-                  ["border-s-[#ECA200]", "border-s-[#FDCCBE]", "border-s-[#7FB0B4]"][i]
-                } p-8 shadow-md hover:shadow-xl transition-shadow duration-700`}
-              >
-                <span
-                  className="absolute -top-4 end-4 font-display text-brand-blush/[0.08] pointer-events-none select-none leading-none"
-                  style={{ fontSize: "7rem" }}
-                  aria-hidden="true"
-                >
-                  {(lang === "ar" ? ["١", "٢", "٣"] : ["1", "2", "3"])[i]}
-                </span>
-                <h3 className="relative font-display text-lg text-brand-teal mb-3">{card.title}</h3>
-                <p className="relative text-brand-dark/60 text-sm leading-relaxed">{card.body}</p>
-              </motion.div>
-            ))}
-          </motion.div>
-        </div>
-      </Section>
-
-      {/* ── GRADIENT BRIDGE — Blush → Cream ── */}
-      <div className="h-32 bg-gradient-to-b from-[#FDCCBE33] to-brand-cream pointer-events-none" />
-
-      {/* ── 6. CREDENTIALS ── */}
+      {/* ── CREDENTIALS ── */}
       <Section className="bg-brand-cream">
-        <div className="section-container py-24">
-          <p className="text-brand-gold text-xs tracking-[0.2em] uppercase mb-3">{t("about.credentialsEyebrow")}</p>
-          <h2 className="font-display font-light text-brand-teal text-4xl mb-10">{t("about.credentialsHeading")}</h2>
+        <div className="section-container py-16">
+          <p className="text-brand-gold text-base tracking-[0.2em] uppercase mb-3">{t("about.credentialsEyebrow")}</p>
+          <h2 className="font-display font-extrabold text-brand-teal text-4xl mb-10">{t("about.credentialsHeading")}</h2>
           <motion.div
-            className="grid grid-cols-1 md:grid-cols-2 gap-6"
+            className="grid grid-cols-1 md:grid-cols-2 gap-x-10 gap-y-5"
             variants={staggerContainer}
             initial="hidden"
             whileInView="visible"
             viewport={{ once: true, margin: "-80px" }}
+            dir={lang === "ar" ? "rtl" : "ltr"}
           >
-            {credentialCards.map((card) => (
+            {credentialItems.map((item) => (
               <motion.div
-                key={card.title}
+                key={item}
                 variants={staggerItem}
-                whileHover={{ y: -4 }}
-                transition={{ duration: 0.3 }}
-                className="bg-white border border-brand-teal/10 rounded-3xl p-8"
+                className="flex items-start gap-3 bg-white border border-brand-teal/10 rounded-2xl p-5"
                 style={{ boxShadow: "0 2px 20px rgba(3,90,96,0.06)" }}
               >
-                <span className="font-display text-5xl text-brand-blush block mb-4">{card.num}</span>
-                <h3 className="font-display text-lg font-semibold text-brand-teal mb-2">{card.title}</h3>
-                <p className="text-brand-dark/50 text-sm leading-relaxed">{card.desc}</p>
+                <span className="mt-1.5 w-2 h-2 rounded-full bg-brand-gold shrink-0" aria-hidden="true" />
+                <p className={`text-brand-dark/70 text-sm leading-relaxed ${lang === "ar" ? "font-display" : ""}`}>
+                  {item}
+                </p>
               </motion.div>
             ))}
           </motion.div>
@@ -460,7 +473,7 @@ export default function AboutPage() {
       </Section>
 
       {/* ── GRADIENT BRIDGE — Cream → Teal ── */}
-      <div className="h-32 bg-gradient-to-b from-brand-cream to-brand-teal pointer-events-none relative">
+      <div className="h-48 bg-gradient-to-b from-brand-cream to-brand-teal pointer-events-none relative">
         <div
           className="absolute inset-0 opacity-[0.04] pointer-events-none"
           style={{ backgroundImage: "url('/noise.png')", backgroundRepeat: "repeat" }}
@@ -468,7 +481,7 @@ export default function AboutPage() {
       </div>
 
       {/* ── CTA — The Invitation ── */}
-      <section className="bg-brand-teal text-brand-cream relative overflow-hidden min-h-[70vh] flex items-center justify-center">
+      <section className="bg-brand-teal text-brand-cream relative overflow-hidden min-h-[70vh] flex items-center justify-center pb-20 lg:pb-0">
         <div className="absolute inset-0 bg-grain pointer-events-none" />
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(253,204,190,0.10)_0%,transparent_65%)] pointer-events-none" />
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_70%_30%,rgba(236,162,0,0.06)_0%,transparent_50%)] pointer-events-none" />
@@ -497,12 +510,13 @@ export default function AboutPage() {
           transition={{ duration: 9, repeat: Infinity, ease: "easeInOut" }}
         />
 
-        <div className="relative z-10 text-center max-w-lg mx-auto px-6 py-32">
+        <div className="relative z-10 text-center max-w-lg mx-auto px-6 py-20">
           <div ref={ctaLineRef} className="flex justify-center mb-10">
             <motion.div
-              className="w-px bg-gradient-to-b from-brand-gold/0 via-brand-gold to-brand-gold/0"
-              initial={{ height: 0, opacity: 0 }}
-              animate={ctaLineInView ? { height: "5rem", opacity: 1 } : { height: 0, opacity: 0 }}
+              className="w-px h-20 bg-gradient-to-b from-brand-gold/0 via-brand-gold to-brand-gold/0"
+              style={{ transformOrigin: "top center" }}
+              initial={{ scaleY: 0, opacity: 0 }}
+              animate={{ scaleY: ctaLineInView ? 1 : 0, opacity: ctaLineInView ? 1 : 0 }}
               transition={{ duration: 1.2, ease: "easeOut" }}
             />
           </div>
@@ -513,14 +527,16 @@ export default function AboutPage() {
             variants={ctaStagger}
             className="flex flex-col items-center"
           >
-            <motion.p
-              variants={ctaItem}
-              className="font-display text-brand-cream tracking-[0.05em] mb-8"
-              style={{ fontSize: "clamp(1.8rem, 4vw, 3rem)" }}
-              dir={lang === "ar" ? "rtl" : "ltr"}
-            >
-              {t("about.ctaLead")}
-            </motion.p>
+            {t("about.ctaLead") && (
+              <motion.p
+                variants={ctaItem}
+                className="font-display text-brand-cream tracking-[0.05em] mb-8"
+                style={{ fontSize: "clamp(1.8rem, 4vw, 3rem)" }}
+                dir={lang === "ar" ? "rtl" : "ltr"}
+              >
+                {t("about.ctaLead")}
+              </motion.p>
+            )}
 
             <motion.div
               variants={ctaItem}
@@ -533,8 +549,9 @@ export default function AboutPage() {
 
             <motion.h2
               variants={ctaItem}
-              className="font-display font-light text-brand-cream mb-6"
+              className="font-display font-extrabold text-brand-cream mb-6 text-balance"
               style={{ fontSize: "clamp(2.2rem, 5vw, 3.8rem)" }}
+              dir={lang === "ar" ? "rtl" : "ltr"}
             >
               {t("about.ctaHeading")}
             </motion.h2>
@@ -542,10 +559,9 @@ export default function AboutPage() {
             <motion.p
               variants={ctaItem}
               className="text-sm text-brand-cream/40 max-w-sm mb-10 leading-relaxed"
+              dir={lang === "ar" ? "rtl" : "ltr"}
             >
-              {lang === "ar"
-                ? "خطوتكِ الأولى نحو التغيير تبدأ من هنا."
-                : "Take the first step toward real, lasting change."}
+              {t("about.ctaBody")}
             </motion.p>
 
             <motion.div variants={ctaItem} className="relative mb-12">
@@ -561,14 +577,6 @@ export default function AboutPage() {
                 {t("about.ctaCta")}
               </Link>
             </motion.div>
-
-            <motion.p
-              variants={ctaItem}
-              className="font-display text-xs text-brand-gold/30 tracking-wide"
-              dir={lang === "ar" ? "rtl" : "ltr"}
-            >
-              {t("about.ctaClosing")}
-            </motion.p>
           </motion.div>
         </div>
       </section>

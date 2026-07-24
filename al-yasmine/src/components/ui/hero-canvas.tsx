@@ -2,13 +2,12 @@
 
 import React, { useEffect, useRef, useState, useCallback } from "react";
 import Link from "next/link";
-import Image from "next/image";
 import { motion, useScroll, useTransform } from "framer-motion";
 import { ArrowDown } from "lucide-react";
 import { getTranslator, type Locale } from "@/lib/i18n";
 
 const TOTAL_FRAMES = 193;
-const FRAME_OFFSET = 50; // skip first ~26% — start with flower quarter-open
+const FRAME_OFFSET = 100; // skip first ~52%, start with flower mid-bloom
 const ACTIVE_FRAMES = TOTAL_FRAMES - FRAME_OFFSET;
 
 const frameSrc = (n: number) =>
@@ -53,13 +52,13 @@ export function HeroCanvas({ lang = "en" }: { lang?: Locale }) {
     offset: ["start start", "end start"],
   });
 
-  const heroOpacity  = useTransform(scrollYProgress, [0.35, 0.47], [1, 0]);
-  const extraDark    = useTransform(scrollYProgress, [0.42, 0.55], [0, 0.3]);
-  const quoteOpacity = useTransform(scrollYProgress, [0.47, 0.57, 0.72, 0.78], [0, 1, 1, 0]);
-  const quoteY       = useTransform(scrollYProgress, [0.47, 0.60], [28, 0]);
-  const attrOpacity  = useTransform(scrollYProgress, [0.54, 0.64, 0.72, 0.78], [0, 1, 1, 0]);
-  const attrY        = useTransform(scrollYProgress, [0.54, 0.64], [14, 0]);
-  const bottomGradientOpacity = useTransform(scrollYProgress, [0.72, 0.85], [0, 1]);
+  const heroOpacity  = useTransform(scrollYProgress, [0.42, 0.58], [1, 0]);
+  const extraDark    = useTransform(scrollYProgress, [0.50, 0.65], [0, 0.3]);
+  const quoteOpacity = useTransform(scrollYProgress, [0.55, 0.65, 0.78, 0.85], [0, 1, 1, 0]);
+  const quoteY       = useTransform(scrollYProgress, [0.55, 0.68], [14, 0]);
+  const attrOpacity  = useTransform(scrollYProgress, [0.62, 0.72, 0.78, 0.85], [0, 1, 1, 0]);
+  const attrY        = useTransform(scrollYProgress, [0.62, 0.72], [8, 0]);
+  const bottomGradientOpacity = useTransform(scrollYProgress, [0.78, 0.92], [0, 1]);
 
   const drawFrame = useCallback((index: number) => {
     const canvas = canvasRef.current;
@@ -129,7 +128,7 @@ export function HeroCanvas({ lang = "en" }: { lang?: Locale }) {
   }, [scrollYProgress, drawFrame]);
 
   return (
-    <div ref={containerRef} style={{ height: "500vh" }} className="relative bg-black">
+    <div ref={containerRef} style={{ height: "280vh" }} className="relative bg-black">
       <div className="sticky top-0 w-full h-screen">
         <canvas ref={canvasRef} className="absolute inset-0 w-full h-full" />
 
@@ -145,28 +144,12 @@ export function HeroCanvas({ lang = "en" }: { lang?: Locale }) {
           style={{ opacity: heroOpacity }}
         >
           <motion.div
-            className="flex justify-center mb-8"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: ready ? 1 : 0 }}
-            transition={{ delay: 0.4 }}
-          >
-            <Image
-              src="/images/al-yasmine-center-logo-light.png"
-              alt="Al Yasmine Center"
-              width={200}
-              height={70}
-              className="h-14 w-auto"
-              priority
-            />
-          </motion.div>
-
-          <motion.div
             initial={{ opacity: 0, y: 24 }}
             animate={{ opacity: ready ? 1 : 0, y: ready ? 0 : 24 }}
             transition={{ duration: 1, ease: [0.22, 1, 0.36, 1] }}
           >
             <h1
-              className="font-display font-medium text-white mb-6 tracking-tight"
+              className="font-display font-extrabold text-white/70 mb-6 tracking-tight"
               style={{
                 fontSize: lang === "ar" ? "clamp(2.8rem, 7vw, 6.5rem)" : "clamp(4rem, 10vw, 9rem)",
                 lineHeight: lang === "ar" ? "1.2" : "0.9",
@@ -215,7 +198,7 @@ export function HeroCanvas({ lang = "en" }: { lang?: Locale }) {
             style={{ opacity: attrOpacity, y: attrY }}
           >
             <div className="w-12 h-px bg-brand-gold" />
-            <p className="text-brand-gold text-xs tracking-[0.3em] uppercase">
+            <p className="text-brand-gold text-base tracking-[0.3em] uppercase">
               {t("hero.quoteAttribution")}
             </p>
           </motion.div>

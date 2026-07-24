@@ -11,7 +11,7 @@ import {
 import type { MotionValue } from "framer-motion";
 import { ChevronDown } from "lucide-react";
 import { Reveal, StaggerReveal, staggerChild } from "@/components/ui/reveal";
-import { CalendlyEmbed } from "@/components/booking/CalendlyEmbed";
+import { JasmineBloom } from "@/components/ui/jasmine-bloom";
 import { siteConfig } from "@/lib/config";
 import type { Locale } from "@/lib/i18n";
 
@@ -60,27 +60,6 @@ const FaqItem = ({ question, answer, isOpen, onToggle }: FaqItemProps) => (
 
 // ─── Bloom Interlude Constants ───────────────────────────────────────────────
 
-const BLOOM_PETAL_D =
-  "M 210 210 C 190 160, 188 100, 210 50 C 232 100, 230 160, 210 210 Z";
-const BLOOM_VEIN_D = "M 210 200 Q 209 140, 210 60";
-
-const BLOOM_PETAL_TIMING = [
-  { rotation: 0, startAt: 0.05 },
-  { rotation: 72, startAt: 0.15 },
-  { rotation: 144, startAt: 0.25 },
-  { rotation: 216, startAt: 0.35 },
-  { rotation: 288, startAt: 0.45 },
-];
-
-const STAMEN_LINES = [
-  { x2: 210, y2: 192 },
-  { x2: 226, y2: 201 },
-  { x2: 226, y2: 219 },
-  { x2: 210, y2: 228 },
-  { x2: 194, y2: 219 },
-  { x2: 194, y2: 201 },
-];
-
 const PETAL_RAIN_CONFIGS = [
   { x: 8, size: 20, startY: "-3%", endY: "85%", rotStart: -15, rotEnd: 120, blur: "", opacityMax: 0.6, isBlush: false },
   { x: 15, size: 16, startY: "10%", endY: "95%", rotStart: 30, rotEnd: -90, blur: "blur-[1px]", opacityMax: 0.5, isBlush: true },
@@ -120,49 +99,6 @@ const GOLD_PARTICLE_CONFIGS = [
 ];
 
 // ─── Bloom Interlude Sub-Components ─────────────────────────────────────────
-
-interface BloomPetalProps {
-  rotation: number;
-  startAt: number;
-  scrollYProgress: MotionValue<number>;
-}
-
-const BloomPetal = ({ rotation, startAt, scrollYProgress }: BloomPetalProps) => {
-  const pathLength = useTransform(
-    scrollYProgress,
-    [startAt, startAt + 0.15],
-    [0, 1]
-  );
-  const fillOpacity = useTransform(
-    scrollYProgress,
-    [startAt, startAt + 0.15],
-    [0, 0.85]
-  );
-  const veinOpacity = useTransform(
-    scrollYProgress,
-    [startAt + 0.05, startAt + 0.15],
-    [0, 0.3]
-  );
-
-  return (
-    <g transform={`rotate(${rotation} 210 210)`}>
-      <motion.path
-        d={BLOOM_PETAL_D}
-        fill="#FDF0EC"
-        stroke="#ECA200"
-        strokeWidth={0.5}
-        style={{ pathLength, fillOpacity }}
-      />
-      <motion.path
-        d={BLOOM_VEIN_D}
-        fill="none"
-        stroke="#ECA200"
-        strokeWidth={0.3}
-        style={{ pathLength, opacity: veinOpacity }}
-      />
-    </g>
-  );
-};
 
 interface DriftingPetalProps {
   config: (typeof PETAL_RAIN_CONFIGS)[number];
@@ -273,7 +209,6 @@ export default function BookingPage({ lang }: BookingPageProps) {
 
   const bloomRotate = useTransform(interludeProgress, [0, 1], ["-8deg", "8deg"]);
   const bloomScale = useTransform(interludeProgress, [0, 0.5, 1], [0.85, 1, 1.05]);
-  const stamenOpacity = useTransform(interludeProgress, [0.5, 0.65], [0, 1]);
   const glowScale = useTransform(interludeProgress, [0, 0.5, 1], [0.8, 1.2, 1.0]);
   const glowOpacity = useTransform(
     interludeProgress,
@@ -283,24 +218,24 @@ export default function BookingPage({ lang }: BookingPageProps) {
 
   const steps = [
     {
-      num: isAr ? "١" : "1",
-      title: isAr ? "احجزي موعدك" : "Book Your Session",
+      num: isAr ? "1" : "1",
+      title: isAr ? "تواصلي معنا" : "Book Your Session",
       body: isAr
-        ? "اختاري الوقت المناسب لكِ. بلا ضغط، وبشروطك."
+        ? "أرسلي لنا عبر الواتساب وسيساعدك فريق مركز الياسمين في اختيار الموعد والخدمة الأنسب لك"
         : "She picks a time that works for her. At her own pace, on her own terms.",
     },
     {
-      num: isAr ? "٢" : "2",
-      title: isAr ? "تعرّفي على علياء" : "Meet Alia",
+      num: isAr ? "2" : "2",
+      title: isAr ? "جلسة استشارة" : "Meet Alia",
       body: isAr
-        ? "محادثة دافئة وخاصة لمدة ٣٠ دقيقة. تستمع. تفهم. بلا أحكام."
+        ? "لقاء خاص مع أ . علياء البحري لفهم ما تمرين به وتحديد احتياجاتك وأهدافك بكل سرية واهتمام"
         : "A warm, private 30-minute conversation. She listens. She understands. No judgment.",
     },
     {
-      num: isAr ? "٣" : "3",
-      title: isAr ? "ابدأي رحلتك" : "Begin Your Journey",
+      num: isAr ? "3" : "3",
+      title: isAr ? "ابدئي خطتك العلاجية" : "Begin Your Journey",
       body: isAr
-        ? "إذا شعرتِ أنه مناسب، تخطين الخطوة التالية معًا. بشروطك، وبوتيرتك."
+        ? "بعد التقييم نضع معك الخطوة الأنسب سواء كانت جلسات فردية أو برنامجًا علاجيًا يناسب احتياج"
         : "If it feels right, you take the next step together. On your terms, at your pace.",
     },
   ];
@@ -309,8 +244,8 @@ export default function BookingPage({ lang }: BookingPageProps) {
     {
       q: isAr ? "كيف أبدأ؟" : "How do I get started?",
       a: isAr
-        ? "ابدأي بحجز استشارتك الأولى. هي جلسة تقييم مدتها ٩٠ دقيقة تستمع فيها علياء إلى وضعكِ وتبنيان معاً خطة عمل مناسبة — الخطوة الأساسية قبل أي رحلة علاجية."
-        : "Start by booking your initial consultation — a 90-minute session where Alia listens, understands your situation, and together you build a personalised action plan. It\u2019s the essential first step before beginning any therapeutic journey.",
+        ? "ابدأي بحجز استشارتك الأولى. هي جلسة تقييم مدتها 90 دقيقة تستمع فيها علياء إلى وضعكِ وتبنيان معاً خطة عمل مناسبة. الخطوة الأساسية قبل أي رحلة علاجية."
+        : "Start by booking your initial consultation, a 90-minute session where Alia listens, understands your situation, and together you build a personalised action plan. It\u2019s the essential first step before beginning any therapeutic journey.",
     },
     {
       q: isAr ? "هل كل ما أشاركه سري؟" : "Is everything I share confidential?",
@@ -321,8 +256,8 @@ export default function BookingPage({ lang }: BookingPageProps) {
     {
       q: isAr ? "ماذا لو لم أكن متأكدة أنني مستعدة؟" : "What if I\u2019m not sure I\u2019m ready?",
       a: isAr
-        ? "لا تحتاجين أن تكوني مستعدة تماماً — فقط أن تحضري وأن تبدأي."
-        : "You don\u2019t need to be fully ready \u2014 you just need to show up and begin.",
+        ? "لا تحتاجين أن تكوني مستعدة تماماً، فقط أن تحضري وأن تبدأي."
+        : "You don\u2019t need to be fully ready, you just need to show up and begin.",
     },
     {
       q: isAr ? "هل يمكنني الحجز بالعربية؟" : "Can I book in Arabic?",
@@ -468,7 +403,7 @@ export default function BookingPage({ lang }: BookingPageProps) {
         />
 
         {/* Hero content */}
-        <div className="relative z-10 max-w-5xl mx-auto px-6 py-40 text-center">
+        <div className="relative z-10 max-w-5xl mx-auto px-6 py-20 md:py-32 lg:py-40 text-center">
 
           {/* Gold anchor line */}
           <motion.div
@@ -482,23 +417,23 @@ export default function BookingPage({ lang }: BookingPageProps) {
 
           <Reveal direction="up" delay={0.1}>
             <p
-              className="text-brand-gold text-xs tracking-[0.2em] uppercase font-light mb-6 font-display"
+              className="text-brand-gold text-base tracking-[0.2em] uppercase font-light mb-6 font-display"
               style={isAr ? { direction: "rtl" } : undefined}
             >
-              {isAr ? "ابدأي رحلتك" : "Begin Your Journey"}
+              {isAr ? "إطمئني … أنت في المكان الصحيح" : "Begin Your Journey"}
             </p>
           </Reveal>
 
           <Reveal direction="up" delay={0.2}>
             <h1
-              className="font-display font-normal text-brand-teal max-w-3xl mx-auto leading-tight"
+              className="font-display font-extrabold text-brand-teal max-w-3xl mx-auto leading-tight"
               style={{
                 fontSize: isAr ? "clamp(2.2rem, 5vw, 3.8rem)" : "clamp(2.4rem, 5vw, 4rem)",
                 direction: isAr ? "rtl" : "ltr",
               }}
             >
               {isAr
-                ? "محادثة واحدة قد تغيّر كل شيء."
+                ? "أنتِ على بُعد خطوة واحدة"
                 : "A conversation that could change everything."}
             </h1>
           </Reveal>
@@ -509,99 +444,117 @@ export default function BookingPage({ lang }: BookingPageProps) {
               style={isAr ? { direction: "rtl" } : undefined}
             >
               {isAr
-                ? "تستحقين أن تشعري بالدعم. الخطوة الأولى دائمًا هي الأصعب — لكنها الأهم. ابدأي اليوم."
-                : "You deserve to feel supported. The first step is always the hardest \u2014 but it\u2019s the most important one. Begin today."}
+                ? "سنرافقك خطوة بخطوة لتبدئي رحلتك النفسية بكل خصوصية وطمأنينة"
+                : "You deserve to feel supported. The first step is always the hardest, but it\u2019s the most important one. Begin today."}
             </p>
           </Reveal>
         </div>
       </section>
 
-      {/* ── Bridge: Hero → Interlude ── */}
-      <div className="h-32 bg-gradient-to-b from-brand-cream to-brand-cream/0 pointer-events-none" />
+      {/* ── Bridge: Hero (cream) → Calendly (teal) ── */}
+      <div className="h-48 bg-gradient-to-b from-brand-cream via-brand-blush/30 to-brand-teal pointer-events-none" />
+
+      {/* ── 2. Calendly Embed ── */}
+      <section className="bg-brand-teal relative overflow-hidden">
+        <div className="max-w-5xl mx-auto px-6 py-16 md:py-24 lg:py-32">
+          <Reveal direction="up" className="text-center mb-12">
+            <p
+              className="text-brand-gold text-base tracking-[0.2em] uppercase font-light mb-4 font-display"
+              style={isAr ? { direction: "rtl" } : undefined}
+            >
+              {isAr ? "الحجز" : "Reserve Your Session"}
+            </p>
+            <h2
+              className="font-display font-extrabold text-white"
+              style={{
+                fontSize: "clamp(2rem, 4vw, 3rem)",
+                direction: isAr ? "rtl" : "ltr",
+              }}
+            >
+              {isAr
+                ? "نحن بانتظارك"
+                : "Choose a time that feels right."}
+            </h2>
+            <p
+              className="text-white/70 text-sm leading-relaxed max-w-lg mx-auto mt-4"
+              style={isAr ? { direction: "rtl" } : undefined}
+            >
+              {isAr
+                ? "تواصلي معنا عبر الواتساب وسنساعدك في اختيار ما يناسب احتياجاتك بكل سرية واهتمام"
+                : "Reach out directly on WhatsApp to arrange your session. Completely private and safe."}
+            </p>
+          </Reveal>
+
+          <Reveal direction="up" delay={0.2} className="flex flex-col items-center">
+            <a
+              href={`https://wa.me/${siteConfig.whatsapp}?text=${encodeURIComponent(
+                isAr
+                  ? "السلام عليكم، أرغب في حجز جلسة مع مركز الياسمين."
+                  : "Hello, I'd like to book a session with Al Yasmine Center."
+              )}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="group inline-flex items-center gap-3 rounded-full bg-brand-gold px-10 py-5 text-brand-teal font-display font-semibold text-lg shadow-lg transition-[transform,opacity] duration-300 hover:opacity-90 hover:-translate-y-0.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold focus-visible:ring-offset-2 focus-visible:ring-offset-brand-teal"
+            >
+              <svg
+                viewBox="0 0 24 24"
+                fill="currentColor"
+                className="w-6 h-6 shrink-0"
+                aria-hidden="true"
+              >
+                <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51l-.57-.01c-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.999-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z" />
+              </svg>
+              <span>{isAr ? "تواصلي عبر واتساب" : "Chat on WhatsApp"}</span>
+            </a>
+            <p className="text-white/50 text-xs mt-4 tracking-wide" dir="ltr">
+              {siteConfig.phone}
+            </p>
+          </Reveal>
+        </div>
+      </section>
+
+      {/* ── Bridge: Calendly (teal) → Interlude (cream) ── */}
+      <div className="h-48 bg-gradient-to-b from-brand-teal via-brand-blush/30 to-brand-cream pointer-events-none" />
 
       {/* ── Cinematic Bloom Interlude ── */}
       {prefersReducedMotion ? (
         <section
-          className="relative overflow-hidden"
+          className="relative overflow-hidden h-[45vh] md:h-[60vh]"
           style={{
-            height: "60vh",
             background: "linear-gradient(to bottom, #F6F2E9 0%, #FDCCBE 100%)",
           }}
           aria-hidden="true"
         >
-          <div className="absolute top-0 left-0 right-0 h-32 bg-gradient-to-b from-brand-cream to-transparent pointer-events-none z-10" />
+          <div className="absolute top-0 left-0 right-0 h-16 md:h-48 bg-gradient-to-b from-brand-cream to-transparent pointer-events-none z-10" />
           <div
-            className="absolute left-1/2 top-[55%] -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] rounded-full bg-brand-gold/15 blur-3xl pointer-events-none z-[1]"
+            className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[400px] h-[400px] md:w-[600px] md:h-[600px] rounded-full bg-brand-gold/15 blur-3xl pointer-events-none z-[1]"
             aria-hidden="true"
           />
-          <div
-            className="absolute left-1/2 top-[55%] -translate-x-1/2 -translate-y-1/2 w-[280px] h-[280px] md:w-[420px] md:h-[420px] pointer-events-none z-[5]"
-            style={{ filter: "drop-shadow(0 8px 40px rgba(236,162,0,0.15))" }}
-          >
-            <svg
-              viewBox="0 0 420 420"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
-              className="w-full h-full"
+          <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-[5]">
+            <div
+              className="w-[280px] md:w-[400px] lg:w-[520px] aspect-square"
+              style={{ filter: "drop-shadow(0 8px 40px rgba(236,162,0,0.15))" }}
             >
-              {BLOOM_PETAL_TIMING.map((petal, i) => (
-                <g key={i} transform={`rotate(${petal.rotation} 210 210)`}>
-                  <path
-                    d={BLOOM_PETAL_D}
-                    fill="#FDF0EC"
-                    fillOpacity={0.85}
-                    stroke="#ECA200"
-                    strokeWidth={0.5}
-                  />
-                  <path
-                    d={BLOOM_VEIN_D}
-                    fill="none"
-                    stroke="#ECA200"
-                    strokeWidth={0.3}
-                    strokeOpacity={0.3}
-                  />
-                </g>
-              ))}
-              <circle cx="210" cy="210" r="12" fill="#ECA200" fillOpacity={0.6} />
-              {STAMEN_LINES.map((line, i) => (
-                <g key={i}>
-                  <line
-                    x1="210"
-                    y1="210"
-                    x2={line.x2}
-                    y2={line.y2}
-                    stroke="#ECA200"
-                    strokeWidth={1}
-                  />
-                  <circle
-                    cx={line.x2}
-                    cy={line.y2}
-                    r={2}
-                    fill="#ECA200"
-                    fillOpacity={0.8}
-                  />
-                </g>
-              ))}
-            </svg>
+              <JasmineBloom seed={7} size="100%" toneClass="text-brand-teal" />
+            </div>
           </div>
-          <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-b from-transparent to-brand-blush pointer-events-none z-10" />
+          <div className="absolute bottom-0 left-0 right-0 h-16 md:h-48 bg-gradient-to-b from-transparent to-brand-blush pointer-events-none z-10" />
         </section>
       ) : (
         <section
           ref={interludeRef}
-          className="relative overflow-hidden"
+          className="relative overflow-hidden h-[45vh] md:h-[60vh]"
           style={{
-            height: "60vh",
             background: "linear-gradient(to bottom, #F6F2E9 0%, #FDCCBE 100%)",
           }}
           aria-hidden="true"
         >
           {/* Transition in — hero cream bleed */}
-          <div className="absolute top-0 left-0 right-0 h-32 bg-gradient-to-b from-brand-cream to-transparent pointer-events-none z-10" />
+          <div className="absolute top-0 left-0 right-0 h-16 md:h-48 bg-gradient-to-b from-brand-cream to-transparent pointer-events-none z-10" />
 
           {/* Element 4 — Radial glow behind bloom */}
           <motion.div
-            className="absolute left-1/2 top-[55%] -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] rounded-full bg-brand-gold/15 blur-3xl pointer-events-none z-[1]"
+            className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[400px] h-[400px] md:w-[600px] md:h-[600px] rounded-full bg-brand-gold/15 blur-3xl pointer-events-none z-[1]"
             style={{ scale: glowScale, opacity: glowOpacity }}
             aria-hidden="true"
           />
@@ -625,78 +578,52 @@ export default function BookingPage({ lang }: BookingPageProps) {
           ))}
 
           {/* Element 1 — Central jasmine bloom */}
-          <motion.div
-            className="absolute left-1/2 top-[55%] -translate-x-1/2 -translate-y-1/2 w-[280px] h-[280px] md:w-[420px] md:h-[420px] pointer-events-none z-[5]"
-            style={{
-              rotate: bloomRotate,
-              scale: bloomScale,
-              filter: "drop-shadow(0 8px 40px rgba(236,162,0,0.15))",
-            }}
-            aria-hidden="true"
-          >
-            <svg
-              viewBox="0 0 420 420"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
-              className="w-full h-full"
+          <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-[5]">
+            <motion.div
+              className="w-[280px] md:w-[400px] lg:w-[520px] aspect-square"
+              style={{
+                rotate: bloomRotate,
+                scale: bloomScale,
+                filter: "drop-shadow(0 8px 40px rgba(236,162,0,0.15))",
+              }}
+              aria-hidden="true"
             >
-              {BLOOM_PETAL_TIMING.map((petal, i) => (
-                <BloomPetal
-                  key={i}
-                  rotation={petal.rotation}
-                  startAt={petal.startAt}
-                  scrollYProgress={interludeProgress}
-                />
-              ))}
-              <circle cx="210" cy="210" r="12" fill="#ECA200" fillOpacity={0.6} />
-              <motion.g style={{ opacity: stamenOpacity }}>
-                {STAMEN_LINES.map((line, i) => (
-                  <g key={i}>
-                    <line
-                      x1="210"
-                      y1="210"
-                      x2={line.x2}
-                      y2={line.y2}
-                      stroke="#ECA200"
-                      strokeWidth={1}
-                    />
-                    <circle
-                      cx={line.x2}
-                      cy={line.y2}
-                      r={2}
-                      fill="#ECA200"
-                      fillOpacity={0.8}
-                    />
-                  </g>
-                ))}
-              </motion.g>
-            </svg>
-          </motion.div>
+              <JasmineBloom seed={7} size="100%" toneClass="text-brand-teal" />
+            </motion.div>
+          </div>
 
           {/* Transition out — bleed into What to Expect */}
-          <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-b from-transparent to-brand-blush pointer-events-none z-10" />
+          <div className="absolute bottom-0 left-0 right-0 h-16 md:h-48 bg-gradient-to-b from-transparent to-brand-blush pointer-events-none z-10" />
         </section>
       )}
 
-      {/* ── 2. What to Expect ── */}
+      {/* ── 3. What to Expect ── */}
       <section className="bg-brand-blush relative overflow-hidden">
-        <div className="max-w-5xl mx-auto px-6 py-32">
+        <div className="max-w-5xl mx-auto px-6 py-16 md:py-24 lg:py-32">
           <Reveal direction="up" className="text-center mb-16">
             <p
-              className="text-brand-gold text-xs tracking-[0.2em] uppercase font-light mb-4 font-display"
+              className="text-brand-gold text-base tracking-[0.2em] uppercase font-light mb-4 font-display"
               style={isAr ? { direction: "rtl" } : undefined}
             >
               {isAr ? "الخطوات" : "The Process"}
             </p>
             <h2
-              className="font-display font-medium text-brand-teal"
+              className="font-display font-extrabold text-brand-teal"
               style={{
                 fontSize: "clamp(2rem, 4vw, 3rem)",
                 direction: isAr ? "rtl" : "ltr",
               }}
             >
-              {isAr ? "بسيطة. خاصة. لكِ." : "Simple. Private. Yours."}
+              {isAr ? "بداية بسيطة وآمنة" : "Simple. Private. Yours."}
             </h2>
+            {isAr && (
+              <p
+                className="text-brand-dark/70 text-sm leading-relaxed max-w-xl mx-auto mt-6 font-display"
+                style={{ direction: "rtl" }}
+              >
+                ثلاث خطوات واضحة تبدأ برسالة وتنتهي بخطة تناسب احتياجك
+              </p>
+            )}
           </Reveal>
 
           <StaggerReveal
@@ -715,7 +642,7 @@ export default function BookingPage({ lang }: BookingPageProps) {
                   {step.num}
                 </span>
                 <h3
-                  className="font-display text-lg text-brand-teal mb-3"
+                  className="font-display font-extrabold text-lg text-brand-teal mb-3"
                   style={isAr ? { direction: "rtl" } : undefined}
                 >
                   {step.title}
@@ -732,58 +659,21 @@ export default function BookingPage({ lang }: BookingPageProps) {
         </div>
       </section>
 
-      {/* ── Bridge: Blush → Teal ── */}
-      <div className="h-48 bg-gradient-to-b from-brand-blush via-brand-blush/30 to-brand-teal pointer-events-none" />
-
-      {/* ── 3. Calendly Embed ── */}
-      <section className="bg-brand-teal relative overflow-hidden">
-        <div className="max-w-5xl mx-auto px-6 py-32">
-          <Reveal direction="up" className="text-center mb-12">
-            <p
-              className="text-brand-gold text-xs tracking-[0.2em] uppercase font-light mb-4 font-display"
-              style={isAr ? { direction: "rtl" } : undefined}
-            >
-              {isAr ? "الحجز" : "Reserve Your Session"}
-            </p>
-            <h2
-              className="font-display font-[200] text-white"
-              style={{
-                fontSize: "clamp(2rem, 4vw, 3rem)",
-                direction: isAr ? "rtl" : "ltr",
-              }}
-            >
-              {isAr
-                ? "اختاري الوقت الذي يناسبك."
-                : "Choose a time that feels right."}
-            </h2>
-            <p
-              className="text-white/70 text-sm leading-relaxed max-w-lg mx-auto mt-4"
-              style={isAr ? { direction: "rtl" } : undefined}
-            >
-              {isAr
-                ? "جلستك خاصة وآمنة تمامًا."
-                : "Your session is completely private and safe."}
-            </p>
-          </Reveal>
-
-          <Reveal direction="up" delay={0.2} className="max-w-3xl mx-auto">
-            <CalendlyEmbed url={siteConfig.calendlyUrl} />
-          </Reveal>
-        </div>
-      </section>
+      {/* ── Bridge: What to Expect (blush) → FAQ (teal) ── */}
+      <div className="h-64 bg-gradient-to-b from-brand-blush via-brand-blush/30 to-brand-teal pointer-events-none" />
 
       {/* ── 4. FAQ (continuous teal) ── */}
-      <section className="bg-brand-teal relative overflow-hidden">
-        <div className="max-w-5xl mx-auto px-6 pt-8 pb-32">
+      <section className="bg-brand-teal relative overflow-hidden pb-20 lg:pb-0">
+        <div className="max-w-5xl mx-auto px-6 pt-8 pb-20 md:pb-24 lg:pb-32">
           <Reveal direction="up" className="text-center mb-12">
             <p
-              className="text-brand-gold text-xs tracking-[0.2em] uppercase font-light mb-4 font-display"
+              className="text-brand-gold text-base tracking-[0.2em] uppercase font-light mb-4 font-display"
               style={isAr ? { direction: "rtl" } : undefined}
             >
               {isAr ? "أسئلة شائعة" : "Common Questions"}
             </p>
             <h2
-              className="font-display font-[200] text-white"
+              className="font-display font-extrabold text-white"
               style={{
                 fontSize: "clamp(2rem, 4vw, 3rem)",
                 direction: isAr ? "rtl" : "ltr",

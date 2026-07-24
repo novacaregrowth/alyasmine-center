@@ -4,7 +4,7 @@ import ar from "@/locales/ar.json";
 export type Locale = "en" | "ar";
 
 export const locales: Locale[] = ["en", "ar"];
-export const defaultLocale: Locale = "en";
+export const defaultLocale: Locale = "ar";
 
 const dictionaries: Record<Locale, typeof en> = { en, ar };
 

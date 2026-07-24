@@ -20,7 +20,7 @@ export const metadata: Metadata = {
         url:    '/images/og-image.png',
         width:  1200,
         height: 630,
-        alt:    'Al Yasmine Center — Grow. Transform. Bloom.',
+        alt:    'Al Yasmine Center: Grow. Transform. Bloom.',
       },
     ],
   },
