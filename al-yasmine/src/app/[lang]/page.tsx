@@ -1,12 +1,13 @@
 "use client";
 
 import React, { useRef } from "react";
+import Image from "next/image";
 import Link from "next/link";
 import { motion, useScroll, useTransform } from "framer-motion";
 import { HeroCanvas } from "@/components/ui/hero-canvas";
 import { Reveal, StaggerReveal, staggerChild } from "@/components/ui/reveal";
 import { orderedServices } from "@/lib/config";
-import { formatPrice } from "@/lib/utils";
+import { formatPrice, serviceWhatsAppHref } from "@/lib/utils";
 import { CinematicWrapper } from "@/components/layout/CinematicWrapper";
 import { getTranslator, type Locale } from "@/lib/i18n";
 import { useParams } from "next/navigation";
@@ -14,6 +15,150 @@ import { useParams } from "next/navigation";
 function useLocale(): Locale {
   const params = useParams();
   return (params?.lang as Locale) || "en";
+}
+
+function MeetAlia() {
+  const lang = useLocale();
+  const t = getTranslator(lang);
+  const isAr = lang === "ar";
+  const credentials = [t("meetAlia.line1"), t("meetAlia.line2"), t("meetAlia.line3")];
+
+  return (
+    <section
+      className="relative overflow-hidden py-10 md:py-24"
+      style={{
+        background:
+          "linear-gradient(160deg, #F6F2E9 0%, #FDF0E8 45%, #FDCCBE33 100%)",
+      }}
+      dir={isAr ? "rtl" : "ltr"}
+    >
+      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_20%_30%,rgba(253,204,190,0.35)_0%,transparent_55%)] pointer-events-none" />
+      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_85%_70%,rgba(236,162,0,0.07)_0%,transparent_50%)] pointer-events-none" />
+
+      <div className="relative section-container">
+        <Reveal direction="up" className="relative">
+          {/* Yellow heading above the card */}
+          <div className="text-center mb-5 md:mb-8">
+            <h3
+              className={`text-brand-gold mb-3 md:mb-4 mx-auto max-w-[18ch] md:max-w-none leading-[1.35] ${
+                isAr
+                  ? "font-display font-semibold text-[1.85rem] sm:text-[2.25rem] md:text-[2.75rem] tracking-[0.02em]"
+                  : "font-semibold text-[1.5rem] sm:text-[1.85rem] md:text-[2.25rem] tracking-[0.12em] uppercase"
+              }`}
+            >
+              {t("meetAlia.eyebrow")}
+            </h3>
+            <div className="flex items-center justify-center gap-2" aria-hidden="true">
+              <span className="h-px w-8 md:w-12 bg-brand-gold/40" />
+              <svg
+                width="16"
+                height="11"
+                viewBox="0 0 18 12"
+                className="text-brand-gold/70"
+              >
+                <path
+                  d="M9 1 C7 4, 4 5.5, 1 6 C4 6.5, 7 8, 9 11 C11 8, 14 6.5, 17 6 C14 5.5, 11 4, 9 1 Z"
+                  fill="currentColor"
+                />
+              </svg>
+              <span className="h-px w-8 md:w-12 bg-brand-gold/40" />
+            </div>
+          </div>
+
+          {/* Soft composition card — side-by-side on all breakpoints */}
+          <div className="relative grid grid-cols-[1.05fr_0.95fr] md:grid-cols-2 items-stretch overflow-hidden rounded-[1.35rem] md:rounded-[2.5rem] bg-[#FBF7F1] ring-1 ring-brand-gold/20 shadow-[0_28px_80px_-36px_rgba(3,90,96,0.35)]">
+            {/* Corner botanical watermark */}
+            <svg
+              className="absolute bottom-0 end-0 w-24 h-24 md:w-48 md:h-48 text-brand-blush/45 pointer-events-none"
+              viewBox="0 0 200 200"
+              fill="none"
+              aria-hidden="true"
+            >
+              <path
+                d="M160 180 C140 140, 150 90, 175 55 C155 80, 120 95, 95 85 C115 110, 130 150, 125 180 Z"
+                fill="currentColor"
+                opacity="0.55"
+              />
+              <path
+                d="M175 55 C165 70, 140 85, 120 80"
+                stroke="currentColor"
+                strokeWidth="1.2"
+                opacity="0.7"
+              />
+              <path
+                d="M95 85 C105 100, 115 130, 112 160"
+                stroke="currentColor"
+                strokeWidth="1"
+                opacity="0.5"
+              />
+            </svg>
+
+            {/* Portrait column */}
+            <div className="relative min-h-[240px] sm:min-h-[300px] md:min-h-[440px] lg:min-h-[520px]">
+              <Image
+                src="/images/alia-portrait.png"
+                alt={t("meetAlia.name")}
+                fill
+                className="object-cover object-[center_12%]"
+                sizes="(max-width: 768px) 52vw, 45vw"
+                priority
+              />
+            </div>
+
+            {/* Text column */}
+            <div className="relative flex flex-col justify-center px-3.5 py-5 sm:px-6 sm:py-8 md:px-10 md:py-14 lg:px-14">
+              <h2
+                className="font-display font-extrabold text-brand-teal text-center leading-[1.15] mb-3 md:mb-5"
+                style={{
+                  fontSize: isAr
+                    ? "clamp(1.35rem, 4.8vw, 3.4rem)"
+                    : "clamp(1.4rem, 4.2vw, 3.5rem)",
+                }}
+              >
+                {t("meetAlia.name")}
+              </h2>
+
+              <ul className="space-y-1 md:space-y-2 mb-3 md:mb-5 text-center">
+                {credentials.map((line) => (
+                  <li key={line}>
+                    <p
+                      className={`text-brand-dark/60 leading-snug ${
+                        isAr
+                          ? "font-display text-[10px] sm:text-xs md:text-sm"
+                          : "text-[10px] sm:text-xs md:text-sm"
+                      }`}
+                    >
+                      {line}
+                    </p>
+                  </li>
+                ))}
+              </ul>
+
+              <p
+                className={`text-brand-teal/80 text-center leading-[1.7] mb-5 md:mb-8 max-w-[16rem] sm:max-w-xs md:max-w-md mx-auto ${
+                  isAr
+                    ? "font-display text-[11px] sm:text-sm md:text-base"
+                    : "font-display italic text-[11px] sm:text-sm md:text-base"
+                }`}
+              >
+                {t("meetAlia.quote")}
+              </p>
+
+              <div className="flex justify-center">
+                <Link
+                  href={`/${lang}/about`}
+                  className="inline-flex items-center gap-2 rounded-full bg-brand-gold px-5 py-2.5 sm:px-6 sm:py-3 md:px-8 md:py-3.5 text-brand-dark text-xs sm:text-sm md:text-base font-medium shadow-sm ring-1 ring-brand-gold/40 hover:bg-brand-gold/90 hover:scale-[1.02] transition-all"
+                >
+                  <span>{t("meetAlia.cta")}</span>
+                  <span aria-hidden="true">{isAr ? "←" : "→"}</span>
+                </Link>
+              </div>
+            </div>
+          </div>
+        </Reveal>
+      </div>
+    </section>
+  );
 }
 
 function Stats() {
@@ -165,15 +310,33 @@ function Services() {
               <span className="text-2xl text-brand-gold group-hover:text-brand-cream transition-colors duration-500 block">{s.icon}</span>
               <div className="flex-1">
                 <h3 className="font-display font-extrabold text-xl text-brand-dark group-hover:text-brand-cream transition-colors duration-500 mb-1.5">{lang === "ar" ? s.titleAr : s.title}</h3>
-                <p className="text-xs text-brand-dark/55 group-hover:text-brand-cream/70 transition-colors duration-500 leading-relaxed">{lang === "ar" ? s.descriptionAr : s.description}</p>
+                <span className="text-brand-dark/55 group-hover:text-brand-cream/70 transition-colors duration-500 leading-relaxed text-xs">
+                  {lang === "ar" ? s.descriptionAr : s.description}
+                </span>
+                {"disclaimerAr" in s && s.disclaimerAr && (
+                  <p className="mt-2 text-[10px] leading-snug text-brand-teal/70 group-hover:text-brand-cream/55 transition-colors duration-500">
+                    {lang === "ar" ? s.disclaimerAr : s.disclaimer}
+                  </p>
+                )}
               </div>
               <div className="flex items-center justify-between text-xs pt-4 border-t border-brand-cream group-hover:border-brand-cream/20 transition-colors duration-500">
                 <span className="text-brand-teal-light group-hover:text-brand-cream/60 transition-colors duration-500">
                   {lang === "ar" ? s.durationAr : s.duration}
                 </span>
-                <span className={`${s.price ? "font-semibold text-brand-teal" : "text-brand-teal-light"} group-hover:text-brand-gold transition-colors duration-500`}>
-                  {s.price ? formatPrice(s.price) : lang === "ar" ? "تواصلي معنا" : "Contact us"}
-                </span>
+                {s.price ? (
+                  <span className="font-semibold text-brand-teal group-hover:text-brand-gold transition-colors duration-500">
+                    {formatPrice(s.price)}
+                  </span>
+                ) : (
+                  <a
+                    href={serviceWhatsAppHref(s.titleAr)}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-brand-teal-light group-hover:text-brand-gold transition-colors duration-500 hover:underline"
+                  >
+                    {lang === "ar" ? "تواصلي معنا" : "Contact us"}
+                  </a>
+                )}
               </div>
               <Link
                 href={`/${lang}/services#${s.id}`}
@@ -280,6 +443,8 @@ export default function HomePage() {
   return (
     <CinematicWrapper>
       <HeroCanvas lang={lang} />
+      <div className="h-32 bg-gradient-to-b from-black via-[#FDF0E8] to-[#F6F2E9] pointer-events-none" />
+      <MeetAlia />
       <Stats />
       <WhyAliyah />
       <div className="h-32 bg-gradient-to-b from-[#FDCCBE] to-[#035A60] pointer-events-none" />

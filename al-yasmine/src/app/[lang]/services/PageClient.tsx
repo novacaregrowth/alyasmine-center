@@ -11,7 +11,7 @@ import { useParams } from "next/navigation";
 import { ChevronDown, ChevronRight } from "lucide-react";
 import { getTranslator, type Locale } from "@/lib/i18n";
 import { services, orderedServices } from "@/lib/config";
-import { formatPrice } from "@/lib/utils";
+import { formatPrice, serviceWhatsAppHref } from "@/lib/utils";
 
 // ─── Hooks ───────────────────────────────────────────────────────────────────
 
@@ -593,6 +593,17 @@ function ServiceBeat({
               {isAr ? service.descriptionAr : service.description}
             </p>
 
+            {"disclaimer" in service && (service as { disclaimer?: string }).disclaimer && (
+              <p
+                className="text-brand-teal/80 text-xs leading-relaxed border border-brand-teal/20 bg-brand-teal/[0.04] rounded-2xl px-3.5 py-2.5"
+                dir={isAr ? "rtl" : "ltr"}
+              >
+                {isAr
+                  ? (service as { disclaimerAr?: string }).disclaimerAr
+                  : (service as { disclaimer?: string }).disclaimer}
+              </p>
+            )}
+
             <motion.div
               className="flex flex-wrap items-center gap-2 mt-1"
               initial="hidden"
@@ -620,12 +631,16 @@ function ServiceBeat({
                   {formatPrice(service.price)}
                 </motion.span>
               ) : (
-                <motion.span
+                <motion.a
                   variants={metaItem}
-                  className="px-3 py-1.5 rounded-full bg-brand-cream text-brand-teal/70 text-[11px] font-medium tracking-wide ms-auto"
+                  href={serviceWhatsAppHref(service.titleAr)}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  onClick={(e) => e.stopPropagation()}
+                  className="px-3 py-1.5 rounded-full bg-brand-cream text-brand-teal/70 text-[11px] font-medium tracking-wide ms-auto hover:bg-brand-gold/15 hover:text-brand-teal transition-colors"
                 >
                   {isAr ? "تواصلي معنا" : "Contact us"}
-                </motion.span>
+                </motion.a>
               )}
             </motion.div>
 
@@ -680,6 +695,12 @@ function ServiceTimeline({
       ? isAr
         ? (service as { bookLabelAr?: string }).bookLabelAr
         : (service as { bookLabel?: string }).bookLabel
+      : undefined;
+  const disclaimer =
+    "disclaimer" in service
+      ? isAr
+        ? (service as { disclaimerAr?: string }).disclaimerAr
+        : (service as { disclaimer?: string }).disclaimer
       : undefined;
 
   return (
@@ -748,6 +769,12 @@ function ServiceTimeline({
                   </span>
                 )}
               </div>
+
+              {disclaimer && (
+                <p className="mb-8 text-brand-teal/80 text-sm leading-relaxed border border-brand-teal/20 bg-brand-teal/[0.04] rounded-2xl px-4 py-3">
+                  {disclaimer}
+                </p>
+              )}
 
               {service.id === "majlis-aliya" && (
                 <div className="mb-10 overflow-hidden rounded-2xl ring-1 ring-brand-teal/10 shadow-md bg-black/5">
@@ -826,12 +853,14 @@ function ServiceTimeline({
               )}
 
               <div className="mt-8 flex flex-wrap items-center gap-4">
-                <Link
-                  href={`/${lang}/booking`}
+                <a
+                  href={serviceWhatsAppHref(service.titleAr)}
+                  target="_blank"
+                  rel="noopener noreferrer"
                   className="inline-block px-8 py-3.5 bg-brand-teal text-brand-cream rounded-full text-xs tracking-[0.12em] uppercase font-medium hover:bg-brand-teal/90 transition-opacity duration-300 hover:opacity-95"
                 >
                   {bookLabel ?? t("servicesPage.bookNow")}
-                </Link>
+                </a>
                 {note && (
                   <p className="text-brand-dark/40 text-xs italic max-w-md leading-relaxed">
                     {note}

@@ -1,7 +1,6 @@
 "use client";
 
 import React, { useEffect, useRef, useState, useCallback } from "react";
-import Link from "next/link";
 import { motion, useScroll, useTransform } from "framer-motion";
 import { ArrowDown } from "lucide-react";
 import { getTranslator, type Locale } from "@/lib/i18n";
@@ -9,9 +8,18 @@ import { getTranslator, type Locale } from "@/lib/i18n";
 const TOTAL_FRAMES = 193;
 const FRAME_OFFSET = 100; // skip first ~52%, start with flower mid-bloom
 const ACTIVE_FRAMES = TOTAL_FRAMES - FRAME_OFFSET;
+// Keep only 30% of the active frames (70% reduction) for a much faster scrub.
+const SAMPLE_COUNT = Math.max(2, Math.round(ACTIVE_FRAMES * 0.3));
 
 const frameSrc = (n: number) =>
   `/hero-frames-webp/frame${String(n).padStart(4, "0")}.webp`;
+
+/** Map a 0..(SAMPLE_COUNT-1) sample index to an absolute frame index. */
+function sampleToFrame(sampleIndex: number): number {
+  if (SAMPLE_COUNT <= 1) return FRAME_OFFSET;
+  const t = sampleIndex / (SAMPLE_COUNT - 1);
+  return FRAME_OFFSET + Math.round(t * (ACTIVE_FRAMES - 1));
+}
 
 function drawCover(
   ctx: CanvasRenderingContext2D,
@@ -86,22 +94,25 @@ export function HeroCanvas({ lang = "en" }: { lang?: Locale }) {
   }, [drawFrame]);
 
   useEffect(() => {
-    const loadOne = (i: number) => {
+    const loadOne = (frameIndex: number, isFirst: boolean) => {
       const img = new window.Image();
       img.onload = () => {
-        imagesRef.current[i] = img;
-        if (i === FRAME_OFFSET) {
+        imagesRef.current[frameIndex] = img;
+        if (isFirst) {
           syncSize();
           setReady(true);
         }
       };
-      img.src = frameSrc(i + 1);
+      img.src = frameSrc(frameIndex + 1);
     };
 
-    loadOne(FRAME_OFFSET);
+    // Only load the subsampled frames (≈30% of the active range).
+    loadOne(sampleToFrame(0), true);
 
     const rafId = requestAnimationFrame(() => {
-      for (let i = FRAME_OFFSET + 1; i < TOTAL_FRAMES; i++) loadOne(i);
+      for (let s = 1; s < SAMPLE_COUNT; s++) {
+        loadOne(sampleToFrame(s), false);
+      }
     });
 
     return () => cancelAnimationFrame(rafId);
@@ -117,18 +128,20 @@ export function HeroCanvas({ lang = "en" }: { lang?: Locale }) {
 
   useEffect(() => {
     return scrollYProgress.on("change", (v) => {
-      const index = FRAME_OFFSET + Math.min(
-        Math.round(v * (ACTIVE_FRAMES - 1)),
-        ACTIVE_FRAMES - 1,
+      const sampleIndex = Math.min(
+        Math.round(v * (SAMPLE_COUNT - 1)),
+        SAMPLE_COUNT - 1,
       );
+      const index = sampleToFrame(sampleIndex);
       if (index === frameRef.current) return;
       frameRef.current = index;
       drawFrame(index);
     });
   }, [scrollYProgress, drawFrame]);
 
+  // Scroll distance scaled with the 70% frame cut (280vh → ~84vh, floor at 110vh).
   return (
-    <div ref={containerRef} style={{ height: "280vh" }} className="relative bg-black">
+    <div ref={containerRef} style={{ height: "110vh" }} className="relative bg-black">
       <div className="sticky top-0 w-full h-screen">
         <canvas ref={canvasRef} className="absolute inset-0 w-full h-full" />
 
@@ -160,16 +173,9 @@ export function HeroCanvas({ lang = "en" }: { lang?: Locale }) {
               <span className="block">{t("hero.line3")}</span>
             </h1>
 
-            <p className="text-white/70 text-lg font-light max-w-md mx-auto mb-10">
+            <p className="text-white/70 text-lg font-light max-w-md mx-auto">
               {t("hero.subtitle")}
             </p>
-
-            <Link
-              href={`/${lang}/booking`}
-              className="inline-block bg-brand-gold text-brand-dark rounded-full px-8 py-4 font-medium text-sm hover:scale-105 transition-transform"
-            >
-              {t("hero.cta")}
-            </Link>
           </motion.div>
 
           <motion.div

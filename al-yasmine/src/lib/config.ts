@@ -11,7 +11,7 @@ export const siteConfig = {
   phone:       "+971 52 441 7078",
   // WhatsApp number in international format, digits only (used for wa.me links)
   whatsapp:    "971524417078",
-  instagram:   "https://instagram.com/alyasminecenter",
+  instagram:   "https://instagram.com/Alyasmine_center",
 
   // TODO: Replace with your real Calendly link when ready
   // e.g. "https://calendly.com/aliyah-albahari/discovery-call"
@@ -55,10 +55,10 @@ export const brandColors = {
 export const services = [
   {
     id:          "consultation",
-    title:       "Psychological Consultation",
-    titleAr:     "الاستشارة النفسية",
-    description: "A first consultation session focused on identifying your concern and building the right action plan together. The essential first step before any therapeutic journey.",
-    descriptionAr: "جلسة استشارية أولى تركّز على فهم وضعك وبناء خطة عمل مناسبة. الخطوة الأساسية قبل أي رحلة علاجية.",
+    title:       "Psychological Consultation & Guidance",
+    titleAr:     "الاستشارة والإرشاد النفسي",
+    description: "A first consultation & guidance session focused on identifying your concern and building the right action plan together. The essential first step before any therapeutic journey.",
+    descriptionAr: "جلسة استشارة وإرشاد أولى تركّز على فهم وضعك وبناء خطة عمل مناسبة. الخطوة الأساسية قبل أي رحلة علاجية.",
     includes: [
       "Initial assessment of your concern",
       "Professional guidance from Alia",
@@ -74,8 +74,8 @@ export const services = [
     duration:    "90 min",
     durationAr:  "90 دقيقة",
     price:       null,
-    priceNote:   "Urgent consultation available, contact us.",
-    priceNoteAr: "تتوفر استشارة عاجلة، تواصلي معنا.",
+    priceNote:   "Urgent consultation & guidance available, contact us.",
+    priceNoteAr: "تتوفر استشارة وإرشاد عاجلة، تواصلي معنا.",
     icon:        "✦",
     image:       "/services/consultation.png",
     timeline: [
@@ -90,8 +90,8 @@ export const services = [
     id:          "cbt-sessions",
     title:       "Psychological Counseling & CBT Sessions",
     titleAr:     "جلسات الإرشاد النفسي والعلاج السلوكي المعرفي",
-    description: "Follow-up sessions designed to apply the action plan agreed in your initial consultation. This is where real, lasting change takes root.",
-    descriptionAr: "جلسات متابعة لتطبيق خطة العمل المتفق عليها في الاستشارة الأولى. هنا يبدأ التغيير الحقيقي والعميق.",
+    description: "Follow-up sessions designed to apply the action plan agreed in your initial consultation & guidance. This is where real, lasting change takes root.",
+    descriptionAr: "جلسات متابعة لتطبيق خطة العمل المتفق عليها في الاستشارة والإرشاد الأولى. هنا يبدأ التغيير الحقيقي والعميق.",
     includes: [
       "Ongoing therapeutic support",
       "Application of your personalised treatment plan",
@@ -110,7 +110,7 @@ export const services = [
     priceNote:   "Minimum package: 4 sessions.",
     priceNoteAr: "الحد الأدنى للحزمة: 4 جلسات.",
     icon:        "◈",
-    image:       "/services/cbt-sessions.png",
+    image:       "/services/majlis-fatayat.png",
     timeline: [
       { en: "Apply your personalised treatment plan", ar: "تطبيق خطة العلاج المخصصة لكِ" },
       { en: "Identify and interrupt negative thinking patterns", ar: "تحديد ومقاطعة أنماط التفكير السلبية" },
@@ -236,6 +236,8 @@ export const services = [
   },
   {
     id:          "smart-memory",
+    badge:       "Most Popular",
+    badgeAr:     "الأكثر طلباً",
     title:       "Excellence Journey: Smart Memory Course",
     titleAr:     "دورة رحلة التميز نحو الذاكرة الذكية",
     description: "A memory development course teaching activation skills and fast memorisation techniques, with daily exercises, personal supervision, and confidence-building psychological training.",
@@ -297,7 +299,7 @@ export const services = [
     priceNote:   "For girls aged 14–17. Contact us to enrol.",
     priceNoteAr: "للفتيات من 14 إلى 17 سنة. تواصلي معنا للتسجيل.",
     icon:        "✿",
-    image:       "/services/majlis-fatayat.png",
+    image:       "/services/cbt-sessions.png",
     timeline: [
       { en: "A safe space to open up and feel truly heard", ar: "مساحة آمنة للتعبير والشعور بأنها مسموعة حقًا" },
       { en: "Build self-confidence and a clearer sense of self", ar: "بناء الثقة بالنفس ووضوح أكبر للذات" },
@@ -308,8 +310,8 @@ export const services = [
   },
   {
     id:          "majlis-aliya",
-    badge:       "New",
-    badgeAr:     "جديد",
+    badge:       "Most Influential",
+    badgeAr:     "الأكثر تأثيراً",
     title:       "Aliya's Majlis",
     titleAr:     "مجلس علياء",
     description: "A cognitive-behavioural group therapy program designed to help women understand themselves deeply and build a more reassured, balanced life. We work on cognitive distortions, emotional regulation, self-confidence, anxiety, overthinking, relationships, and personality patterns, through weekly interactive sessions in a safe, supportive space.",
@@ -365,6 +367,8 @@ export const services = [
     offeringLabelAr: "خدمات المؤسسات",
     description:   "Specialised training and psychological programs designed for government entities and companies — enhancing mental health, elevating human and leadership skills, and helping build more aware, productive, and sustainable workplaces.",
     descriptionAr: "برامج تدريبية ونفسية متخصصة مصممة للجهات الحكومية والشركات، تعزز الصحة النفسية، وترتقي بالمهارات الإنسانية والقيادية، وتسهم في بناء بيئات عمل أكثر وعياً وإنتاجية واستدامة.",
+    disclaimer:    "This service is exclusively for companies and government entities.",
+    disclaimerAr:  "هذه الخدمة مخصصة حصرياً للشركات والجهات الحكومية.",
     includes: [
       "Programs tailored to the organisation's needs",
       "Interactive lectures and workshops",
@@ -408,10 +412,10 @@ export const services = [
 // Single source of truth for the order services appear in across the site
 // (home grid, services offerings, and the journey-detail timeline).
 export const serviceOrder = [
-  "smart-memory",
-  "majlis-aliya",
   "consultation",
   "cbt-sessions",
+  "majlis-aliya",
+  "smart-memory",
   "majlis-fatayat",
   "prewedding",
   "adolescent",

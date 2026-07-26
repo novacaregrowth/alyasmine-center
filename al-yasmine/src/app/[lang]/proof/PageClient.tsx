@@ -715,9 +715,12 @@ function GoldHairlineDivider({
 function ShortCard({
   testimonial,
   isAr,
+  tone = "beige",
 }: {
   testimonial: LocalTestimonial;
   isAr: boolean;
+  /** Alternating card surface — beige or brand green. */
+  tone?: "beige" | "green";
 }) {
   const quote = isAr ? testimonial.quoteAr : testimonial.quote;
   const name = isAr ? testimonial.nameAr : testimonial.name;
@@ -726,34 +729,47 @@ function ShortCard({
   const nameTracking = isAr
     ? "tracking-[0.08em]"
     : "tracking-[0.2em] uppercase";
+  const isBeige = tone === "beige";
 
   return (
     <motion.article
-      className="relative rounded-3xl bg-brand-cream/5 border border-brand-gold/20 p-10 md:p-12 overflow-hidden"
+      className={`relative rounded-3xl p-10 md:p-12 overflow-hidden border ${
+        isBeige
+          ? "bg-brand-cream border-brand-gold/25"
+          : "bg-[#024248] border-brand-gold/30"
+      }`}
       whileHover={{ y: -4 }}
       transition={{ duration: 0.4, ease: [0.19, 1, 0.22, 1] }}
     >
       <span
         aria-hidden="true"
-        className="absolute -top-2 ltr:left-6 rtl:right-6 font-display text-brand-gold/30 text-[8rem] leading-none select-none pointer-events-none"
+        className={`absolute -top-2 ltr:left-6 rtl:right-6 font-display text-[8rem] leading-none select-none pointer-events-none ${
+          isBeige ? "text-brand-gold/40" : "text-brand-gold/30"
+        }`}
       >
         &ldquo;
       </span>
 
       <div className="relative">
         <p
-          className={`${quoteFont} text-brand-cream text-lg leading-[1.8]`}
+          className={`${quoteFont} text-lg leading-[1.8] ${
+            isBeige ? "text-brand-teal" : "text-brand-cream"
+          }`}
         >
           {quote}
         </p>
 
         <span
           aria-hidden="true"
-          className="block h-px w-16 bg-brand-gold/40 my-8"
+          className={`block h-px w-16 my-8 ${
+            isBeige ? "bg-brand-gold/50" : "bg-brand-gold/40"
+          }`}
         />
 
         <p
-          className={`${nameFont} text-brand-teal-light text-sm ${nameTracking}`}
+          className={`${nameFont} text-sm ${nameTracking} ${
+            isBeige ? "text-brand-teal/70" : "text-brand-teal-light"
+          }`}
         >
           {name}
         </p>
@@ -768,10 +784,12 @@ function FeaturedCard({
   testimonial,
   isAr,
   reduceMotion,
+  tone = "beige",
 }: {
   testimonial: LocalTestimonial;
   isAr: boolean;
   reduceMotion: boolean | null;
+  tone?: "beige" | "green";
 }) {
   const quote = isAr ? testimonial.quoteAr : testimonial.quote;
   const name = isAr ? testimonial.nameAr : testimonial.name;
@@ -780,6 +798,7 @@ function FeaturedCard({
   const nameTracking = isAr
     ? "tracking-[0.1em]"
     : "tracking-[0.3em] uppercase";
+  const isBeige = tone === "beige";
 
   // Scroll-linked cinematic entrance — with one-shot lock past v > 0.95.
   const ref = useRef<HTMLDivElement | null>(null);
@@ -800,17 +819,25 @@ function FeaturedCard({
     <motion.div
       ref={ref}
       style={{ opacity, y }}
-      className="relative mx-auto max-w-3xl text-center"
+      className={`relative mx-auto max-w-3xl text-center rounded-3xl p-10 md:p-14 border ${
+        isBeige
+          ? "bg-brand-cream border-brand-gold/25"
+          : "bg-[#024248] border-brand-gold/30"
+      }`}
     >
       <span
         aria-hidden="true"
-        className="absolute -top-10 md:-top-14 ltr:left-0 rtl:right-0 font-display text-brand-gold/40 text-[10rem] md:text-[13rem] leading-none select-none pointer-events-none"
+        className={`absolute -top-6 md:-top-8 ltr:left-4 rtl:right-4 font-display text-[8rem] md:text-[10rem] leading-none select-none pointer-events-none ${
+          isBeige ? "text-brand-gold/40" : "text-brand-gold/30"
+        }`}
       >
         &ldquo;
       </span>
 
       <p
-        className={`${quoteFont} text-brand-cream text-xl md:text-2xl leading-[1.7]`}
+        className={`${quoteFont} text-xl md:text-2xl leading-[1.7] ${
+          isBeige ? "text-brand-teal" : "text-brand-cream"
+        }`}
       >
         {quote}
       </p>
@@ -827,7 +854,9 @@ function FeaturedCard({
       />
 
       <p
-        className={`${nameFont} text-brand-gold/80 text-sm ${nameTracking} mt-3`}
+        className={`${nameFont} text-sm ${nameTracking} mt-3 ${
+          isBeige ? "text-brand-teal/70" : "text-brand-gold/80"
+        }`}
       >
         {name}
       </p>
@@ -894,10 +923,10 @@ function TestimonialsGallery({
             className="grid md:grid-cols-2 gap-4 md:gap-6"
           >
             <motion.div variants={staggerChild}>
-              <ShortCard testimonial={firstPair[0]} isAr={isAr} />
+              <ShortCard testimonial={firstPair[0]} isAr={isAr} tone="beige" />
             </motion.div>
             <motion.div variants={staggerChild}>
-              <ShortCard testimonial={firstPair[1]} isAr={isAr} />
+              <ShortCard testimonial={firstPair[1]} isAr={isAr} tone="green" />
             </motion.div>
           </StaggerReveal>
         )}
@@ -911,6 +940,7 @@ function TestimonialsGallery({
             testimonial={featured}
             isAr={isAr}
             reduceMotion={reduceMotion}
+            tone="beige"
           />
         )}
 
@@ -921,10 +951,10 @@ function TestimonialsGallery({
             className="mt-16 md:mt-20 grid md:grid-cols-2 gap-4 md:gap-6"
           >
             <motion.div variants={staggerChild}>
-              <ShortCard testimonial={secondPair[0]} isAr={isAr} />
+              <ShortCard testimonial={secondPair[0]} isAr={isAr} tone="green" />
             </motion.div>
             <motion.div variants={staggerChild}>
-              <ShortCard testimonial={secondPair[1]} isAr={isAr} />
+              <ShortCard testimonial={secondPair[1]} isAr={isAr} tone="beige" />
             </motion.div>
           </StaggerReveal>
         )}

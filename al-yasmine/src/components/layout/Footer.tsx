@@ -195,7 +195,7 @@ export function Footer({ lang = "en" as Locale }: { lang?: Locale }) {
               className="flex items-center gap-2 text-brand-cream/60 text-sm hover:text-brand-gold transition-colors duration-300"
             >
               <Instagram className="w-4 h-4" />
-              @alyasminecenter
+              @Alyasmine_center
             </a>
             <a
               href={`tel:${siteConfig.phone.replace(/\s+/g, "")}`}

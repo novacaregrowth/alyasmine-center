@@ -279,7 +279,7 @@ export function Navbar({ lang = "en" as Locale }: { lang?: Locale }) {
       {/* ── Floating "Book Now" CTA — follows the user (desktop + mobile) ── */}
       <motion.div
         initial={false}
-        animate={showCta ? { opacity: 1, y: 0, scale: 1 } : { opacity: 0, y: 16, scale: 0.95 }}
+        animate={showCta ? { opacity: 0.8, y: 0, scale: 1 } : { opacity: 0, y: 16, scale: 0.95 }}
         transition={{ duration: 0.25, ease: "easeOut" }}
         className={cn(
           "fixed z-40 bottom-24 lg:bottom-6",
@@ -289,7 +289,7 @@ export function Navbar({ lang = "en" as Locale }: { lang?: Locale }) {
       >
         <Link
           href={`/${lang}/booking`}
-          className="inline-flex items-center rounded-full bg-brand-gold text-brand-dark text-sm font-semibold px-6 py-3.5 shadow-lg shadow-brand-gold/30 ring-1 ring-brand-gold/40 hover:bg-brand-gold/90 hover:scale-105 transition-all"
+          className="inline-flex items-center rounded-full bg-brand-gold text-brand-dark text-xs font-semibold px-4 py-2.5 shadow-md shadow-brand-gold/20 ring-1 ring-brand-gold/30 hover:scale-105 transition-all"
         >
           {t("nav.bookNow")}
         </Link>

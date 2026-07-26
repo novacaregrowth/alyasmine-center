@@ -107,7 +107,7 @@ export default function AboutPage() {
           "حاصلة على السند المتصل إلى النبي ﷺ في حفظ القرآن الكريم كاملاً تعلماً وتعليماً.",
           "مدربة معتمدة من المجلس البريطاني وهيئة المعرفة والتنمية البشرية بدبي.",
           "أكثر من 20 عاماً من الخبرة في الإرشاد والعلاج النفسي.",
-          "أكثر من 3000 ساعة من الاستشارات والتدريب النفسي.",
+          "أكثر من 3000 ساعة من الاستشارات والإرشاد والتدريب النفسي.",
           "خبيرة في تصميم البرامج العلاجية والتدريبية القائمة على العلاج المعرفي السلوكي.",
           "خبيرة في الصحة النفسية المؤسسية وتطوير برامج التدخل النفسي.",
         ]
@@ -117,7 +117,7 @@ export default function AboutPage() {
           "Holds an unbroken chain (sanad) to the Prophet ﷺ for the complete memorisation of the Noble Qur'an, in learning and teaching.",
           "Certified trainer accredited by the British Board and the Knowledge and Human Development Authority (KHDA), Dubai.",
           "Over 20 years of experience in psychological counselling and therapy.",
-          "Over 3,000 hours of psychological consultations and training.",
+          "Over 3,000 hours of psychological consultation & guidance and training.",
           "Expert in designing CBT-based therapeutic and training programs.",
           "Expert in organisational mental health and developing psychological intervention programs.",
         ];
@@ -163,7 +163,7 @@ export default function AboutPage() {
           >
             <motion.p variants={heroItem} className="text-brand-gold tracking-[0.3em] text-base uppercase mb-8">
               {lang === "ar"
-                ? "الاستشارية النفسية ومؤسسة مركز الياسمين"
+                ? "الاستشارية والإرشاد النفسي ومؤسسة مركز الياسمين"
                 : "Psychological Counselor & Founder of Al Yasmine Center"}
             </motion.p>
 

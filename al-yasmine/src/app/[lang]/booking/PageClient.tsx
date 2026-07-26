@@ -226,7 +226,7 @@ export default function BookingPage({ lang }: BookingPageProps) {
     },
     {
       num: isAr ? "2" : "2",
-      title: isAr ? "جلسة استشارة" : "Meet Alia",
+      title: isAr ? "جلسة استشارة وإرشاد" : "Meet Alia",
       body: isAr
         ? "لقاء خاص مع أ . علياء البحري لفهم ما تمرين به وتحديد احتياجاتك وأهدافك بكل سرية واهتمام"
         : "A warm, private 30-minute conversation. She listens. She understands. No judgment.",
@@ -244,8 +244,8 @@ export default function BookingPage({ lang }: BookingPageProps) {
     {
       q: isAr ? "كيف أبدأ؟" : "How do I get started?",
       a: isAr
-        ? "ابدأي بحجز استشارتك الأولى. هي جلسة تقييم مدتها 90 دقيقة تستمع فيها علياء إلى وضعكِ وتبنيان معاً خطة عمل مناسبة. الخطوة الأساسية قبل أي رحلة علاجية."
-        : "Start by booking your initial consultation, a 90-minute session where Alia listens, understands your situation, and together you build a personalised action plan. It\u2019s the essential first step before beginning any therapeutic journey.",
+        ? "ابدأي بحجز جلسة الاستشارة والإرشاد الأولى. هي جلسة تقييم مدتها 90 دقيقة تستمع فيها علياء إلى وضعكِ وتبنيان معاً خطة عمل مناسبة. الخطوة الأساسية قبل أي رحلة علاجية."
+        : "Start by booking your initial consultation & guidance, a 90-minute session where Alia listens, understands your situation, and together you build a personalised action plan. It\u2019s the essential first step before beginning any therapeutic journey.",
     },
     {
       q: isAr ? "هل كل ما أشاركه سري؟" : "Is everything I share confidential?",
@@ -259,12 +259,15 @@ export default function BookingPage({ lang }: BookingPageProps) {
         ? "لا تحتاجين أن تكوني مستعدة تماماً، فقط أن تحضري وأن تبدأي."
         : "You don\u2019t need to be fully ready, you just need to show up and begin.",
     },
-    {
-      q: isAr ? "هل يمكنني الحجز بالعربية؟" : "Can I book in Arabic?",
-      a: isAr
-        ? "بالطبع. تعمل علياء بطلاقة بالعربية والإنجليزية. الجلسة لكِ، بلغتك."
-        : "Of course. Alia works fluently in both Arabic and English. The session is yours, in your language.",
-    },
+    // English-only: Arabic site doesn't need "can I book in Arabic?"
+    ...(!isAr
+      ? [
+          {
+            q: "Can I book in Arabic?",
+            a: "Of course. Alia works fluently in both Arabic and English. The session is yours, in your language.",
+          },
+        ]
+      : []),
   ];
 
   return (

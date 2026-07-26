@@ -25,7 +25,7 @@ export const termsContent: Record<Locale, LegalDoc> = {
                 ul: [
                   "The Center: Al Yasmine Training Center.",
                   "The Website: the official website of the Center and any related pages, forms, or links.",
-                  "The Services: counseling sessions, consultations, training courses, group programs, workshops, lectures, tests, assessments, forms, worksheets, educational content, and any other service provided by the Center.",
+                  "The Services: counseling sessions, consultations & guidance, training courses, group programs, workshops, lectures, tests, assessments, forms, worksheets, educational content, and any other service provided by the Center.",
                   "The Client / Subscriber / Member: any person who uses the website, registers for a service of the Center, or pays for it.",
                 ],
               },
@@ -209,7 +209,7 @@ export const termsContent: Record<Locale, LegalDoc> = {
         ],
       },
       {
-        title: "Psychological Counseling and Consultations Policy",
+        title: "Psychological Counseling and Consultations & Guidance Policy",
         intro: [
           { p: "This policy aims to clarify the nature of the psychological counseling and advisory sessions provided by Al Yasmine Center, their professional limits, and the client's rights and obligations." },
         ],
@@ -484,7 +484,7 @@ export const termsContent: Record<Locale, LegalDoc> = {
           {
             heading: "1. General Principle",
             blocks: [
-              { p: "All fees paid to the Center for sessions, programs, courses, consultations, or workshops are considered non-refundable after registration is confirmed, unless the Center's management decides otherwise in writing." },
+              { p: "All fees paid to the Center for sessions, programs, courses, consultations & guidance, or workshops are considered non-refundable after registration is confirmed, unless the Center's management decides otherwise in writing." },
             ],
           },
           {
@@ -712,7 +712,7 @@ export const termsContent: Record<Locale, LegalDoc> = {
                 ul: [
                   "المركز: مركز الياسمين للتدريب.",
                   "الموقع: الموقع الإلكتروني الرسمي الخاص بالمركز وأي صفحات أو نماذج أو روابط تابعة له.",
-                  "الخدمات: تشمل جلسات الإرشاد، الاستشارات، الدورات التدريبية، البرامج الجماعية، الورش، المحاضرات، الاختبارات، المقاييس، النماذج، أوراق العمل، المحتوى التعليمي، وأي خدمة أخرى يقدمها المركز.",
+                  "الخدمات: تشمل جلسات الإرشاد، الاستشارات والإرشاد، الدورات التدريبية، البرامج الجماعية، الورش، المحاضرات، الاختبارات، المقاييس، النماذج، أوراق العمل، المحتوى التعليمي، وأي خدمة أخرى يقدمها المركز.",
                   "العميل أو المشترك أو المنتسب: كل شخص يستخدم الموقع أو يسجل في خدمة من خدمات المركز أو يدفع مقابلها.",
                 ],
               },
@@ -896,15 +896,15 @@ export const termsContent: Record<Locale, LegalDoc> = {
         ],
       },
       {
-        title: "سياسة الإرشاد النفسي والاستشارات",
+        title: "سياسة الإرشاد النفسي والاستشارات والإرشاد",
         intro: [
-          { p: "تهدف هذه السياسة إلى توضيح طبيعة الجلسات الإرشادية النفسية والاستشارية المقدمة من مركز الياسمين، وحدودها المهنية، وحقوق العميل والتزاماته." },
+          { p: "تهدف هذه السياسة إلى توضيح طبيعة الجلسات الإرشادية النفسية والاستشارة والإرشاد المقدمة من مركز الياسمين، وحدودها المهنية، وحقوق العميل والتزاماته." },
         ],
         sections: [
           {
             heading: "1. طبيعة الجلسات الإرشادية النفسية",
             blocks: [
-              { p: "الجلسات النفسية أو الاستشارية هي مساحة مهنية آمنة تهدف إلى الفهم، والتقييم، والدعم، وبناء الوعي، وتطوير المهارات النفسية والسلوكية." },
+              { p: "الجلسات النفسية أو جلسات الاستشارة والإرشاد هي مساحة مهنية آمنة تهدف إلى الفهم، والتقييم، والدعم، وبناء الوعي، وتطوير المهارات النفسية والسلوكية." },
               { p: "الإرشاد النفسي عملية تعاونية بين المعالج والعميل، وتتطلب حضوراً والتزاماً وصراحة وتطبيقاً بين الجلسات." },
             ],
           },
@@ -1171,7 +1171,7 @@ export const termsContent: Record<Locale, LegalDoc> = {
           {
             heading: "1. مبدأ عام",
             blocks: [
-              { p: "جميع الرسوم المدفوعة للمركز مقابل الجلسات أو البرامج أو الدورات أو الاستشارات أو الورش تعتبر غير قابلة للاسترداد بعد تأكيد التسجيل، إلا إذا قررت إدارة المركز خلاف ذلك كتابة." },
+              { p: "جميع الرسوم المدفوعة للمركز مقابل الجلسات أو البرامج أو الدورات أو الاستشارات والإرشاد أو الورش تعتبر غير قابلة للاسترداد بعد تأكيد التسجيل، إلا إذا قررت إدارة المركز خلاف ذلك كتابة." },
             ],
           },
           {

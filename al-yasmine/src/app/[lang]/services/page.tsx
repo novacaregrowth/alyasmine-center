@@ -8,8 +8,8 @@ const titles: Record<Locale, string> = {
 };
 
 const descriptions: Record<Locale, string> = {
-  en: "Psychological consultation, CBT sessions, and women-only programs with Alia AlBahri.",
-  ar: "الاستشارة النفسية، جلسات العلاج المعرفي السلوكي، وبرامج مخصصة للنساء مع علياء البحري.",
+  ar: "الاستشارة والإرشاد النفسي، جلسات العلاج المعرفي السلوكي، وبرامج مخصصة للنساء مع علياء البحري.",
+  en: "Psychological consultation & guidance, CBT sessions, and women-only programs with Alia AlBahri.",
 };
 
 export function generateMetadata({
