@@ -164,7 +164,7 @@ export default function AboutPage() {
             <motion.p variants={heroItem} className="text-brand-gold tracking-[0.3em] text-base uppercase mb-8">
               {lang === "ar"
                 ? "الاستشارية والإرشاد النفسي ومؤسسة مركز الياسمين"
-                : "Psychological Counselor & Founder of Al Yasmine Center"}
+                : "Psychological Consultation & Guidance Counselor and Founder of Al Yasmine Center"}
             </motion.p>
 
             <motion.h1
@@ -190,7 +190,7 @@ export default function AboutPage() {
             <motion.div variants={heroItem} className="flex flex-wrap gap-3">
               {(lang === "ar"
                 ? ["العلاج المعرفي السلوكي CBT", "+20 عامًا خبرة", "+2000 قصة تغيير"]
-                : ["CBT", "20+ Years", "2000+ Transformations"]
+                : ["Cognitive Behavioural Therapy (CBT)", "20+ years of experience", "2000+ stories of change"]
               ).map((label) => (
                 <span
                   key={label}

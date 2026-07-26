@@ -633,7 +633,10 @@ function ServiceBeat({
               ) : (
                 <motion.a
                   variants={metaItem}
-                  href={serviceWhatsAppHref(service.titleAr)}
+                  href={serviceWhatsAppHref(
+                    isAr ? service.titleAr : service.title,
+                    isAr ? "ar" : "en"
+                  )}
                   target="_blank"
                   rel="noopener noreferrer"
                   onClick={(e) => e.stopPropagation()}
@@ -686,10 +689,12 @@ function ServiceTimeline({
   const durationLabel = isAr ? service.durationAr : service.duration;
   const formatLabel = isAr ? service.formatAr : service.format;
   const note = isAr ? service.priceNoteAr : service.priceNote;
-  const suitableFor =
-    isAr && "suitableForAr" in service
-      ? (service as { suitableForAr?: readonly string[] }).suitableForAr
-      : undefined;
+  const suitableFor = isAr
+    ? (service as { suitableForAr?: readonly string[] }).suitableForAr
+    : (service as { suitableFor?: readonly string[] }).suitableFor;
+  const suitableForHeading = isAr
+    ? (service as { suitableForHeadingAr?: string }).suitableForHeadingAr
+    : (service as { suitableForHeading?: string }).suitableForHeading;
   const bookLabel =
     "bookLabel" in service
       ? isAr
@@ -837,9 +842,9 @@ function ServiceTimeline({
               )}
 
               {suitableFor && suitableFor.length > 0 && (
-                <div className="mt-10 pt-8 border-t border-brand-cream" dir="rtl">
+                <div className="mt-10 pt-8 border-t border-brand-cream">
                   <p className="text-brand-teal text-base font-medium mb-4">
-                    مجلس علياء مناسب لكِ إذا كنتِ ترغبين في:
+                    {suitableForHeading}
                   </p>
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                     {suitableFor.map((s, i) => (
@@ -854,7 +859,10 @@ function ServiceTimeline({
 
               <div className="mt-8 flex flex-wrap items-center gap-4">
                 <a
-                  href={serviceWhatsAppHref(service.titleAr)}
+                  href={serviceWhatsAppHref(
+                    isAr ? service.titleAr : service.title,
+                    isAr ? "ar" : "en"
+                  )}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="inline-block px-8 py-3.5 bg-brand-teal text-brand-cream rounded-full text-xs tracking-[0.12em] uppercase font-medium hover:bg-brand-teal/90 transition-opacity duration-300 hover:opacity-95"
@@ -1083,27 +1091,25 @@ export default function ServicesPage() {
             viewport={{ once: true }}
             transition={{ duration: 1, ease: [0.25, 0.1, 0.25, 1] }}
           >
-            {lang !== "ar" && (
-              <div className="flex items-center justify-center gap-3 mb-6">
-                <motion.div
-                  className="h-px w-10 bg-brand-gold"
-                  initial={{ scaleX: 0 }}
-                  whileInView={{ scaleX: 1 }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.8, ease: [0.19, 1, 0.22, 1] }}
-                />
-                <p className="text-brand-gold text-[11px] tracking-[0.3em] uppercase font-medium">
-                  {t("servicesPage.offeringsEyebrow")}
-                </p>
-                <motion.div
-                  className="h-px w-10 bg-brand-gold"
-                  initial={{ scaleX: 0 }}
-                  whileInView={{ scaleX: 1 }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.8, ease: [0.19, 1, 0.22, 1], delay: 0.1 }}
-                />
-              </div>
-            )}
+            <div className="flex items-center justify-center gap-3 mb-6">
+              <motion.div
+                className="h-px w-10 bg-brand-gold"
+                initial={{ scaleX: 0 }}
+                whileInView={{ scaleX: 1 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.8, ease: [0.19, 1, 0.22, 1] }}
+              />
+              <p className="text-brand-gold text-[11px] tracking-[0.3em] uppercase font-medium">
+                {t("servicesPage.offeringsEyebrow")}
+              </p>
+              <motion.div
+                className="h-px w-10 bg-brand-gold"
+                initial={{ scaleX: 0 }}
+                whileInView={{ scaleX: 1 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.8, ease: [0.19, 1, 0.22, 1], delay: 0.1 }}
+              />
+            </div>
             <h2
               className="font-display font-extrabold text-brand-teal text-balance leading-[1.1]"
               style={{ fontSize: "clamp(2.25rem, 5.5vw, 4rem)" }}

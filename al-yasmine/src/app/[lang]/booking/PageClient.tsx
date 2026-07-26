@@ -218,25 +218,25 @@ export default function BookingPage({ lang }: BookingPageProps) {
 
   const steps = [
     {
-      num: isAr ? "1" : "1",
-      title: isAr ? "تواصلي معنا" : "Book Your Session",
+      num: "1",
+      title: isAr ? "تواصلي معنا" : "Contact Us",
       body: isAr
         ? "أرسلي لنا عبر الواتساب وسيساعدك فريق مركز الياسمين في اختيار الموعد والخدمة الأنسب لك"
-        : "She picks a time that works for her. At her own pace, on her own terms.",
+        : "Message us on WhatsApp and the Al Yasmine Center team will help you choose the appointment and service that suits you best.",
     },
     {
-      num: isAr ? "2" : "2",
-      title: isAr ? "جلسة استشارة وإرشاد" : "Meet Alia",
+      num: "2",
+      title: isAr ? "جلسة استشارة وإرشاد" : "Consultation & Guidance Session",
       body: isAr
         ? "لقاء خاص مع أ . علياء البحري لفهم ما تمرين به وتحديد احتياجاتك وأهدافك بكل سرية واهتمام"
-        : "A warm, private 30-minute conversation. She listens. She understands. No judgment.",
+        : "A private meeting with Alia AlBahri to understand what you're going through and clarify your needs and goals — with full confidentiality and care.",
     },
     {
-      num: isAr ? "3" : "3",
-      title: isAr ? "ابدئي خطتك العلاجية" : "Begin Your Journey",
+      num: "3",
+      title: isAr ? "ابدئي خطتك العلاجية" : "Begin Your Treatment Plan",
       body: isAr
         ? "بعد التقييم نضع معك الخطوة الأنسب سواء كانت جلسات فردية أو برنامجًا علاجيًا يناسب احتياج"
-        : "If it feels right, you take the next step together. On your terms, at your pace.",
+        : "After the assessment, we set the right next step with you — whether individual sessions or a therapeutic program that fits your needs.",
     },
   ];
 
@@ -245,21 +245,20 @@ export default function BookingPage({ lang }: BookingPageProps) {
       q: isAr ? "كيف أبدأ؟" : "How do I get started?",
       a: isAr
         ? "ابدأي بحجز جلسة الاستشارة والإرشاد الأولى. هي جلسة تقييم مدتها 90 دقيقة تستمع فيها علياء إلى وضعكِ وتبنيان معاً خطة عمل مناسبة. الخطوة الأساسية قبل أي رحلة علاجية."
-        : "Start by booking your initial consultation & guidance, a 90-minute session where Alia listens, understands your situation, and together you build a personalised action plan. It\u2019s the essential first step before beginning any therapeutic journey.",
+        : "Start by booking your first consultation & guidance session. It is a 90-minute assessment where Alia listens to your situation and together you build a suitable action plan — the essential first step before any therapeutic journey.",
     },
     {
       q: isAr ? "هل كل ما أشاركه سري؟" : "Is everything I share confidential?",
       a: isAr
         ? "بالتأكيد. خصوصيتك مقدسة. كل ما تشاركينه مع علياء يبقى بينكما."
-        : "Absolutely. Your privacy is sacred. Everything shared with Alia stays between you.",
+        : "Absolutely. Your privacy is sacred. Everything you share with Alia stays between you.",
     },
     {
-      q: isAr ? "ماذا لو لم أكن متأكدة أنني مستعدة؟" : "What if I\u2019m not sure I\u2019m ready?",
+      q: isAr ? "ماذا لو لم أكن متأكدة أنني مستعدة؟" : "What if I'm not sure I'm ready?",
       a: isAr
         ? "لا تحتاجين أن تكوني مستعدة تماماً، فقط أن تحضري وأن تبدأي."
-        : "You don\u2019t need to be fully ready, you just need to show up and begin.",
+        : "You don't need to be fully ready — you only need to show up and begin.",
     },
-    // English-only: Arabic site doesn't need "can I book in Arabic?"
     ...(!isAr
       ? [
           {
@@ -423,7 +422,7 @@ export default function BookingPage({ lang }: BookingPageProps) {
               className="text-brand-gold text-base tracking-[0.2em] uppercase font-light mb-6 font-display"
               style={isAr ? { direction: "rtl" } : undefined}
             >
-              {isAr ? "إطمئني … أنت في المكان الصحيح" : "Begin Your Journey"}
+              {isAr ? "إطمئني … أنت في المكان الصحيح" : "Be reassured… you are in the right place"}
             </p>
           </Reveal>
 
@@ -437,7 +436,7 @@ export default function BookingPage({ lang }: BookingPageProps) {
             >
               {isAr
                 ? "أنتِ على بُعد خطوة واحدة"
-                : "A conversation that could change everything."}
+                : "You are one step away"}
             </h1>
           </Reveal>
 
@@ -448,7 +447,7 @@ export default function BookingPage({ lang }: BookingPageProps) {
             >
               {isAr
                 ? "سنرافقك خطوة بخطوة لتبدئي رحلتك النفسية بكل خصوصية وطمأنينة"
-                : "You deserve to feel supported. The first step is always the hardest, but it\u2019s the most important one. Begin today."}
+                : "We will walk with you step by step so you can begin your psychological journey with full privacy and peace of mind."}
             </p>
           </Reveal>
         </div>
@@ -465,7 +464,7 @@ export default function BookingPage({ lang }: BookingPageProps) {
               className="text-brand-gold text-base tracking-[0.2em] uppercase font-light mb-4 font-display"
               style={isAr ? { direction: "rtl" } : undefined}
             >
-              {isAr ? "الحجز" : "Reserve Your Session"}
+              {isAr ? "الحجز" : "Booking"}
             </p>
             <h2
               className="font-display font-extrabold text-white"
@@ -476,7 +475,7 @@ export default function BookingPage({ lang }: BookingPageProps) {
             >
               {isAr
                 ? "نحن بانتظارك"
-                : "Choose a time that feels right."}
+                : "We are waiting for you"}
             </h2>
             <p
               className="text-white/70 text-sm leading-relaxed max-w-lg mx-auto mt-4"
@@ -484,7 +483,7 @@ export default function BookingPage({ lang }: BookingPageProps) {
             >
               {isAr
                 ? "تواصلي معنا عبر الواتساب وسنساعدك في اختيار ما يناسب احتياجاتك بكل سرية واهتمام"
-                : "Reach out directly on WhatsApp to arrange your session. Completely private and safe."}
+                : "Reach out to us on WhatsApp and we will help you choose what suits your needs — with full confidentiality and care."}
             </p>
           </Reveal>
 
@@ -493,7 +492,7 @@ export default function BookingPage({ lang }: BookingPageProps) {
               href={`https://wa.me/${siteConfig.whatsapp}?text=${encodeURIComponent(
                 isAr
                   ? "السلام عليكم، أرغب في حجز جلسة مع مركز الياسمين."
-                  : "Hello, I'd like to book a session with Al Yasmine Center."
+                  : "Hello, I would like to book a session with Al Yasmine Center."
               )}`}
               target="_blank"
               rel="noopener noreferrer"
@@ -507,7 +506,7 @@ export default function BookingPage({ lang }: BookingPageProps) {
               >
                 <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51l-.57-.01c-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.999-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z" />
               </svg>
-              <span>{isAr ? "تواصلي عبر واتساب" : "Chat on WhatsApp"}</span>
+              <span>{isAr ? "تواصلي عبر واتساب" : "Contact us on WhatsApp"}</span>
             </a>
             <p className="text-white/50 text-xs mt-4 tracking-wide" dir="ltr">
               {siteConfig.phone}
@@ -608,7 +607,7 @@ export default function BookingPage({ lang }: BookingPageProps) {
               className="text-brand-gold text-base tracking-[0.2em] uppercase font-light mb-4 font-display"
               style={isAr ? { direction: "rtl" } : undefined}
             >
-              {isAr ? "الخطوات" : "The Process"}
+              {isAr ? "الخطوات" : "The Steps"}
             </p>
             <h2
               className="font-display font-extrabold text-brand-teal"
@@ -617,16 +616,16 @@ export default function BookingPage({ lang }: BookingPageProps) {
                 direction: isAr ? "rtl" : "ltr",
               }}
             >
-              {isAr ? "بداية بسيطة وآمنة" : "Simple. Private. Yours."}
+              {isAr ? "بداية بسيطة وآمنة" : "A simple, safe beginning"}
             </h2>
-            {isAr && (
-              <p
-                className="text-brand-dark/70 text-sm leading-relaxed max-w-xl mx-auto mt-6 font-display"
-                style={{ direction: "rtl" }}
-              >
-                ثلاث خطوات واضحة تبدأ برسالة وتنتهي بخطة تناسب احتياجك
-              </p>
-            )}
+            <p
+              className="text-brand-dark/70 text-sm leading-relaxed max-w-xl mx-auto mt-6 font-display"
+              style={isAr ? { direction: "rtl" } : undefined}
+            >
+              {isAr
+                ? "ثلاث خطوات واضحة تبدأ برسالة وتنتهي بخطة تناسب احتياجك"
+                : "Three clear steps that begin with a message and end with a plan that fits your needs"}
+            </p>
           </Reveal>
 
           <StaggerReveal
@@ -673,7 +672,7 @@ export default function BookingPage({ lang }: BookingPageProps) {
               className="text-brand-gold text-base tracking-[0.2em] uppercase font-light mb-4 font-display"
               style={isAr ? { direction: "rtl" } : undefined}
             >
-              {isAr ? "أسئلة شائعة" : "Common Questions"}
+              {isAr ? "أسئلة شائعة" : "Frequently Asked Questions"}
             </p>
             <h2
               className="font-display font-extrabold text-white"
@@ -682,7 +681,7 @@ export default function BookingPage({ lang }: BookingPageProps) {
                 direction: isAr ? "rtl" : "ltr",
               }}
             >
-              {isAr ? "ربما تتساءلين..." : "You may be wondering\u2026"}
+              {isAr ? "ربما تتساءلين..." : "You may be wondering…"}
             </h2>
           </Reveal>
 

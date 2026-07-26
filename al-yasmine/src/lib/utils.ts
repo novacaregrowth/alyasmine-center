@@ -14,9 +14,12 @@ export function formatPrice(amount: number, currency = "AED") {
   }).format(amount);
 }
 
-/** WhatsApp deep-link with a per-service inquiry message (Arabic). */
-export function serviceWhatsAppHref(programNameAr: string) {
-  const text = `السلام عليكم\nأرغب بمعرفة تفاصيل ${programNameAr} وأتمنى معرفة خطوات التسجيل و كيف يمكنني الإنضمام`;
+/** WhatsApp deep-link with a per-service inquiry message (locale-aware). */
+export function serviceWhatsAppHref(programName: string, lang: "ar" | "en" = "ar") {
+  const text =
+    lang === "ar"
+      ? `السلام عليكم\nأرغب بمعرفة تفاصيل ${programName} وأتمنى معرفة خطوات التسجيل و كيف يمكنني الإنضمام`
+      : `Hello,\nI would like to know more about ${programName}, including registration steps and how I can join.`;
   return `https://wa.me/${siteConfig.whatsapp}?text=${encodeURIComponent(text)}`;
 }
 

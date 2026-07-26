@@ -40,11 +40,7 @@ function MeetAlia() {
           {/* Yellow heading above the card */}
           <div className="text-center mb-5 md:mb-8">
             <h3
-              className={`text-brand-gold mb-3 md:mb-4 mx-auto max-w-[18ch] md:max-w-none leading-[1.35] ${
-                isAr
-                  ? "font-display font-semibold text-[1.85rem] sm:text-[2.25rem] md:text-[2.75rem] tracking-[0.02em]"
-                  : "font-semibold text-[1.5rem] sm:text-[1.85rem] md:text-[2.25rem] tracking-[0.12em] uppercase"
-              }`}
+              className="text-brand-gold mb-3 md:mb-4 mx-auto max-w-[18ch] md:max-w-none leading-[1.35] font-display font-semibold text-[1.85rem] sm:text-[2.25rem] md:text-[2.75rem] tracking-[0.02em]"
             >
               {t("meetAlia.eyebrow")}
             </h3>
@@ -135,11 +131,7 @@ function MeetAlia() {
               </ul>
 
               <p
-                className={`text-brand-teal/80 text-center leading-[1.7] mb-5 md:mb-8 max-w-[16rem] sm:max-w-xs md:max-w-md mx-auto ${
-                  isAr
-                    ? "font-display text-[11px] sm:text-sm md:text-base"
-                    : "font-display italic text-[11px] sm:text-sm md:text-base"
-                }`}
+                className="text-brand-teal/80 text-center leading-[1.7] mb-5 md:mb-8 max-w-[16rem] sm:max-w-xs md:max-w-md mx-auto font-display text-[11px] sm:text-sm md:text-base"
               >
                 {t("meetAlia.quote")}
               </p>
@@ -329,7 +321,10 @@ function Services() {
                   </span>
                 ) : (
                   <a
-                    href={serviceWhatsAppHref(s.titleAr)}
+                    href={serviceWhatsAppHref(
+                      lang === "ar" ? s.titleAr : s.title,
+                      lang === "ar" ? "ar" : "en"
+                    )}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="text-brand-teal-light group-hover:text-brand-gold transition-colors duration-500 hover:underline"

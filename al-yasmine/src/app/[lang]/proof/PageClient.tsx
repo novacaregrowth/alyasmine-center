@@ -503,9 +503,7 @@ function ProofGardenHero({
             </motion.h1>
 
             <motion.p
-              className={`mt-5 font-display tracking-normal text-brand-teal ${
-                isAr ? "" : "italic"
-              }`}
+              className="mt-5 font-display tracking-normal text-brand-teal"
               style={{
                 fontSize: "clamp(0.9375rem, 1.2vw, 1.0625rem)",
                 ...(whisperLocked
@@ -556,11 +554,7 @@ function ProofStats({ t, isAr }: ProofStatsProps) {
       <div className="section-container mx-auto max-w-5xl">
         <Reveal className="mb-14 text-center">
           <p
-            className={`text-brand-gold uppercase ${
-              isAr
-                ? "font-display text-[18px] tracking-[0.25em] font-extrabold"
-                : "text-[15px] tracking-[0.4em] font-extrabold"
-            }`}
+            className="text-brand-gold uppercase font-display text-[18px] tracking-[0.25em] font-extrabold"
           >
             {t("proofPage.proofStats.eyebrow")}
           </p>
@@ -580,11 +574,7 @@ function ProofStats({ t, isAr }: ProofStatsProps) {
               {items[0].value}
             </div>
             <div
-              className={`text-brand-teal/70 ${
-                isAr
-                  ? "font-display text-[12px] tracking-[0.12em]"
-                  : "text-[11px] uppercase tracking-[0.25em]"
-              }`}
+              className="text-brand-teal/70 font-display text-[12px] tracking-[0.12em]"
             >
               {items[0].label}
             </div>
@@ -607,11 +597,7 @@ function ProofStats({ t, isAr }: ProofStatsProps) {
               {items[1].value}
             </div>
             <div
-              className={`text-brand-teal/70 ${
-                isAr
-                  ? "font-display text-[12px] tracking-[0.12em]"
-                  : "text-[11px] uppercase tracking-[0.25em]"
-              }`}
+              className="text-brand-teal/70 font-display text-[12px] tracking-[0.12em]"
             >
               {items[1].label}
             </div>
@@ -634,11 +620,7 @@ function ProofStats({ t, isAr }: ProofStatsProps) {
               {items[2].value}
             </div>
             <div
-              className={`text-brand-teal/70 ${
-                isAr
-                  ? "font-display text-[12px] tracking-[0.12em]"
-                  : "text-[11px] uppercase tracking-[0.25em]"
-              }`}
+              className="text-brand-teal/70 font-display text-[12px] tracking-[0.12em]"
             >
               {items[2].label}
             </div>
@@ -724,11 +706,11 @@ function ShortCard({
 }) {
   const quote = isAr ? testimonial.quoteAr : testimonial.quote;
   const name = isAr ? testimonial.nameAr : testimonial.name;
-  const quoteFont = isAr ? "font-display" : "font-body";
-  const nameFont = isAr ? "font-display" : "font-display";
+  const quoteFont = "font-display";
+  const nameFont = "font-display";
   const nameTracking = isAr
     ? "tracking-[0.08em]"
-    : "tracking-[0.2em] uppercase";
+    : "tracking-[0.06em]";
   const isBeige = tone === "beige";
 
   return (
@@ -793,11 +775,11 @@ function FeaturedCard({
 }) {
   const quote = isAr ? testimonial.quoteAr : testimonial.quote;
   const name = isAr ? testimonial.nameAr : testimonial.name;
-  const quoteFont = isAr ? "font-display" : "font-display";
-  const nameFont = isAr ? "font-display" : "font-display";
+  const quoteFont = "font-display";
+  const nameFont = "font-display";
   const nameTracking = isAr
     ? "tracking-[0.1em]"
-    : "tracking-[0.3em] uppercase";
+    : "tracking-[0.06em]";
   const isBeige = tone === "beige";
 
   // Scroll-linked cinematic entrance — with one-shot lock past v > 0.95.

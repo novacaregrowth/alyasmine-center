@@ -10,32 +10,32 @@
     "switchToArabic": "العربية"
   },
   "hero": {
-    "line1": "Heard.",
-    "line2": "Understood.",
-    "line3": "Healed.",
-    "subtitle": "We're here to help you regain your balance.",
-    "cta": "Book a Consultation & Guidance",
+    "line1": "Understood.",
+    "line2": "At peace.",
+    "line3": "Flourishing.",
+    "subtitle": "Here your journey begins toward peace with yourself and the quality of your psychological life.",
+    "cta": "Book Your Appointment",
     "scroll": "Scroll",
-    "quote": "\"We are here to help you regain your balance. Listen to your inner voice instead of the voice of fear, anxiety, and tension.\"",
+    "quote": "We are here to help you move past what weighs on your heart and restore peace with yourself and the quality of your psychological life.",
     "quoteAttribution": "Alia AlBahri"
   },
   "meetAlia": {
-    "eyebrow": "Who will walk with you?",
+    "eyebrow": "Who will walk with you on your journey?",
     "name": "Alia AlBahri",
     "line1": "Over 20 years in psychological counseling",
     "line2": "Specialist in Cognitive Behavioural Therapy (CBT)",
-    "line3": "Founder of Al Yasmine Center",
+    "line3": "And founder of Al Yasmine Center",
     "quote": "I believe every woman deserves to understand herself and live in peace and serenity with who she is.",
     "cta": "Meet Alia",
     "stat1Value": "+2000",
-    "stat1Label": "Transformations",
+    "stat1Label": "Stories of change",
     "stat2Value": "20+",
     "stat2Label": "Years of experience",
     "stat3Value": "CBT",
     "stat3Label": "Specialist focus"
   },
   "stats": {
-    "label": "By the Numbers",
+    "label": "Impact in Numbers",
     "clientsTransformed": "Women Who Began Their Journey",
     "satisfactionRate": "Satisfaction Rate",
     "yearsOfImpact": "Years of Professional Impact",
@@ -73,8 +73,8 @@
   "bookingCta": {
     "eyebrow": "Ready to Begin?",
     "heading": "Book Your First Session",
-    "body": "Take the first step toward lasting change. Your journey starts here.",
-    "cta": "Book Your Session"
+    "body": "Your first step toward real change begins here.",
+    "cta": "Book Your Appointment Now"
   },
   "about": {
     "heroEyebrow": "Psychological Counselor",
@@ -118,12 +118,12 @@
     "ctaLead": ""
   },
   "servicesPage": {
-    "heroEyebrow": "Pathways of Healing",
-    "heroTitle": "Here, Your Healing Begins",
-    "heroBody": "Each service is a pathway, designed to meet you where you are and walk with you toward where you want to be.",
-    "pill1": "5 Pathways",
+    "heroEyebrow": "Toward Serenity",
+    "heroTitle": "Because every woman has a different journey",
+    "heroBody": "Specialised therapeutic programs designed for women, with select therapeutic services also available for men — so we can walk with you step by step toward a more serene life.",
+    "pill1": "5 Therapeutic Pathways",
     "pill2": "Women Only",
-    "pill3": "CBT-Based",
+    "pill3": "CBT-Based Method",
     "offeringsEyebrow": "The Offerings",
     "offeringsHeading": "Our Services",
     "mostPopular": "Most Popular",
@@ -136,7 +136,7 @@
     "exhaleWatermark": "Healing",
     "exhaleTitle": "One step can make all the difference.",
     "pathwayEyebrow": "Your Journey",
-    "pathwayHeading": "Three Steps to Begin Your Journey",
+    "pathwayHeading": "Three Steps to Begin Your Psychological Journey",
     "pathwayStep1Title": "Consult",
     "pathwayStep1Body": "An assessment session to understand your needs and identify the step that's right for you.",
     "pathwayStep2Title": "Begin",
@@ -146,7 +146,7 @@
     "ctaBloomLine": "We're here, waiting for you",
     "ctaReadyHeading": "Are you ready to give yourself what you deserve?",
     "ctaReadyBody": "We're here to walk with you on your journey toward inner peace.",
-    "ctaBook": "Book Your Session"
+    "ctaBook": "Book Your Appointment Now"
   },
   "proofPage": {
     "heroEyebrow": "Voices of Transformation",
@@ -157,7 +157,7 @@
     "heroScrollHint": "Scroll to listen",
     "heroStat1Value": "2000+",
     "heroStat1Label": "Clients Transformed",
-    "heroStat2Value": "10+",
+    "heroStat2Value": "20+",
     "heroStat2Label": "Years of Impact",
     "heroStat3Value": "98%",
     "heroStat3Label": "Satisfaction Rate",
@@ -170,26 +170,26 @@
     "voicesEyebrow": "Voices",
     "voicesHeading": "What Our Clients Say",
     "startStory": "Start Your Story",
-    "ctaHeading": "Your story starts here.",
-    "ctaBody": "Join the women who chose to invest in themselves.",
+    "ctaHeading": "Give yourself what you deserve",
+    "ctaBody": "Because your mental health deserves to be a priority.",
     "ctaButton": "Book Your Session",
     "heroNew": {
-      "headline": "Before you, there were two thousand.",
-      "whisperedCount": "two thousand women · ten years"
+      "headline": "Be reassured",
+      "whisperedCount": "You are in the right place"
     },
     "proofStats": {
-      "eyebrow": "By the Numbers",
+      "eyebrow": "Behind every number… a human journey",
       "stat1Value": "2000+",
-      "stat1Label": "Clients Transformed",
-      "stat2Value": "10+",
-      "stat2Label": "Years of Impact",
+      "stat1Label": "Real stories of change.",
+      "stat2Value": "20+",
+      "stat2Label": "Years of experience.",
       "stat3Value": "98%",
-      "stat3Label": "Satisfaction Rate"
+      "stat3Label": "Trust and satisfaction."
     },
     "testimonialsSection": {
-      "eyebrow": "Her words",
-      "heading": "Women who walked this path",
-      "subheading": "Four voices. Four rooms in the same home."
+      "eyebrow": "You are not alone",
+      "heading": "Women who began the journey of change and reclaimed something beautiful in themselves — these are their words",
+      "subheading": ""
     }
   },
   "freeCoursePage": {
@@ -279,7 +279,7 @@
     "home": "Home",
     "aboutLink": "About",
     "servicesLink": "Services",
-    "proofLink": "Proof",
+    "proofLink": "Testimonials",
     "pricingLink": "Pricing",
     "bookSession": "Book a Session",
     "contact": "Contact",
