@@ -102,8 +102,8 @@ export default function AboutPage() {
   const credentialItems =
     lang === "ar"
       ? [
-          "ماجستير في الإرشاد النفسي.",
-          "متخصصة في العلاج المعرفي السلوكي CBT.",
+          "ماجستير في العلاج المعرفي السلوكي (CBT).",
+          "مختصه في الإرشاد النفسي.",
           "حاصلة على السند المتصل إلى النبي ﷺ في حفظ القرآن الكريم كاملاً تعلماً وتعليماً.",
           "مدربة معتمدة من المجلس البريطاني وهيئة المعرفة والتنمية البشرية بدبي.",
           "أكثر من 20 عاماً من الخبرة في الإرشاد والعلاج النفسي.",
@@ -112,8 +112,8 @@ export default function AboutPage() {
           "خبيرة في الصحة النفسية المؤسسية وتطوير برامج التدخل النفسي.",
         ]
       : [
-          "Master's in Psychological Counseling.",
-          "Specialist in Cognitive Behavioural Therapy (CBT).",
+          "Master's in Cognitive Behavioural Therapy (CBT).",
+          "Specialist in psychological counseling.",
           "Holds an unbroken chain (sanad) to the Prophet ﷺ for the complete memorisation of the Noble Qur'an, in learning and teaching.",
           "Certified trainer accredited by the British Board and the Knowledge and Human Development Authority (KHDA), Dubai.",
           "Over 20 years of experience in psychological counselling and therapy.",
@@ -163,8 +163,8 @@ export default function AboutPage() {
           >
             <motion.p variants={heroItem} className="text-brand-gold tracking-[0.3em] text-base uppercase mb-8">
               {lang === "ar"
-                ? "الاستشارية والإرشاد النفسي ومؤسسة مركز الياسمين"
-                : "Psychological Consultation & Guidance Counselor and Founder of Al Yasmine Center"}
+                ? "إستشارية الإرشاد النفسي و مؤسسة مركز الياسمين"
+                : "Psychological Counseling Consultant and Founder of Al Yasmine Center"}
             </motion.p>
 
             <motion.h1

@@ -438,7 +438,7 @@ export default function HomePage() {
   return (
     <CinematicWrapper>
       <HeroCanvas lang={lang} />
-      <div className="h-32 bg-gradient-to-b from-black via-[#FDF0E8] to-[#F6F2E9] pointer-events-none" />
+      <div className="h-24 bg-gradient-to-b from-[#F6F2E9] via-[#FDF0E8] to-[#F6F2E9] pointer-events-none" />
       <MeetAlia />
       <Stats />
       <WhyAliyah />

@@ -141,7 +141,7 @@ export function HeroCanvas({ lang = "en" }: { lang?: Locale }) {
 
   // Scroll distance scaled with the 70% frame cut (280vh → ~84vh, floor at 110vh).
   return (
-    <div ref={containerRef} style={{ height: "110vh" }} className="relative bg-black">
+    <div ref={containerRef} style={{ height: "110vh" }} className="relative bg-[#F6F2E9]">
       <div className="sticky top-0 w-full h-screen">
         <canvas ref={canvasRef} className="absolute inset-0 w-full h-full" />
 
@@ -210,9 +210,21 @@ export function HeroCanvas({ lang = "en" }: { lang?: Locale }) {
           </motion.div>
         </motion.div>
 
+        {/* Always soft-blend into Meet Alia cream so no hard black seam */}
+        <div
+          className="absolute bottom-0 left-0 w-full h-40 z-30 pointer-events-none"
+          style={{
+            background:
+              "linear-gradient(to bottom, transparent 0%, rgba(246,242,233,0.55) 55%, #F6F2E9 100%)",
+          }}
+        />
         <motion.div
-          className="absolute bottom-0 left-0 w-full h-48 z-30 bg-gradient-to-b from-transparent to-black pointer-events-none"
-          style={{ opacity: bottomGradientOpacity }}
+          className="absolute bottom-0 left-0 w-full h-56 z-30 pointer-events-none"
+          style={{
+            opacity: bottomGradientOpacity,
+            background:
+              "linear-gradient(to bottom, transparent 0%, #FDF0E8 45%, #F6F2E9 100%)",
+          }}
         />
       </div>
     </div>
